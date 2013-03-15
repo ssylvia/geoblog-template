@@ -1,0 +1,11 @@
+#applicaitonWindow{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+#banner{
+	background-color: #444;
+	height: 115px;
+	width: 100%;
+}

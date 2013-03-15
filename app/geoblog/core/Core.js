@@ -1,0 +1,88 @@
+define(["esri/map",
+		"esri/arcgis/utils",
+		"esri/layout",
+		"esri/widgets"],
+	function(
+		Map,
+		Utils,
+		Layout,
+		Widgets)
+	{
+		/**
+		 * Core
+		 * @class Core
+		 *
+		 * Geoblog viewer Main class
+		 */
+
+		//
+		// Initialization
+		//
+
+		var isBuilder = false;
+
+		function init()
+		{
+			app = {
+				//Esri map variable
+				map: null,
+				resetLayout: resetLayout()
+			}
+
+			if (!configOptions.sharingurl) {
+				if(location.host.match("localhost") || location.host.match("storymaps.esri.com"))
+					configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
+				else
+					configOptions.sharingurl = location.protocol + '//' + location.host + "/sharing/content/items";
+			}
+
+			if (configOptions.geometryserviceurl && location.protocol === "https:")
+				configOptions.geometryserviceurl = configOptions.geometryserviceurl.replace('http:', 'https:');
+
+			esri.arcgis.utils.arcgisUrl = configOptions.sharingurl;
+			esri.config.defaults.io.proxyUrl = configOptions.proxyurl;
+			esri.config.defaults.geometryService = new esri.tasks.GeometryService(configOptions.geometryserviceurl);
+
+			var urlObject = esri.urlToObject(document.location.href);
+			urlObject.query = urlObject.query || {};
+
+			if (urlObject.query.edit || urlObject.query.edit === "") {
+				isBuilder = true;
+			}
+
+			loadMap();
+		}
+
+		function loadMap()
+		{
+			var mapDeferred = esri.arcgis.utils.createMap(configOptions.webmap,"map",{
+				mapOptions: {
+					sliderPosition: "top-right"
+				}
+			});
+
+			mapDeferred.addCallback(function(response){
+				app.map = response.map;
+			});
+		}
+
+		function resetLayout()
+		{
+			$(".region-center").each(function(){
+				// var x = 0;
+				// var y = 0;
+				//x = $(this).siblings(".region-left").outerWidth() + $(this).siblings(".region-right").outerWidth();
+				//y = $(this).siblings(".region-top").outerHeight() + $(this).siblings(".region-bottom").outerHeight();
+				// $(this).css({
+				// 	"height" : $(this).parent().outerHeight - y,
+				// 	"width" : $(this).parent().outerWidth - x
+				// });
+				console.log($(this));
+			});
+		}
+
+		return {
+			init: init
+		}
+	}
+);

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<title>Geoblog Template</title>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+		<link type="image/ico" rel="shortcut icon" href="//resources.esri.com/favicon.ico">
+		<link type="image/ico" rel="icon"  href="//resources.esri.com/favicon.ico">
+
+		<link rel="stylesheet" type="text/css" href="lib/normalize.css">
+
+		<link rel="stylesheet" type="text/css" href="//servicesbeta.esri.com/jsapi/arcgis/3.4/js/dojo/dijit/themes/tundra/tundra.css">
+		<link rel="stylesheet" type="text/css" href="//servicesbeta.esri.com/jsapi/arcgis/3.4/js/esri/css/esri.css" />
+
+		<link rel="stylesheet" type="text/css" href="app/geoblog/core/Core.css">
+
+		<script type="text/javascript">
+			var dojoConfig = {
+				parseOnLoad: true,
+				isDebug: false,
+				packages: [
+				{
+					name: 'storymaps',
+					location: location.pathname.replace(/\/[^/]+$/, '/') + 'app'
+				}//,
+				// {
+				// 	name: 'esriTemplate',
+				// 	location: location.pathname.replace(/\/[^/]+$/, '/') + 'resources'
+				// }
+				]
+			};
+		</script>
+
+	</head>
+	<body class="tundra" resize="app.resetLayout();">
+
+		<div id="application-window">
+
+			<div id="banner" class="region-top">
+			</div><!--/banner-->
+
+			<div id="content" class="region-center">
+
+				<div id="map" class="region-center"></div>
+
+			</div><!--/content-->
+
+		</div><!--application-window-->
+
+		<script type="text/javascript" src="//servicesbeta.esri.com/jsapi/arcgis/?v=3.4"></script>
+		<script type="text/javascript" src="lib/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript">
+
+			//GET Application Config
+			require(["storymaps/Config"]);
+
+			require(["storymaps/geoblog/core/Core"], function(core){
+				core.init();
+			});
+
+		</script>
+
+
+	</body>
+</html>
