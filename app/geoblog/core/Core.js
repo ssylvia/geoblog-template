@@ -1,12 +1,16 @@
 define(["esri/map",
 		"esri/arcgis/utils",
 		"esri/layout",
-		"esri/widgets"],
+		"esri/widgets",
+		"storymaps/geoblog/core/BlogData",
+		"storymaps/geoblog/ui/BlogView"],
 	function(
 		Map,
 		Utils,
 		Layout,
-		Widgets)
+		Widgets,
+		BlogData,
+		BlogView)
 	{
 		/**
 		 * Core
@@ -32,8 +36,12 @@ define(["esri/map",
 				map: null,
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
-				resetLayout: resetLayout()
+				blogData: new BlogData(configOptions.reverseOrder),
+				blog: new BlogView()
 			}
+
+			//First layout setup called on app load
+			resetLayout();
 
 			if (!configOptions.sharingurl) {
 				if(location.host.match("localhost") || location.host.match("storymaps.esri.com"))
@@ -57,6 +65,7 @@ define(["esri/map",
 			}
 
 			loadMap();
+			loadBlog();
 		}
 
 		function loadMap()
@@ -79,6 +88,21 @@ define(["esri/map",
 					});
 				}
 
+			});
+		}
+
+		function loadBlog()
+		{
+			var queryTask = new esri.tasks.QueryTask(configOptions.featureService);
+
+			var query = new esri.tasks.Query();
+			query.outFields = ["*"];
+			query.where = "blogPost != ''";
+			query.returnGeometry = false;
+
+			queryTask.execute(query,function(result){
+				console.log(result);
+				app.blogData.setBlogData(result.features,result.objectIdFieldName)
 			});
 		}
 
