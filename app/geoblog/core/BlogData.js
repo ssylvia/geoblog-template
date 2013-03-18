@@ -16,6 +16,7 @@ define([],
 			var _blogData = null;
 			var _blogDataObjectIdField = null;
 			var _selectedPost = null;
+			var _selectedPostIndex = 0;
 
 			this.setBlogData = function(featureArray,OIdField)
 			{
@@ -40,6 +41,12 @@ define([],
 			this.getBlogLength = function()
 			{
 				return _blogData.length;
+			}
+
+			this.getCurrentBlogSet = function()
+			{
+				return _blogData;
+				//TODO: Select data by page
 			}
 		}
 

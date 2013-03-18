@@ -37,7 +37,7 @@ define(["esri/map",
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView()
+				blog: new BlogView("#inner-blog","blogPost")
 			}
 
 			//First layout setup called on app load
@@ -101,8 +101,9 @@ define(["esri/map",
 			query.returnGeometry = false;
 
 			queryTask.execute(query,function(result){
-				console.log(result);
-				app.blogData.setBlogData(result.features,result.objectIdFieldName)
+				app.blogData.setBlogData(result.features,result.objectIdFieldName);
+
+				app.blog.init(app.blogData.getCurrentBlogSet());
 			});
 		}
 

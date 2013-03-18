@@ -1,0 +1,96 @@
+.geoBlogPost{
+	border-bottom: 1px solid #ccc;
+	padding: 25px 0;
+}
+
+.geoBlogPost:first-child{
+	border-top: 1px solid #ccc;
+}
+
+.blogPostTitle, .blogPostCaption, .tempPostTitle, .tempImgCaption{
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.blogPostTitle, .blogPostTitle{
+	color: #444;
+}
+
+.blogPostTitle, .tempPostTitle{
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.blogPostImg{
+	max-width: 100%;
+	margin-top: 10px;
+}
+
+.blogPostCaption, .tempImgCaption{
+	color: #999;
+}
+
+.blogPostText{
+	margin-top: 10px;
+}
+
+.addPost{
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #dadada;
+	color: #444;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 50px;
+	cursor: pointer;
+}
+
+.addPost:hover{
+	background-color: #ccc
+}
+
+.tempPost{
+	margin-top: 25px;
+}
+
+.tempBlogItemInput{
+	width: 100%;
+	resize: vertical;
+	color: #444;
+	border: #dadada 1px solid;
+	color:none;
+}
+
+.tempPostTitle{
+	height:26px;
+}
+
+.tempBlogPhotoPreview{
+	max-width: 100%;
+}
+
+.tempPostText{
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.legendSelectorPane{
+	position: absolute;
+	bottom: 0;
+	background-color: #fff;	
+	font-family: Arial, Helvetica, sans-serif;	
+	border: #999 solid 1px;	
+	border-bottom: none;	
+}
+
+.legendSelectorToggle{
+	background-color: #dadada;
+	border-bottom: #999 solid 1px;	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 10px;
+	cursor:pointer;
+}
+
+.legendSelectorContent{
+	padding: 10px;
+}
