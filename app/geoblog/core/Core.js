@@ -21,11 +21,17 @@ define(["esri/map",
 
 		var isBuilder = false;
 
+		$(window).resize(function(){
+			resetLayout();
+		});
+
 		function init()
 		{
 			app = {
 				//Esri map variable
 				map: null,
+				//Feature services layer holding blog posts
+				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				resetLayout: resetLayout()
 			}
 
@@ -63,21 +69,41 @@ define(["esri/map",
 
 			mapDeferred.addCallback(function(response){
 				app.map = response.map;
+
+				if (app.map.loaded){
+					initializeApp(response);
+				}
+				else {
+					dojo.connect(map, "onLoad", function() {
+						initializeApp(response);
+					});
+				}
+
 			});
+		}
+
+		function initializeApp(response)
+		{
+			buildBannerDisplay(response);
+		}
+
+		function buildBannerDisplay(response) 
+		{
+			$("#title").html(configOptions.title || response.itemInfo.item.title);
+			$("#subtitle").html(configOptions.subtitle || response.itemInfo.item.snippet);
 		}
 
 		function resetLayout()
 		{
 			$(".region-center").each(function(){
-				// var x = 0;
-				// var y = 0;
-				//x = $(this).siblings(".region-left").outerWidth() + $(this).siblings(".region-right").outerWidth();
-				//y = $(this).siblings(".region-top").outerHeight() + $(this).siblings(".region-bottom").outerHeight();
-				// $(this).css({
-				// 	"height" : $(this).parent().outerHeight - y,
-				// 	"width" : $(this).parent().outerWidth - x
-				// });
-				console.log($(this));
+				var x = 0;
+				var y = 0;
+				x = $(this).siblings(".region-left").outerWidth() + $(this).siblings(".region-right").outerWidth();
+				y = $(this).siblings(".region-top").outerHeight() + $(this).siblings(".region-bottom").outerHeight();
+				$(this).css({
+					"height" : $(this).parent().outerHeight() - y,
+					"width" : $(this).parent().outerWidth() - x
+				});
 			});
 		}
 
