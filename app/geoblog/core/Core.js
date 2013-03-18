@@ -3,14 +3,16 @@ define(["esri/map",
 		"esri/layout",
 		"esri/widgets",
 		"storymaps/geoblog/core/BlogData",
-		"storymaps/geoblog/ui/BlogView"],
+		"storymaps/geoblog/ui/BlogView",
+		"dojo/has"],
 	function(
 		Map,
 		Utils,
 		Layout,
 		Widgets,
 		BlogData,
-		BlogView)
+		BlogView,
+		Has)
 	{
 		/**
 		 * Core
@@ -38,13 +40,13 @@ define(["esri/map",
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
 				blog: new BlogView("#inner-blog","blogPost",function(){
-					$(".blogPostImg").load(function(){
-						app.blogScroll.refresh();
-					})
+					if(app.blogScroll){
+						$(".blogPostImg").load(function(){
+							app.blogScroll.refresh();
+						});
+					}
 				}),
-				blogScroll: new iScroll("blog",{
-					bounce: true
-				})
+				blogScroll: null
 			}
 
 			//First layout setup called on app load
@@ -100,6 +102,17 @@ define(["esri/map",
 
 		function loadBlog()
 		{
+
+
+			if(Has("ie") <= 8){
+				//TODO: IE 7/8 Scrolling method
+			}
+			else{
+				app.blogScroll = new iScroll("blog",{
+					bounce: true
+				});
+			}
+
 			var queryTask = new esri.tasks.QueryTask(configOptions.featureService);
 
 			var query = new esri.tasks.Query();

@@ -46,6 +46,10 @@ h2{
 	width: 40%;
 }
 
+#blog{
+	overflow: auto;
+}
+
 #blog-navigation{
 	background-color: #777;
 	height: 100%;
