@@ -41,6 +41,7 @@ h2{
 }
 
 #blog-wrapper{
+	position: relative;
 	height: 100%;
 	width: 40%;
 }
@@ -49,4 +50,8 @@ h2{
 	background-color: #777;
 	height: 100%;
 	width: 40px;
+}
+
+#inner-blog{	
+	margin: 25px 5%;
 }

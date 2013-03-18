@@ -37,7 +37,14 @@ define(["esri/map",
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView("#inner-blog","blogPost")
+				blog: new BlogView("#inner-blog","blogPost",function(){
+					$(".blogPostImg").load(function(){
+						app.blogScroll.refresh();
+					})
+				}),
+				blogScroll: new iScroll("blog",{
+					bounce: true
+				})
 			}
 
 			//First layout setup called on app load

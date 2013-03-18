@@ -8,13 +8,15 @@ define([],
 		 * Class to compile blog attributes into DOM Display
 		 */
 
-		return function BlogView(selector,fieldName)
+		return function BlogView(selector,fieldName,loadCallback)
 		{
 			this.init = function(featureArray) 
 			{
 				dojo.forEach(featureArray,function(ftr){
 					createBlogPost(ftr.attributes[fieldName]);
 				});
+
+				loadCallback();
 			}
 
 			function createBlogPost(blogString)
