@@ -53,7 +53,7 @@ define(["esri/map",
 			resetLayout();
 
 			if (!configOptions.sharingurl) {
-				if(location.host.match("localhost") || location.host.match("storymaps.esri.com"))
+				if(location.host.match("localhost") || location.host.match("storymaps.esri.com") || location.host.match("c9.io"))
 					configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
 				else
 					configOptions.sharingurl = location.protocol + '//' + location.host + "/sharing/content/items";
@@ -92,7 +92,7 @@ define(["esri/map",
 					initializeApp(response);
 				}
 				else {
-					dojo.connect(map, "onLoad", function() {
+					dojo.connect(app.map, "onLoad", function() {
 						initializeApp(response);
 					});
 				}
@@ -132,7 +132,7 @@ define(["esri/map",
 			buildBannerDisplay(response);
 		}
 
-		function buildBannerDisplay(response) 
+		function buildBannerDisplay(response)
 		{
 			$("#title").html(configOptions.title || response.itemInfo.item.title);
 			$("#subtitle").html(configOptions.subtitle || response.itemInfo.item.snippet);
