@@ -2,6 +2,7 @@ define(["esri/map",
 		"esri/arcgis/utils",
 		"esri/layout",
 		"esri/widgets",
+		"storymaps/geoblog/ui/WordpressImport",
 		"storymaps/geoblog/core/BlogData",
 		"storymaps/geoblog/ui/BlogView",
 		"dojo/has"],
@@ -10,6 +11,7 @@ define(["esri/map",
 		Utils,
 		Layout,
 		Widgets,
+		Wordpress,
 		BlogData,
 		BlogView,
 		Has)
@@ -36,6 +38,7 @@ define(["esri/map",
 			app = {
 				//Esri map variable
 				map: null,
+				blogWP: new Wordpress(getHostname(configOptions.blogURL)),
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
@@ -98,6 +101,12 @@ define(["esri/map",
 				}
 
 			});
+		}
+
+		function getHostname(url)
+		{
+			var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+			return url.match(re)[1].toString();
 		}
 
 		function loadBlog()

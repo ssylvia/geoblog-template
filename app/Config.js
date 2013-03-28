@@ -8,6 +8,8 @@ define([],
 			webmap: "996f62fa8f174423a11794913f7e189f",
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog_test/FeatureServer/0",
+			//wordpress blog url
+			blogURL: "http://besthike.wordpress.com/",
 			//If starting blog from lastest post, set to true
 			reverseOrder: false,
 			//Enter a title, if no title is specified, the webmap's title is used.
