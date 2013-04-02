@@ -38,15 +38,15 @@ define(["esri/map",
 			app = {
 				//Esri map variable
 				map: null,
-				blogWP: new Wordpress(getHostname(configOptions.blogURL)),
+				wordpressData: new Wordpress(getHostname(configOptions.blogURL),null,null,null,setupBanner),
 				//Feature services layer holding blog posts
-				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
-				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView("#inner-blog","blogPost",function(){
+				//blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
+				//blogData: new BlogData(configOptions.reverseOrder),
+				blog: new BlogView("#inner-blog","title","content",function(){
 					if(app.blogScroll){
-						$(".blogPostImg").load(function(){
-							app.blogScroll.refresh();
-						});
+						// $("img").load(function(){
+						// 	app.blogScroll.refresh();
+						// });
 					}
 				}),
 				blogScroll: null
@@ -78,6 +78,12 @@ define(["esri/map",
 
 			loadMap();
 			loadBlog();
+		}
+
+		function setupBanner(title,subtitle)
+		{
+			$("#title").html(configOptions.title || title);
+			$("#subtitle").html(configOptions.subtitle || subtitle);
 		}
 
 		function loadMap()
@@ -122,29 +128,26 @@ define(["esri/map",
 				});
 			}
 
-			var queryTask = new esri.tasks.QueryTask(configOptions.featureService);
-
-			var query = new esri.tasks.Query();
-			query.outFields = ["*"];
-			query.where = "blogPost != ''";
-			query.returnGeometry = false;
-
-			queryTask.execute(query,function(result){
-				app.blogData.setBlogData(result.features,result.objectIdFieldName);
-
-				app.blog.init(app.blogData.getCurrentBlogSet());
+			app.wordpressData.init(function(){
+				app.blog.init(app.wordpressData.getCurrentPosts());
 			});
+
+			// var queryTask = new esri.tasks.QueryTask(configOptions.featureService);
+
+			// var query = new esri.tasks.Query();
+			// query.outFields = ["*"];
+			// query.where = "blogPost != ''";
+			// query.returnGeometry = false;
+
+			// queryTask.execute(query,function(result){
+			// 	app.blogData.setBlogData(result.features,result.objectIdFieldName);
+
+			// 	app.blog.init(app.blogData.getCurrentBlogSet());
+			// });
 		}
 
 		function initializeApp(response)
 		{
-			buildBannerDisplay(response);
-		}
-
-		function buildBannerDisplay(response)
-		{
-			$("#title").html(configOptions.title || response.itemInfo.item.title);
-			$("#subtitle").html(configOptions.subtitle || response.itemInfo.item.snippet);
 		}
 
 		function resetLayout()

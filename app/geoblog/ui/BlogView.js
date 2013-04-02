@@ -8,45 +8,23 @@ define([],
 		 * Class to compile blog attributes into DOM Display
 		 */
 
-		return function BlogView(selector,fieldName,loadCallback)
+		return function BlogView(selector,titleAttr,contentAttr,loadCallback)
 		{
-			this.init = function(featureArray) 
+			this.init = function(blogPosts) 
 			{
-				dojo.forEach(featureArray,function(ftr){
-					createBlogPost(ftr.attributes[fieldName]);
+				dojo.forEach(blogPosts,function(post){
+					createBlogPost(post[titleAttr],post[contentAttr]);
+
+				alert("TEST");
 				});
 
 				loadCallback();
 			}
 
-			function createBlogPost(blogString)
+			function createBlogPost(titleString,blogString)
 			{
-				var blogArray = $.parseJSON(blogString);
-
 				$(selector).append('<div class="geoBlogPost"></div>');
-
-				dojo.forEach(blogArray,function(item){
-
-					var el;
-
-					switch (item.type){
-						case "title":
-							el = '<h3 class="blogPostTitle">'+item.string+'</h3>';
-							break;
-						case "img":
-							el = '<img class="blogPostImg" src="'+item.src+'" alt="">';
-							if (item.string){
-								el = el + '<p class="blogPostCaption">'+item.string+'</p>';
-							}
-							break;
-						case "text":
-							el = '<p class="blogPostText">'+item.string+'</p>';
-							break;
-					}
-
-					$(".geoBlogPost").last().append(el);
-
-				});
+				$(".geoBlogPost").last().append("<h2>"+ titleString +"</h2>").append(blogString);
 			}
 		}
 
