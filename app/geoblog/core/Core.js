@@ -44,9 +44,9 @@ define(["esri/map",
 				//blogData: new BlogData(configOptions.reverseOrder),
 				blog: new BlogView("#inner-blog","title","content",function(){
 					if(app.blogScroll){
-						// $("img").load(function(){
-						// 	app.blogScroll.refresh();
-						// });
+						$("img").load(function(){
+							app.blogScroll.refresh();
+						});
 					}
 				}),
 				blogScroll: null
@@ -124,7 +124,11 @@ define(["esri/map",
 			}
 			else{
 				app.blogScroll = new iScroll("blog",{
-					bounce: true
+					useTransform: false,
+					onRefresh: function(){
+						if(app.blogScroll)
+							app.blogScroll.maxScrollY = app.blogScroll.maxScrollY - 50;
+					}
 				});
 			}
 
@@ -150,18 +154,27 @@ define(["esri/map",
 		{
 		}
 
-		function resetLayout()
+		function resetLayout(splitter)
 		{
-			$(".region-center").each(function(){
-				var x = 0;
-				var y = 0;
-				x = $(this).siblings(".region-left").outerWidth() + $(this).siblings(".region-right").outerWidth();
-				y = $(this).siblings(".region-top").outerHeight() + $(this).siblings(".region-bottom").outerHeight();
-				$(this).css({
-					"height" : $(this).parent().outerHeight() - y,
-					"width" : $(this).parent().outerWidth() - x
+			if(splitter){
+				
+			}
+			else{
+				$(".region-center").each(function(){
+					var l = $(this).siblings(".region-left").outerWidth(),
+						r = $(this).siblings(".region-right").outerWidth(),
+						t = $(this).siblings(".region-top").outerHeight(),
+						b = $(this).siblings(".region-bottom").outerHeight(),
+						x = l + r,
+						y = t + b;
+					$(this).css({
+						"top" : t,
+						"left" : l,
+						"height" : $(this).parent().outerHeight() - y,
+						"width" : $(this).parent().outerWidth() - x
+					});
 				});
-			});
+			}
 		}
 
 		return {

@@ -14,8 +14,6 @@ define([],
 			{
 				dojo.forEach(blogPosts,function(post){
 					createBlogPost(post[titleAttr],post[contentAttr]);
-
-				alert("TEST");
 				});
 
 				loadCallback();

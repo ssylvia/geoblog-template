@@ -38,13 +38,13 @@ define([],
 				var requestString = "";
 
 				for (item in requestOptions){
-					if (requestString = "")
-						requestString = requestString + requestOptions[item];
-					else
-						requestString = requestString + "&" + requestOptions[item];
+					if (requestString === ""){
+						requestString = requestString + item + "=" + requestOptions[item];
+					}
+					else{
+						requestString = requestString + "&" + item + "=" + requestOptions[item];
+					}
 				}
-
-				console.log(requestString);
 
 				$.ajax({
 					type: 'GET',
