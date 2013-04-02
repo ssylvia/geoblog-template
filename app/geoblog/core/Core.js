@@ -124,12 +124,39 @@ define(["esri/map",
 			}
 			else{
 				app.blogScroll = new iScroll("blog",{
-					useTransform: false,
-					onRefresh: function(){
-						if(app.blogScroll)
-							app.blogScroll.maxScrollY = app.blogScroll.maxScrollY - 50;
-					}
+					useTransform: false
 				});
+				//Change wheel event to increase scroll speed
+				app.blogScroll._wheel = function (e) {
+					var that = this,
+						wheelDeltaX, wheelDeltaY,
+						deltaX, deltaY,
+						deltaScale;
+
+					if ('wheelDeltaX' in e) {
+						wheelDeltaX = e.wheelDeltaX / 12;
+						wheelDeltaY = e.wheelDeltaY / 12;
+					} else if('wheelDelta' in e) {
+						wheelDeltaX = wheelDeltaY = e.wheelDelta / 12;
+					} else if ('detail' in e) {
+						wheelDeltaX = wheelDeltaY = -e.detail * 3;
+					} else {
+						return;
+					}
+					
+					deltaX = that.x + wheelDeltaX;
+					deltaY = that.y + (wheelDeltaY * 5);
+
+					if (deltaX > 0) deltaX = 0;
+					else if (deltaX < that.maxScrollX) deltaX = that.maxScrollX;
+
+					if (deltaY > that.minScrollY) deltaY = that.minScrollY;
+					else if (deltaY < that.maxScrollY) deltaY = that.maxScrollY;
+			    
+					if (that.maxScrollY < 0) {
+						that.scrollTo(deltaX, deltaY, 0);
+					}
+				}
 			}
 
 			app.wordpressData.init(function(){

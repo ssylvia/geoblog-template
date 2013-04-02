@@ -37,7 +37,7 @@ define([],
 
 				var requestString = "";
 
-				for (item in requestOptions){
+				for (var item in requestOptions){
 					if (requestString === ""){
 						requestString = requestString + item + "=" + requestOptions[item];
 					}

@@ -12,6 +12,8 @@ define([],
 		{
 			this.init = function(blogPosts) 
 			{
+				$(selector).append('<div id="blog-bottom-controls" class="blogElement"></div>')
+
 				dojo.forEach(blogPosts,function(post){
 					createBlogPost(post[titleAttr],post[contentAttr]);
 				});
@@ -21,8 +23,8 @@ define([],
 
 			function createBlogPost(titleString,blogString)
 			{
-				$(selector).append('<div class="geoBlogPost"></div>');
-				$(".geoBlogPost").last().append("<h2>"+ titleString +"</h2>").append(blogString);
+				$('#blog-bottom-controls').before('<div class="geoBlogPost blogElement"></div>');
+				$('.geoBlogPost').last().append("<h2>"+ titleString +"</h2>").append(blogString);
 			}
 		}
 
