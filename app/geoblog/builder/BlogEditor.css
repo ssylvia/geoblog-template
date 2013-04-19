@@ -1,0 +1,18 @@
+.add-blog-post{
+	margin: 25px 5%;
+	padding: 10px;
+	background-color: #dadada;
+	color: #444;
+	text-align: center;
+	font-size: 50px;
+	cursor: pointer;
+}
+
+.add-blog-post:hover{
+	background-color: #ccc
+}
+
+.temp-blog-post{
+	width: 100%;
+	margin: 25px 5%;
+}

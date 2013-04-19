@@ -4,6 +4,29 @@
 
 		<title>Geoblog Template</title>
 
+		<meta name="author" content="">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+
+		<!--Facebook Open Graph-->
+		<meta property="og:title" content="" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content="" />
+		<meta property="og:image" content="" />
+		<meta property="og:site_name" content="Esri" />
+		<meta property="og:description" content=""/>
+		<meta property="fb:app_id" content="" />
+		<!--End Facebook-->
+
+		<!--Twitter Card Data-->
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:site" content="">
+		<meta name="twitter:url" content="">
+		<meta name="twitter:title" content="">
+		<meta name="twitter:description" content="">
+		<meta name="twitter:image" content="">
+		<!--Twitter Card Data-->
+
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,9 +38,11 @@
 
 		<link rel="stylesheet" type="text/css" href="lib/normalize.css">
 
-		<link rel="stylesheet" type="text/css" href="//servicesbeta.esri.com/jsapi/arcgis/3.4/js/dojo/dijit/themes/tundra/tundra.css">
-		<link rel="stylesheet" type="text/css" href="//servicesbeta.esri.com/jsapi/arcgis/3.4/js/esri/css/esri.css" />
+		<link rel="stylesheet" type="text/css" href="//servicesbeta.esri.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/tundra/tundra.css">
+		<link rel="stylesheet" type="text/css" href="//servicesbeta.esri.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
 
+		<link rel="stylesheet" type="text/css" href="app/utils/Helper.css">
+		<link rel="stylesheet" type="text/css" href="app/geoblog/builder/BlogEditor.css">
 		<link rel="stylesheet" type="text/css" href="app/geoblog/ui/BlogView.css">
 		<link rel="stylesheet" type="text/css" href="app/geoblog/core/Core.css">
 
@@ -38,6 +63,13 @@
 			};
 		</script>
 
+		<!--Social Media Links-->
+		<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+		<script type="text/javascript">
+			stLight.options({publisher: "77225c91-2742-42f7-b1b4-bddda99a9bde"});
+		</script>
+		<!--END Social Media Links-->
+
 	</head>
 	<body class="tundra">
 
@@ -48,9 +80,27 @@
 				<div id="header-text" class="region-center">
 					<h1 id="title"></h1>
 					<h2 id="subtitle"></h2>
+					<p id="hide-intro" class="intro-toggle">H I D E</p>
 				</div><!--/header-text-->
 
+				<div id="mobile-nav">
+					<span class="left-nav intro-toggle">INTRO</span>
+					<span class="map-toggle">MAP</span>
+					<span class="right-nav legend-toggle">LEGEND</span>
+				</div><!--/mobile-nav-->
+
 				<div id="branding-wrapper" class="region-right">
+					<div id="social">
+						<a id="smLink" href="http://storymaps.esri.com" target="_blank">A story map </a>
+						<span class='st_facebook'></span>
+						<span class='st_twitter' st_via='EsriStoryMaps'></span>
+						<span class='st_sharethis'></span>
+					</div><!--/social-->
+					<div id="logo">
+						<a id="logoLink" href="http://www.esri.com" target="_blank">
+							<img id="logoImg" src="resources/images/app/esriGlobeLogow.png" alt="Esri - Home">
+						</a><!--/logoLink-->
+					</div><!--/logo-->
 				</div><!--/branding-wrapper-->
 
 			</div><!--/banner-->
@@ -68,13 +118,15 @@
 
 				</div><!--/blog-wrapper-->
 
-				<div id="map" class="region-center"></div>
+				<div id="map" class="region-center">
+					<img class="loader loader80" src="resources/images/app/loader.gif" alt="Loading">
+				</div><!--/map-->
 
 			</div><!--/content-->
 
 		</div><!--application-window-->
 
-		<script type="text/javascript" src="//servicesbeta.esri.com/jsapi/arcgis/?v=3.4"></script>
+		<script type="text/javascript" src="//servicesbeta.esri.com/jsapi/arcgis/3.5"></script>
 		<script type="text/javascript" src="lib/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="lib/iscroll.js"></script>
 		<script type="text/javascript">

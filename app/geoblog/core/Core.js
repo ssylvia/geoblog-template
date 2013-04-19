@@ -2,7 +2,7 @@ define(["esri/map",
 		"esri/arcgis/utils",
 		"esri/layout",
 		"esri/widgets",
-		"storymaps/geoblog/ui/WordpressImport",
+		"storymaps/utils/Helper",
 		"storymaps/geoblog/core/BlogData",
 		"storymaps/geoblog/ui/BlogView",
 		"dojo/has"],
@@ -11,7 +11,7 @@ define(["esri/map",
 		Utils,
 		Layout,
 		Widgets,
-		Wordpress,
+		Helper,
 		BlogData,
 		BlogView,
 		Has)
@@ -30,7 +30,12 @@ define(["esri/map",
 		var isBuilder = false;
 
 		$(window).resize(function(){
-			resetLayout();
+			Helper.resetLayout();
+		});
+
+		$(document).ready(function(){
+			Helper.resetLayout();
+			$(".loader").fadeIn();
 		});
 
 		function init()
@@ -38,10 +43,9 @@ define(["esri/map",
 			app = {
 				//Esri map variable
 				map: null,
-				wordpressData: new Wordpress(getHostname(configOptions.blogURL),null,null,null,setupBanner),
 				//Feature services layer holding blog posts
-				//blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
-				//blogData: new BlogData(configOptions.reverseOrder),
+				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
+				blogData: new BlogData(configOptions.reverseOrder),
 				blog: new BlogView("#inner-blog","title","content",function(){
 					if(app.blogScroll){
 						$("img").load(function(){
@@ -51,9 +55,6 @@ define(["esri/map",
 				}),
 				blogScroll: null
 			}
-
-			//First layout setup called on app load
-			resetLayout();
 
 			if (!configOptions.sharingurl) {
 				if(location.host.match("localhost") || location.host.match("storymaps.esri.com") || location.host.match("c9.io"))
@@ -109,12 +110,6 @@ define(["esri/map",
 			});
 		}
 
-		function getHostname(url)
-		{
-			var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-			return url.match(re)[1].toString();
-		}
-
 		function loadBlog()
 		{
 
@@ -152,56 +147,27 @@ define(["esri/map",
 
 					if (deltaY > that.minScrollY) deltaY = that.minScrollY;
 					else if (deltaY < that.maxScrollY) deltaY = that.maxScrollY;
-			    
+
 					if (that.maxScrollY < 0) {
 						that.scrollTo(deltaX, deltaY, 0);
 					}
 				}
 			}
 
-			app.wordpressData.init(function(){
-				app.blog.init(app.wordpressData.getCurrentPosts());
-			});
+			//Add post editor
+			if(isBuilder){
+				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
+					app.editor = new BlogEditor("#inner-blog");
+				});
 
-			// var queryTask = new esri.tasks.QueryTask(configOptions.featureService);
-
-			// var query = new esri.tasks.Query();
-			// query.outFields = ["*"];
-			// query.where = "blogPost != ''";
-			// query.returnGeometry = false;
-
-			// queryTask.execute(query,function(result){
-			// 	app.blogData.setBlogData(result.features,result.objectIdFieldName);
-
-			// 	app.blog.init(app.blogData.getCurrentBlogSet());
-			// });
+				app.editor.init();
+			}
 		}
 
 		function initializeApp(response)
 		{
-		}
-
-		function resetLayout(splitter)
-		{
-			if(splitter){
-				
-			}
-			else{
-				$(".region-center").each(function(){
-					var l = $(this).siblings(".region-left").outerWidth(),
-						r = $(this).siblings(".region-right").outerWidth(),
-						t = $(this).siblings(".region-top").outerHeight(),
-						b = $(this).siblings(".region-bottom").outerHeight(),
-						x = l + r,
-						y = t + b;
-					$(this).css({
-						"top" : t,
-						"left" : l,
-						"height" : $(this).parent().outerHeight() - y,
-						"width" : $(this).parent().outerWidth() - x
-					});
-				});
-			}
+			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
+			$(".loader").fadeOut();
 		}
 
 		return {
