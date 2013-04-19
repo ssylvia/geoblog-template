@@ -1,4 +1,4 @@
-define(["dijit/Editor"],
+define([],
 	function(Editor)
 	{
 		/**
@@ -24,7 +24,15 @@ define(["dijit/Editor"],
 			{
 				$(".add-blog-post").hide();
 				$(".add-blog-post").before(
-					'<div class="temp-blog-post"><input class="temp-post-title"></div>');
+					'<form class="temp-blog-post">\
+						<input type="text" class="temp blog-post-title" placeholder="Type post title...">\
+						<textarea type="textarea" id="temp-editor"></textarea>\
+					</form>');
+
+				$("#temp-editor").wysihtml5({
+					"font-styles": false,
+					"image": false,
+				});
 			}
 
 		}

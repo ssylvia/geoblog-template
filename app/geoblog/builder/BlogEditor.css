@@ -13,6 +13,9 @@
 }
 
 .temp-blog-post{
-	width: 100%;
 	margin: 25px 5%;
+}
+
+.temp.blog-post-title{
+	font-size: 20px;
 }

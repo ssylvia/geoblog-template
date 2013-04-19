@@ -27,7 +27,8 @@ define(["esri/map",
 		// Initialization
 		//
 
-		var isBuilder = false;
+		var isBuilder = false,
+			blogSelector = "#blog";
 
 		$(window).resize(function(){
 			Helper.resetLayout();
@@ -46,14 +47,7 @@ define(["esri/map",
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView("#inner-blog","title","content",function(){
-					if(app.blogScroll){
-						$("img").load(function(){
-							app.blogScroll.refresh();
-						});
-					}
-				}),
-				blogScroll: null
+				blog: new BlogView(blogSelector,"title","content")
 			}
 
 			if (!configOptions.sharingurl) {
@@ -112,52 +106,10 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-
-
-			if(Has("ie") <= 8){
-				//TODO: IE 7/8 Scrolling method
-			}
-			else{
-				app.blogScroll = new iScroll("blog",{
-					useTransform: false
-				});
-				//Change wheel event to increase scroll speed
-				app.blogScroll._wheel = function (e) {
-					var that = this,
-						wheelDeltaX, wheelDeltaY,
-						deltaX, deltaY,
-						deltaScale;
-
-					if ('wheelDeltaX' in e) {
-						wheelDeltaX = e.wheelDeltaX / 12;
-						wheelDeltaY = e.wheelDeltaY / 12;
-					} else if('wheelDelta' in e) {
-						wheelDeltaX = wheelDeltaY = e.wheelDelta / 12;
-					} else if ('detail' in e) {
-						wheelDeltaX = wheelDeltaY = -e.detail * 3;
-					} else {
-						return;
-					}
-					
-					deltaX = that.x + wheelDeltaX;
-					deltaY = that.y + (wheelDeltaY * 5);
-
-					if (deltaX > 0) deltaX = 0;
-					else if (deltaX < that.maxScrollX) deltaX = that.maxScrollX;
-
-					if (deltaY > that.minScrollY) deltaY = that.minScrollY;
-					else if (deltaY < that.maxScrollY) deltaY = that.maxScrollY;
-
-					if (that.maxScrollY < 0) {
-						that.scrollTo(deltaX, deltaY, 0);
-					}
-				}
-			}
-
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor("#inner-blog");
+					app.editor = new BlogEditor(blogSelector);
 				});
 
 				app.editor.init();
