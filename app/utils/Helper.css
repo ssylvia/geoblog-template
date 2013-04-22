@@ -40,13 +40,13 @@ body, html{
 }
 
 .region-right{
-	position: relative;
-	float: right;
+	position: absolute;
+	right: 0;
 }
 
 .region-left, .region-center, .region-top, .region-bottom{
-	position: relative;
-	float: left;
+	position: absolute;
+	left: 0;
 }
 
 #banner{

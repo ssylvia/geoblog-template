@@ -13,9 +13,23 @@
 }
 
 .temp-blog-post{
-	margin: 25px 5%;
+	padding: 25px 5%;
+	margin-right: 14px;
 }
 
 .temp.blog-post-title{
 	font-size: 20px;
+}
+
+input.temp{
+	width: 100%;
+}
+
+textarea.temp{
+	width: 100%;
+	height: 200px;
+}
+
+.temp.blog-post-photo{
+	display: none;
 }

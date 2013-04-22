@@ -18,6 +18,8 @@ define(["dojo/cookie", "dojo/has","dojo/_base/array"], function(cookie, has, arr
 					x = l + r,
 					y = t + b;
 				$(this).css({
+					"top": t,
+					"left": l,
 					"height" : $(this).parent().outerHeight() - y,
 					"width" : $(this).parent().outerWidth() - x
 				});
