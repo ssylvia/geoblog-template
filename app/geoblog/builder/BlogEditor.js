@@ -30,8 +30,10 @@ define([],
 					</form>');
 
 				$("#temp-editor").wysihtml5({
+					"stylesheets": ["lib/bootstrap-wysihtml5/lib/css/wysiwyg-color.css"],
 					"font-styles": false,
 					"image": false,
+					"color": true
 				});
 			}
 
