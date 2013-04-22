@@ -30,8 +30,8 @@ define([],
 							<div class="btn-group">\
 								<button class="btn editor-ctrl add-text" title="Text"><i class="icon-align-left" onclick=""></i></button>\
 								<button class="btn editor-ctrl add-photo" title="Photo"><i class="icon-picture"></i></button>\
-								<button class="btn editor-ctrl add-date" title="Date & Time"><i class="icon-calendar"></i></button>\
-								<button class="btn editor-ctrl add-location" title="Location"><i class="icon-map-marker"></i></button>\
+								<button class="btn editor-ctrl add-date disabled" title="Date & Time"><i class="icon-calendar"></i></button>\
+								<button class="btn editor-ctrl add-location disabled" title="Location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
 							<button class="btn btn-danger editor-ctrl discard-editor" type="button">Discard</button>\
@@ -62,7 +62,7 @@ define([],
 
 			function addTextEditor()
 			{
-				$(".temp-post-controls").last().before('<textarea type="textarea" id="temp-editor" class="temp blog-post-text post-item" placeholder="Type text content..."></textarea>');
+				$(".temp-post-controls").last().before('<textarea type="textarea" class="temp blog-post-text post-item" placeholder="Type text content..."></textarea>');
 
 				$(".temp.blog-post-text").last().wysihtml5({
 					"stylesheets": ["lib/bootstrap-wysihtml5/lib/css/wysiwyg-color.css"],
@@ -101,12 +101,36 @@ define([],
 
 			function discardEditor()
 			{
-
+				//TODO: Add confirm popup
+				$(".temp-blog-post").remove();
+				$(".add-blog-post").show();
 			}
 
 			function savePost()
 			{
+				var postTitle = $(".temp.blog-post-title").last().val();
+				var postHTML = compileHTMLContent();
 
+				console.log(postHTML);
+			}
+
+			function compileHTMLContent()
+			{
+				var HTML = "";
+
+				$(".temp.post-item").each(function(){
+					if($(this).hasClass("blog-post-text")){
+						HTML += '<div class="blog-post-text">'+$(this).val()+'</div>'
+					}
+					else if($(this).hasClass("photo-url")){
+						HTML += '<img class="blog-post-photo img-polaroid" src="'+$(this).val()+'" alt="'+$(this).val()+'">';
+					}
+					else if($(this).hasClass("photo-caption")){
+						HTML += '<p class="blog-post-photo-caption">'+$(this).val()+'</p>';
+					}
+				});
+
+				return HTML;
 			}
 
 		}
