@@ -8,7 +8,7 @@ define([],
 		 * Class to create and edit blog posts
 		 */
 
-		return function BlogEditor(selector)
+		return function BlogEditor(selector,onSave)
 		{
 			var _this = this;
 
@@ -119,10 +119,13 @@ define([],
 
 			function savePost()
 			{
-				var postTitle = $(".temp.blog-post-title").last().val();
-				var postHTML = compileHTMLContent();
+				var blogPost = {
+					title: $(".temp.blog-post-title").last().val(),
+					content: compileHTMLContent(),
+					date: getPostDate()
+				}
 
-				console.log(postHTML);
+				onSave(blogPost);
 			}
 
 			function compileHTMLContent()
@@ -142,6 +145,16 @@ define([],
 				});
 
 				return HTML;
+			}
+
+			function getPostDate()
+			{
+				if($(".temp.blog-post-date").last().val()){
+					return new Date();
+				}
+				else{
+					return new Date($(".temp.blog-post-date").last().val());
+				}
 			}
 
 		}
