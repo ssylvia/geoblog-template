@@ -133,7 +133,8 @@ define(["storymaps/utils/MovableGraphic"],
 				var blogPost = {
 					title: $(".temp.blog-post-title").last().val(),
 					content: compileHTMLContent(),
-					date: getPostDate()
+					date: getPostDate(),
+					geometry: getPostGeometry()
 				}
 
 				onSave(blogPost);
@@ -168,6 +169,16 @@ define(["storymaps/utils/MovableGraphic"],
 				}
 				else{
 					return new Date($(".temp.blog-post-date").last().val()).valueOf();
+				}
+			}
+
+			function getPostGeometry()
+			{
+				if(_mapLayer.graphics.length > 0){
+					return _mapLayer.graphics[0].geometry;
+				}
+				else{
+					return false;
 				}
 			}
 
