@@ -30,6 +30,10 @@ textarea.temp{
 	height: 200px;
 }
 
+.temp.blog-post-date{
+	cursor: default;
+}
+
 .temp.blog-post-photo{
 	display: none;
 }

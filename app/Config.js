@@ -5,7 +5,7 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "996f62fa8f174423a11794913f7e189f",
+			webmap: "9629c5f58dc5418788bb96cb9c82321d",
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog_test/FeatureServer/0",
 			//wordpress blog url

@@ -26,12 +26,15 @@ define([],
 				$(".add-blog-post").before(
 					'<form class="temp-blog-post" action="javascript:void(0);">\
 						<input type="text" class="temp blog-post-title" placeholder="Type post title...">\
+						<div class="input-append date form_datetime">\
+							<input class="temp blog-post-date" size="20" type="text" value="" readonly>\
+							<span class="add-on"><i class="icon-calendar"></i></span>\
+						</div>\
 						<div class="temp-post-controls">\
 							<div class="btn-group">\
 								<button class="btn editor-ctrl add-text" title="Text"><i class="icon-align-left" onclick=""></i></button>\
 								<button class="btn editor-ctrl add-photo" title="Photo"><i class="icon-picture"></i></button>\
-								<button class="btn editor-ctrl add-date disabled" title="Date & Time"><i class="icon-calendar"></i></button>\
-								<button class="btn editor-ctrl add-location disabled" title="Location"><i class="icon-map-marker"></i></button>\
+								<button class="btn editor-ctrl add-location disabled" title="Set Location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
 							<button class="btn btn-danger editor-ctrl discard-editor" type="button">Discard</button>\
@@ -57,6 +60,14 @@ define([],
 					else{
 						savePost();
 					}
+				});
+
+				$(".form_datetime").last().datetimepicker({
+					format: "dd MM yyyy - HH:ii p",
+					showMeridian: true,
+					autoclose: true,
+					todayBtn: true,
+					pickerPosition: "bottom-left"
 				});
 			}
 
