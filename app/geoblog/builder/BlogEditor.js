@@ -1,5 +1,5 @@
-define([],
-	function(Editor)
+define(["storymaps/utils/MovableGraphic"],
+	function(MovableGraphic)
 	{
 		/**
 		 * BlogEditor
@@ -8,9 +8,10 @@ define([],
 		 * Class to create and edit blog posts
 		 */
 
-		return function BlogEditor(selector,onSave)
+		return function BlogEditor(selector,map,onSave)
 		{
 			var _this = this;
+			var _mapLayer = new esri.layers.GraphicsLayer();
 
 			this.init = function()
 			{
@@ -32,13 +33,14 @@ define([],
 						</div>\
 						<div class="temp-post-controls">\
 							<div class="btn-group">\
-								<button class="btn editor-ctrl add-text" title="Text"><i class="icon-align-left" onclick=""></i></button>\
-								<button class="btn editor-ctrl add-photo" title="Photo"><i class="icon-picture"></i></button>\
-								<button class="btn editor-ctrl add-location disabled" title="Set Location"><i class="icon-map-marker"></i></button>\
+								<button class="btn editor-ctrl add-text" title="Add text"><i class="icon-align-left" onclick=""></i></button>\
+								<button class="btn editor-ctrl add-photo" title="Add a photo"><i class="icon-picture"></i></button>\
+								<button class="btn editor-ctrl add-location" title="Set location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
 							<button class="btn btn-danger editor-ctrl discard-editor" type="button">Discard</button>\
 						</div>\
+						<div class="temp-post-messages"></div>\
 					</form>');
 
 				$(".editor-ctrl").click(function(){
@@ -47,9 +49,6 @@ define([],
 					}
 					else if($(this).hasClass("add-photo")){
 						addPhotoEditor();
-					}
-					else if($(this).hasClass("add-date")){
-						addDateEditor();
 					}
 					else if($(this).hasClass("add-location")){
 						addLocationEditor();
@@ -100,14 +99,17 @@ define([],
 				});
 			}
 
-			function addDateEditor()
-			{
-
-			}
-
 			function addLocationEditor()
 			{
+				var pms = new esri.symbol.PictureMarkerSymbol('resources/icons/EditMarker.png', 50, 50).setOffset(0,20);
+				if(map){
+					var graphic = new esri.Graphic(map.extent.getCenter(),pms);
+					map.addLayer(_mapLayer);
+					_mapLayer.clear();
+					_mapLayer.add(graphic);
+					var mg = new MovableGraphic(map, _mapLayer, _mapLayer.graphics[0]);
 
+				}
 			}
 
 			function discardEditor()
@@ -150,10 +152,10 @@ define([],
 			function getPostDate()
 			{
 				if($(".temp.blog-post-date").last().val()){
-					return new Date();
+					return new Date().valueOf();
 				}
 				else{
-					return new Date($(".temp.blog-post-date").last().val());
+					return new Date($(".temp.blog-post-date").last().val()).valueOf();
 				}
 			}
 

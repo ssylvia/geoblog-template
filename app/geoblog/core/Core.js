@@ -72,7 +72,6 @@ define(["esri/map",
 			}
 
 			loadMap();
-			loadBlog();
 		}
 
 		function setupBanner(title,subtitle)
@@ -109,7 +108,9 @@ define(["esri/map",
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(blogSelector);
+					app.editor = new BlogEditor(blogSelector,app.map,function(blog){
+						console.log(blog);
+					});
 				});
 
 				app.editor.init();
@@ -117,7 +118,8 @@ define(["esri/map",
 		}
 
 		function initializeApp(response)
-		{
+		{			
+			loadBlog();
 			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
 			$(".loader").fadeOut();
 		}
