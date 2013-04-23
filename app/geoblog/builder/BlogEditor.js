@@ -103,12 +103,19 @@ define(["storymaps/utils/MovableGraphic"],
 			{
 				var pms = new esri.symbol.PictureMarkerSymbol('resources/icons/EditMarker.png', 50, 50).setOffset(0,20);
 				if(map){
-					var graphic = new esri.Graphic(map.extent.getCenter(),pms);
-					map.addLayer(_mapLayer);
-					_mapLayer.clear();
-					_mapLayer.add(graphic);
-					var mg = new MovableGraphic(map, _mapLayer, _mapLayer.graphics[0]);
-
+					if($(".editor-ctrl.add-location").last().hasClass("active")){
+						$(".editor-ctrl.add-location").last().removeClass("active");
+						_mapLayer.clear();
+						map.removeLayer(_mapLayer);
+					}
+					else{
+						$(".editor-ctrl.add-location").last().addClass("active");
+						var graphic = new esri.Graphic(map.extent.getCenter(),pms);
+						map.addLayer(_mapLayer);
+						_mapLayer.clear();
+						_mapLayer.add(graphic);
+						var mg = new MovableGraphic(map, _mapLayer, _mapLayer.graphics[0]);
+					}
 				}
 			}
 
@@ -117,6 +124,8 @@ define(["storymaps/utils/MovableGraphic"],
 				//TODO: Add confirm popup
 				$(".temp-blog-post").remove();
 				$(".add-blog-post").show();
+				_mapLayer.clear();
+				map.removeLayer(_mapLayer);
 			}
 
 			function savePost()
@@ -128,6 +137,9 @@ define(["storymaps/utils/MovableGraphic"],
 				}
 
 				onSave(blogPost);
+
+				//Reset Editor and Add Button
+				discardEditor();
 			}
 
 			function compileHTMLContent()
