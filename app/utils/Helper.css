@@ -16,6 +16,10 @@ body, html{
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+b, strong{
+	font-weight: bold;
+}
+
 .loader{
 	display: none;
 	position: absolute;

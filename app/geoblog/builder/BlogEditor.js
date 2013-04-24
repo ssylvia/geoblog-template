@@ -159,7 +159,9 @@ define(["storymaps/utils/MovableGraphic"],
 					date: getPostDate(),
 					geometry: getPostGeometry(),
 					mapState: {
-						hiddenLayers: getHiddenLayers()
+						extent: map.extent.toJson(),
+						hiddenLayers: getHiddenLayers(),
+						infoWindow: getInfoWindowFeature()
 					}
 				}
 
@@ -223,6 +225,19 @@ define(["storymaps/utils/MovableGraphic"],
 					}
 				});
 				return layers;
+			}
+
+			function getInfoWindowFeature()
+			{
+				if(map.infoWindow.getSelectedFeature() && map.infoWindow.isShowing){
+					return {
+						graphic: map.infoWindow.getSelectedFeature().toJson(),
+						layerId: map.infoWindow.getSelectedFeature().getLayer().id
+					}
+				}
+				else{
+					return false;
+				}
 			}
 
 			function addLayerSelector()
