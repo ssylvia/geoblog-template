@@ -6,6 +6,8 @@ define(["storymaps/utils/MovableGraphic"],
 		 * @class BlogEditor
 		 *
 		 * Class to create and edit blog posts
+		 *
+		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
 		return function BlogEditor(selector,map,onSave)
@@ -19,6 +21,7 @@ define(["storymaps/utils/MovableGraphic"],
 				$(".add-blog-post").click(function(){
 					initNewPost();
 				});
+				addLayerSelector();
 			}
 
 			function initNewPost()
@@ -35,7 +38,7 @@ define(["storymaps/utils/MovableGraphic"],
 							<div class="btn-group">\
 								<button class="btn editor-ctrl add-text" title="Add text"><i class="icon-align-left" onclick=""></i></button>\
 								<button class="btn editor-ctrl add-photo" title="Add a photo"><i class="icon-picture"></i></button>\
-								<button class="btn editor-ctrl add-location" title="Set location"><i class="icon-map-marker"></i></button>\
+								<button class="btn editor-ctrl add-location" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
 							<button class="btn btn-danger editor-ctrl discard-editor" type="button">Discard</button>\
@@ -180,6 +183,63 @@ define(["storymaps/utils/MovableGraphic"],
 				else{
 					return false;
 				}
+			}
+
+			function addLayerSelector()
+			{
+				var mapSelector = '#'+app.map.container.id;
+
+				$(mapSelector).append(
+					'<div class="layer-selector-wrapper">\
+						<div class="layer-selector-toggle">Choose visible layers</div>\
+						<div class="layer-selector-content"></div>\
+					</div>');
+
+				dojo.forEach(map.layerIds,function(id){
+					var visible = map.getLayer(id).visible;
+
+					$(".layer-selector-content").last().prepend(
+						'<label class="checkbox">\
+							<input type="checkbox" class="layer-select" name="'+id+'" value="'+id+'"> '+id+'\
+						</label><br>');
+
+					if(map.getLayer(id).visible)
+						$(".layer-select").first().prop("checked",visible);
+
+					$(".layer-select").first().click(function(){
+						if($(this).is(":checked")){
+							map.getLayer($(this).attr("name")).show();
+						}
+						else{
+							map.getLayer($(this).attr("name")).hide();
+						}
+					});
+				});
+
+				dojo.forEach(map.graphicsLayerIds,function(id){
+					var visible = map.getLayer(id).visible;
+
+					$(".layer-selector-content").last().prepend(
+						'<label class="checkbox">\
+							<input type="checkbox" class="layer-select" name="'+id+'" value="'+id+'"> '+id+'\
+						</label><br>');
+
+					if(map.getLayer(id).visible)
+						$(".layer-select").first().prop("checked",visible);
+
+					$(".layer-select").first().click(function(){
+						if($(this).is(":checked")){
+							map.getLayer($(this).attr("name")).show();
+						}
+						else{
+							map.getLayer($(this).attr("name")).hide();
+						}
+					});
+				});
+
+				$(".layer-selector-toggle").click(function(){
+					$(this).next().stop(true,true).slideToggle();
+				});
 			}
 
 		}

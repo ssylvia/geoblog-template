@@ -6,6 +6,8 @@ define([],
 		 * @class BlogView
 		 *
 		 * Class to compile blog attributes into DOM Display
+		 *
+		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
 		return function BlogView(selector,titleAttr,contentAttr,loadCallback)
