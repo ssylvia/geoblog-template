@@ -29,7 +29,7 @@ define(["storymaps/utils/MovableGraphic"],
 				$(".add-blog-post").hide();
 				$(".add-blog-post").before(
 					'<form class="temp-blog-post" action="javascript:void(0);">\
-						<input type="text" class="temp blog-post-title" placeholder="Type post title...">\
+						<input type="text" class="temp blog-post-title post-item" placeholder="Type post title...">\
 						<div class="input-append date form_datetime">\
 							<input class="temp blog-post-date" size="20" type="text" value="" readonly>\
 							<span class="add-on"><i class="icon-calendar"></i></span>\
@@ -157,7 +157,10 @@ define(["storymaps/utils/MovableGraphic"],
 					title: $(".temp.blog-post-title").last().val(),
 					content: compileHTMLContent(),
 					date: getPostDate(),
-					geometry: getPostGeometry()
+					geometry: getPostGeometry(),
+					mapState: {
+						hiddenLayers: getHiddenLayers()
+					}
 				}
 
 				onSave(blogPost);
@@ -171,7 +174,10 @@ define(["storymaps/utils/MovableGraphic"],
 				var HTML = "";
 
 				$(".temp.post-item").each(function(){
-					if($(this).hasClass("blog-post-text")){
+					if($(this).hasClass("blog-post-title")){
+						HTML += '<h3 class="blog-post-title">'+$(this).val()+'</h3>'
+					}
+					else if($(this).hasClass("blog-post-text")){
 						HTML += '<div class="blog-post-text">'+$(this).val()+'</div>'
 					}
 					else if($(this).hasClass("photo-url")){
@@ -208,6 +214,17 @@ define(["storymaps/utils/MovableGraphic"],
 				}
 			}
 
+			function getHiddenLayers()
+			{
+				var layers = [];
+				$(".layer-select").each(function(){
+					if(!$(this).is(":checked")){
+						layers.push($(this).val());
+					}
+				});
+				return layers;
+			}
+
 			function addLayerSelector()
 			{
 				var mapSelector = '#'+app.map.container.id;
@@ -223,7 +240,7 @@ define(["storymaps/utils/MovableGraphic"],
 
 					$(".layer-selector-content").last().prepend(
 						'<label class="checkbox">\
-							<input type="checkbox" class="layer-select" name="'+id+'" value="'+id+'"> '+id+'\
+							<input type="checkbox" class="layer-select" value="'+id+'"> '+id+'\
 						</label><br>');
 
 					if(map.getLayer(id).visible)
@@ -244,7 +261,7 @@ define(["storymaps/utils/MovableGraphic"],
 
 					$(".layer-selector-content").last().prepend(
 						'<label class="checkbox">\
-							<input type="checkbox" class="layer-select" name="'+id+'" value="'+id+'"> '+id+'\
+							<input type="checkbox" class="layer-select" value="'+id+'"> '+id+'\
 						</label><br>');
 
 					if(map.getLayer(id).visible)
