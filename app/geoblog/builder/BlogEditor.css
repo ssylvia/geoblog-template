@@ -28,6 +28,7 @@ input.temp{
 textarea.temp{
 	width: 100%;
 	height: 200px;
+	resize: vertical;
 }
 
 .temp.blog-post-date{
@@ -62,4 +63,8 @@ textarea.temp{
 	max-height: 300px;
 	overflow: auto;
 	word-break: break-all;
+}
+
+.temp.post-embed-code{
+	height: 100px;
 }

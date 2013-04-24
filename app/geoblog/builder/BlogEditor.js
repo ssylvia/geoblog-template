@@ -38,6 +38,7 @@ define(["storymaps/utils/MovableGraphic"],
 							<div class="btn-group">\
 								<button class="btn editor-ctrl add-text" title="Add text"><i class="icon-align-left" onclick=""></i></button>\
 								<button class="btn editor-ctrl add-photo" title="Add a photo"><i class="icon-picture"></i></button>\
+								<button class="btn editor-ctrl add-embed" title="Embed video or other content"><i class="icon-facetime-video"></i></button>\
 								<button class="btn editor-ctrl add-location" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
@@ -52,6 +53,9 @@ define(["storymaps/utils/MovableGraphic"],
 					}
 					else if($(this).hasClass("add-photo")){
 						addPhotoEditor();
+					}
+					else if($(this).hasClass("add-embed")){
+						addEmbedEditor();
 					}
 					else if($(this).hasClass("add-location")){
 						addLocationEditor();
@@ -95,6 +99,22 @@ define(["storymaps/utils/MovableGraphic"],
 
 				$(".temp.photo-url").last().change(function(){
 					$(".temp.blog-post-photo").last().attr("src",$(this).val());
+				});
+
+				$(".temp.blog-post-photo").last().load(function(){
+					$(this).fadeIn();
+				});
+			}
+
+			function addEmbedEditor()
+			{
+				$(".temp-post-controls").last().before(
+					'<div class="temp blog-post-embed-wrapper"></div>\
+					<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code..."></textarea>'
+				);
+
+				$(".temp.post-embed-code ").last().change(function(){
+					$(".temp.blog-post-embed-wrapper").last().html($(this).val());
 				});
 
 				$(".temp.blog-post-photo").last().load(function(){
@@ -159,6 +179,9 @@ define(["storymaps/utils/MovableGraphic"],
 					}
 					else if($(this).hasClass("photo-caption")){
 						HTML += '<p class="blog-post-photo-caption">'+$(this).val()+'</p>';
+					}
+					else if($(this).hasClass("post-embed-code")){
+						HTML += '<div class="blog-post-embed-wrapper">'+$(this).val()+'</div>';
 					}
 				});
 
