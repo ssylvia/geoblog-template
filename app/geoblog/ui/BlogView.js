@@ -14,16 +14,25 @@ define([],
 		{
 			this.update = function(blogPosts) 
 			{
-				$(selector).empty();
+				$("geoblog-post").remove();
+
+				var editEl = $(selector).children().first();
 
 				dojo.forEach(blogPosts,function(post){
-					createBlogPost(post.attributes[contentAttr]);
+					createBlogPost(editEl,post.attributes[contentAttr]);
 				});
 			}
 
-			function createBlogPost(blogContent)
+			function createBlogPost(editEl,blogContent)
 			{
-				$(selector).append('<div class="geoblog-post">'+unescape(blogContent)+'</div>');
+				var content = unescape(blogContent);
+
+				if(editEl.length > 0){
+					editEl.before('<div class="geoblog-post">'+content+'</div>');
+				}
+				else{
+					$(selector).append('<div class="geoblog-post">'+content+'</div>');
+				}
 			}
 		}
 
