@@ -1,3 +1,13 @@
+.geoblog-post{
+	margin: 0 5%;
+	padding: 25px 0;
+	border-top: 1px solid #dadada;
+}
+
+.geoblog-post:first-child{
+	border: none;
+}
+
 .blog-post-title{	
 	font-weight: bold;
 	font-size: 20px;
