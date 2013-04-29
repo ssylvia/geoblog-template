@@ -47,7 +47,7 @@ define(["esri/map",
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView(blogSelector,"title","content")
+				blog: new BlogView(blogSelector,"content")
 			}
 
 			if (!configOptions.sharingurl) {
@@ -105,25 +105,25 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blogData.init(app.blogLayer);
+			app.blogData.init(app.blogLayer,app.blog.update);
 
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
 					app.editor = new BlogEditor(blogSelector,app.map,function(blog){
 						var graphic,
-							pt;
+							pt,
+							geometry = $.parseJSON(blog.geometry);
 						
-						if ($.parseJSON(blog.geometry)){
-							pt = $.parseJSON(blog.geometry);
+						if (geometry){
+							pt = new esri.geometry.Point({"x": geometry.x, "y": geometry.y," spatialReference": {" wkid": geometry.spatialReference.wkid }});
 						}
 						else{
 							pt = new esri.geometry.Point(0, 0);
 						}
 
 						graphic = new esri.Graphic(pt,null,blog);
-
-						console.log(blog);
+						console.log(graphic);
 
 						app.blogData.saveNewBlogPost(graphic,function(){;
 							app.editor.discardEditor();

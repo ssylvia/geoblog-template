@@ -158,14 +158,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						extent: map.extent.toJson(),
 						hiddenLayers: getHiddenLayers(),
 						infoWindow: getInfoWindowFeature()
-					},
-					content = {
-						html: compileHTMLContent()
 					};
 
 				var blogPost = {
 					title: $(".temp.blog-post-title").last().val(),
-					content: JSON.stringify(content),
+					content: compileHTMLContent(),
 					date: getPostDate(),
 					geometry: JSON.stringify(geometry),
 					mapState: JSON.stringify(mapState)

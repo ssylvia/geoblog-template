@@ -12,21 +12,18 @@ define([],
 
 		return function BlogView(selector,contentAttr,loadCallback)
 		{
-			this.init = function(blogPosts) 
+			this.update = function(blogPosts) 
 			{
-				$(selector).append('<div id="blog-bottom-controls" class="blogElement"></div>')
+				$(selector).empty();
 
 				dojo.forEach(blogPosts,function(post){
-					createBlogPost(post[titleAttr],post[contentAttr]);
+					createBlogPost(post.attributes[contentAttr]);
 				});
-
-				loadCallback();
 			}
 
 			function createBlogPost(blogContent)
 			{
-				$('#blog-bottom-controls').before('<div class="geoBlogPost blogElement"></div>');
-				$('.geoblog-post').last().append(blogContent);
+				$(selector).append('<div class="geoblog-post">'+unescape(blogContent)+'</div>');
 			}
 		}
 

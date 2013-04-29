@@ -12,11 +12,15 @@ define([],
 		{
 			var _this = this,
 				_featureLayer,
-				_blogPost;
+				_blogPosts,
+				_events = {
+					onQueryComplete: null
+				}
 
-			this.init = function(featureLayer)
+			this.init = function(featureLayer,onQueryComplete)
 			{
 				_featureLayer = featureLayer;
+				_events.onQueryComplete = onQueryComplete;
 
 				queryFeatureService();
 			}
@@ -26,13 +30,13 @@ define([],
 				var queryTask = new esri.tasks.QueryTask(_featureLayer.url);
 
 				var query = new esri.tasks.Query();
-				query.returnGeometry = false;
+				query.returnGeometry = true;
 				query.outFields = ["*"];
 				query.where = "1=1";
 
 				queryTask.execute(query,function(result){
-					_blogPost = result.features;
-					console.log(_blogPost);
+					_blogPosts = result.features;
+					_events.onQueryComplete(_blogPosts);
 				},
 				function(error){
 					console.log("Error: " + error.details);
@@ -48,7 +52,7 @@ define([],
 					});
 				}
 				else{
-					//TODO: make prettier
+					//TODO: apply bootstrap modal
 					alert("Error: Your feature service layer is not editable!");
 				}
 			}
