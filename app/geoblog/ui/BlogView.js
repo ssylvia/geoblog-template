@@ -10,7 +10,7 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,titleAttr,contentAttr,loadCallback)
+		return function BlogView(selector,contentAttr,loadCallback)
 		{
 			this.init = function(blogPosts) 
 			{
@@ -23,10 +23,10 @@ define([],
 				loadCallback();
 			}
 
-			function createBlogPost(titleString,blogString)
+			function createBlogPost(blogContent)
 			{
 				$('#blog-bottom-controls').before('<div class="geoBlogPost blogElement"></div>');
-				$('.geoBlogPost').last().append("<h2>"+ titleString +"</h2>").append(blogString);
+				$('.geoblog-post').last().append(blogContent);
 			}
 		}
 

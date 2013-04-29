@@ -10,43 +10,47 @@ define([],
 
 		return function BlogData(reverseOrder)
 		{
-			var _this = this;
+			var _this = this,
+				_featureLayer,
+				_blogPost;
 
-			//All blog posts
-			var _blogData = null;
-			var _blogDataObjectIdField = null;
-			var _selectedPost = null;
-			var _selectedPostIndex = 0;
-
-			this.setBlogData = function(featureArray,OIdField)
+			this.init = function(featureLayer)
 			{
-				if ($.isArray(featureArray)){
-					if (reverseOrder){
-						_blogData = featureArray.reverse();
-					}
-					else{
-						_blogData = featureArray;
-					}
-					_blogData = featureArray;
-					_blogDataObjectIdField = OIdField;
-					if(!_selectedPost){
-						_selectedPost = _blogData[0];
-					}
+				_featureLayer = featureLayer;
+
+				queryFeatureService();
+			}
+
+			function queryFeatureService()
+			{
+				var queryTask = new esri.tasks.QueryTask(_featureLayer.url);
+
+				var query = new esri.tasks.Query();
+				query.returnGeometry = false;
+				query.outFields = ["*"];
+				query.where = "1=1";
+
+				queryTask.execute(query,function(result){
+					_blogPost = result.features;
+					console.log(_blogPost);
+				},
+				function(error){
+					console.log("Error: " + error.details);
+				});
+
+			}
+
+			this.saveNewBlogPost = function(feature,onComplete)
+			{
+				if(_featureLayer.capabilities.search("Editing") >= 0){
+					_featureLayer.applyEdits([feature],null,null,onComplete,function(error){
+						console.log("Error: " + error.details);
+					});
 				}
 				else{
-					console.log("Blog data must be array of graphics");
+					//TODO: make prettier
+					alert("Error: Your feature service layer is not editable!");
 				}
-			}
-
-			this.getBlogLength = function()
-			{
-				return _blogData.length;
-			}
-
-			this.getCurrentBlogSet = function()
-			{
-				return _blogData;
-				//TODO: Select data by page
 			}
 		}
 

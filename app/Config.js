@@ -7,9 +7,7 @@ define([],
 			//The web map id
 			webmap: "e5359a951a5b4b1dacff6f4c79cda9e7",
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog_test/FeatureServer/0",
-			//wordpress blog url
-			blogURL: "http://en.blog.wordpress.com/",
+			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/geoblog_test/FeatureServer/0",
 			//If starting blog from lastest post, set to true
 			reverseOrder: false,
 			//Enter a title, if no title is specified, the webmap's title is used.

@@ -105,11 +105,29 @@ define(["esri/map",
 
 		function loadBlog()
 		{
+			app.blogData.init(app.blogLayer);
+
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
 					app.editor = new BlogEditor(blogSelector,app.map,function(blog){
+						var graphic,
+							pt;
+						
+						if ($.parseJSON(blog.geometry)){
+							pt = $.parseJSON(blog.geometry);
+						}
+						else{
+							pt = new esri.geometry.Point(0, 0);
+						}
+
+						graphic = new esri.Graphic(pt,null,blog);
+
 						console.log(blog);
+
+						app.blogData.saveNewBlogPost(graphic,function(){;
+							app.editor.discardEditor();
+						});
 					});
 				});
 

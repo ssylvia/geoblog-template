@@ -1,5 +1,5 @@
-define(["storymaps/utils/MovableGraphic"],
-	function(MovableGraphic)
+define(["storymaps/utils/MovableGraphic","dojo/json"],
+	function(MovableGraphic,JSON)
 	{
 		/**
 		 * BlogEditor
@@ -61,7 +61,7 @@ define(["storymaps/utils/MovableGraphic"],
 						addLocationEditor();
 					}
 					else if($(this).hasClass("discard-editor")){
-						discardEditor();
+						_this.discardEditor();
 					}
 					else{
 						savePost();
@@ -69,7 +69,7 @@ define(["storymaps/utils/MovableGraphic"],
 				});
 
 				$(".form_datetime").last().datetimepicker({
-					format: "dd MM yyyy - HH:ii p",
+					format: "dd MM yyyy HH:ii p",
 					showMeridian: true,
 					autoclose: true,
 					todayBtn: true,
@@ -142,7 +142,7 @@ define(["storymaps/utils/MovableGraphic"],
 				}
 			}
 
-			function discardEditor()
+			this.discardEditor = function()
 			{
 				//TODO: Add confirm popup
 				$(".temp-blog-post").remove();
@@ -153,22 +153,26 @@ define(["storymaps/utils/MovableGraphic"],
 
 			function savePost()
 			{
-				var blogPost = {
-					title: $(".temp.blog-post-title").last().val(),
-					content: compileHTMLContent(),
-					date: getPostDate(),
-					geometry: getPostGeometry(),
-					mapState: {
+				var geometry = getPostGeometry(),
+					mapState = {
 						extent: map.extent.toJson(),
 						hiddenLayers: getHiddenLayers(),
 						infoWindow: getInfoWindowFeature()
-					}
+					},
+					content = {
+						html: compileHTMLContent()
+					};
+
+				var blogPost = {
+					title: $(".temp.blog-post-title").last().val(),
+					content: JSON.stringify(content),
+					date: getPostDate(),
+					geometry: JSON.stringify(geometry),
+					mapState: JSON.stringify(mapState)
 				}
 
+				console.log(getPostDate());
 				onSave(blogPost);
-
-				//Reset Editor and Add Button
-				discardEditor();
 			}
 
 			function compileHTMLContent()
@@ -193,16 +197,18 @@ define(["storymaps/utils/MovableGraphic"],
 					}
 				});
 
-				return HTML;
+				return escape(HTML);
 			}
 
 			function getPostDate()
 			{
-				if($(".temp.blog-post-date").last().val()){
-					return new Date().valueOf();
+				if($(".temp.blog-post-date").last().val() === ""){
+					var date = new Date();
+					return date.valueOf();
 				}
 				else{
-					return new Date($(".temp.blog-post-date").last().val()).valueOf();
+					var date = new Date($(".temp.blog-post-date").last().val());
+					return date.valueOf();
 				}
 			}
 
@@ -224,7 +230,12 @@ define(["storymaps/utils/MovableGraphic"],
 						layers.push($(this).val());
 					}
 				});
-				return layers;
+				if(layers.length > 0){
+					return layers;
+				}
+				else{
+					return false;
+				}
 			}
 
 			function getInfoWindowFeature()
@@ -263,10 +274,10 @@ define(["storymaps/utils/MovableGraphic"],
 
 					$(".layer-select").first().click(function(){
 						if($(this).is(":checked")){
-							map.getLayer($(this).attr("name")).show();
+							map.getLayer($(this).val()).show();
 						}
 						else{
-							map.getLayer($(this).attr("name")).hide();
+							map.getLayer($(this).val()).hide();
 						}
 					});
 				});
@@ -284,10 +295,10 @@ define(["storymaps/utils/MovableGraphic"],
 
 					$(".layer-select").first().click(function(){
 						if($(this).is(":checked")){
-							map.getLayer($(this).attr("name")).show();
+							map.getLayer($(this).val()).show();
 						}
 						else{
-							map.getLayer($(this).attr("name")).hide();
+							map.getLayer($(this).val()).hide();
 						}
 					});
 				});
