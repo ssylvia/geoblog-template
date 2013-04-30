@@ -177,20 +177,20 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				var HTML = "";
 
 				$(".temp.post-item").each(function(){
-					if($(this).hasClass("blog-post-title")){
-						HTML += '<h3 class="blog-post-title">'+$(this).val()+'</h3>'
+					if($(this).hasClass("blog-post-title") && $(this).val() != ""){
+						HTML += '<h3 class="blog-post-title blog-item">'+$(this).val()+'</h3>'
 					}
-					else if($(this).hasClass("blog-post-text")){
-						HTML += '<div class="blog-post-text">'+$(this).val()+'</div>'
+					else if($(this).hasClass("blog-post-text") && $(this).val() != ""){
+						HTML += '<div class="blog-post-text blog-item">'+$(this).val()+'</div>'
 					}
-					else if($(this).hasClass("photo-url")){
-						HTML += '<img class="blog-post-photo img-polaroid" src="'+$(this).val()+'" alt="'+$(this).val()+'">';
+					else if($(this).hasClass("photo-url") && $(this).val() != ""){
+						HTML += '<img class="blog-post-photo blog-item img-polaroid" src="'+$(this).val()+'" alt="'+$(this).val()+'">';
 					}
-					else if($(this).hasClass("photo-caption")){
-						HTML += '<p class="blog-post-photo-caption">'+$(this).val()+'</p>';
+					else if($(this).hasClass("photo-caption") && $(this).val() != ""){
+						HTML += '<p class="blog-post-photo-caption blog-item">'+$(this).val()+'</p>';
 					}
-					else if($(this).hasClass("post-embed-code")){
-						HTML += '<div class="blog-post-embed-wrapper">'+$(this).val()+'</div>';
+					else if($(this).hasClass("post-embed-code") && $(this).val() != ""){
+						HTML += $(this).val();
 					}
 				});
 
