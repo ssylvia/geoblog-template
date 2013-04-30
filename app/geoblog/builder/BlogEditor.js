@@ -190,7 +190,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						HTML += '<p class="blog-post-photo-caption blog-item">'+$(this).val()+'</p>';
 					}
 					else if($(this).hasClass("post-embed-code") && $(this).val() != ""){
-						HTML += $(this).val();
+						HTML += '<div class="blog-post-embed-wrapper blog-item">'+$(this).val()+'</div>';
 					}
 				});
 
