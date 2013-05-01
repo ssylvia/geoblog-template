@@ -21,6 +21,8 @@ define([],
 				dojo.forEach(blogPosts,function(post){
 					createBlogPost(editEl,post.attributes[contentAttr]);
 				});
+
+				loadCallback();
 			}
 
 			function createBlogPost(editEl,blogContent)

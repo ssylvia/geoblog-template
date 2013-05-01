@@ -8,15 +8,31 @@
 	border: none;
 }
 
+.blog-item{
+	margin-top: 1.5em;
+}
+
+.blog-item:first-child{
+	margin-top: 0;
+}
+
 .blog-post-title{	
 	font-weight: bold;
 	font-size: 20px;
 }
 
-.blog-post-photo{
-	margin-bottom: 10px
+.blog-post-text{
+	color: #444;
+	font-family: Georgia;
+	line-height: 1.5em;
 }
 
-.blog-post-embed-wrapper{
-	margin-bottom: 10px
+.blog-post-photo-caption{
+	color: #777;
+	font-size: 13px;
+	margin-top: 8px;
+}
+
+.blog-post-embed-wrapper iframe{
+	width: 100%;
 }

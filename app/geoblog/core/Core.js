@@ -32,6 +32,7 @@ define(["esri/map",
 
 		$(window).resize(function(){
 			Helper.resetLayout();
+			resizeBlogElements();
 		});
 
 		$(document).ready(function(){
@@ -47,7 +48,9 @@ define(["esri/map",
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView(blogSelector,"content")
+				blog: new BlogView(blogSelector,"content",function(){
+					resizeBlogElements();
+				})
 			}
 
 			if (!configOptions.sharingurl) {
@@ -140,6 +143,14 @@ define(["esri/map",
 			loadBlog();
 			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
 			$(".loader").fadeOut();
+		}
+
+		function resizeBlogElements()
+		{
+			//Set embedable content to fill width of blog with a 16:9 ratio
+			$(".blog-post-embed-wrapper iframe").height($(".blog-post-embed-wrapper iframe").width() * 0.563);
+
+			$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
 		}
 
 		return {
