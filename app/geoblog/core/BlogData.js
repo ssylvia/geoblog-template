@@ -16,6 +16,9 @@ define([],
 				_featureLayer,
 				_blogPostGraphics,
 				_blogPostElements,
+				_selectedGraphic,
+				_selectedElement,
+				_selctedIndex,
 				_events = {
 					onQueryComplete: null
 				}
@@ -47,19 +50,16 @@ define([],
 
 			}
 
-			this.setBlogElements = function(elements,index)
+			this.setBlogElements = function(elements,index,onSelect)
 			{
 				_blogPostElements = elements;
 				if(index != undefined){
-					selectPost(index);
-				}
-			}
+					_selectedElement = _blogPostElements.eq(index);
+					_selectedGraphic = _blogPostGraphics[index];
+					_selctedIndex = index;
 
-			function selectPost(index)
-			{
-				_blogPostElements.removeClass("active");
-				_blogPostElements.eq(index).addClass("active").fadeTo(200,1);
-				_blogPostElements.not(".active").fadeTo(200,.5);
+					onSelect(_selctedIndex,_blogPostGraphics,_blogPostElements);
+				}
 			}
 
 			this.saveNewBlogPost = function(feature,onComplete)

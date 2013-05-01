@@ -61,7 +61,7 @@ define(["esri/map",
 						$("#blog").mCustomScrollbar("update");
 					});
 
-					app.blogData.setBlogElements($(".geoblog-post"),0);
+					app.blogData.setBlogElements($(".geoblog-post"),0,app.blog.selectPost);
 
 					resizeBlogElements();
 				})

@@ -12,8 +12,11 @@ define([],
 
 		return function BlogView(selector,contentAttr,loadCallback)
 		{
+
 			this.update = function(blogPosts) 
 			{
+				_blogPostGraphics = blogPosts;
+
 				$("geoblog-post").remove();
 
 				var editEl = $(selector).children().first();
@@ -23,6 +26,13 @@ define([],
 				});
 
 				loadCallback();
+			}
+
+			this.selectPost = function(index,graphics,elements)
+			{
+				elements.removeClass("active");
+				elements.eq(index).addClass("active").fadeTo(200,1);
+				elements.not(".active").fadeTo(200,.5);
 			}
 
 			function createBlogPost(editEl,blogContent)
