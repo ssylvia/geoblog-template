@@ -6,13 +6,16 @@ define([],
 		 * @class BlogView
 		 *
 		 * Blog data model
+		 *
+		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
 		return function BlogData(reverseOrder)
 		{
 			var _this = this,
 				_featureLayer,
-				_blogPosts,
+				_blogPostGraphics,
+				_blogPostElements,
 				_events = {
 					onQueryComplete: null
 				}
@@ -35,13 +38,28 @@ define([],
 				query.where = "1=1";
 
 				queryTask.execute(query,function(result){
-					_blogPosts = result.features;
-					_events.onQueryComplete(_blogPosts);
+					_blogPostGraphics = result.features;
+					_events.onQueryComplete(_blogPostGraphics);
 				},
 				function(error){
 					console.log("Error: " + error.details);
 				});
 
+			}
+
+			this.setBlogElements = function(elements,index)
+			{
+				_blogPostElements = elements;
+				if(index != undefined){
+					selectPost(index);
+				}
+			}
+
+			function selectPost(index)
+			{
+				_blogPostElements.removeClass("active");
+				_blogPostElements.eq(index).addClass("active").fadeTo(200,1);
+				_blogPostElements.not(".active").fadeTo(200,.5);
 			}
 
 			this.saveNewBlogPost = function(feature,onComplete)

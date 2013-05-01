@@ -49,7 +49,6 @@ define(["esri/map",
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
 				blog: new BlogView(blogSelector,"content",function(){
-					resizeBlogElements();
 					if($("#blog").data("mCustomScrollbarIndex")){
 						$("#blog").mCustomScrollbar("update");
 					}
@@ -58,6 +57,13 @@ define(["esri/map",
 							theme: "dark-2"
 						});
 					}
+					$(".blog-post-photo").load(function(){
+						$("#blog").mCustomScrollbar("update");
+					});
+
+					app.blogData.setBlogElements($(".geoblog-post"),0);
+
+					resizeBlogElements();
 				})
 			}
 
