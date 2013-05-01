@@ -13,3 +13,13 @@
 	height: 100%;
 	width: 40px;
 }
+
+/* Custom Scrollbar */
+.mCSB_container{
+	margin-right: 16px;
+}
+
+.mCustomScrollBox>.mCSB_scrollTools{
+	height: 98%;
+	top: 1%;
+}

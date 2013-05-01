@@ -50,6 +50,14 @@ define(["esri/map",
 				blogData: new BlogData(configOptions.reverseOrder),
 				blog: new BlogView(blogSelector,"content",function(){
 					resizeBlogElements();
+					if($("#blog").data("mCustomScrollbarIndex")){
+						$("#blog").mCustomScrollbar("update");
+					}
+					else{
+						$("#blog").mCustomScrollbar({
+							theme: "dark-2"
+						});
+					}
 				})
 			}
 
