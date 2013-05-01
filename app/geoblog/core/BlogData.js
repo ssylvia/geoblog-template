@@ -62,6 +62,17 @@ define([],
 				}
 			}
 
+			this.setPostByIndex = function(index,onSelect)
+			{
+				if(index != undefined){
+					_selectedElement = _blogPostElements.eq(index);
+					_selectedGraphic = _blogPostGraphics[index];
+					_selctedIndex = index;
+
+					onSelect(_selctedIndex,_blogPostGraphics,_blogPostElements);
+				}
+			}
+
 			this.saveNewBlogPost = function(feature,onComplete)
 			{
 				if(_featureLayer.capabilities.search("Editing") >= 0){

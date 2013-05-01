@@ -163,7 +163,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				var blogPost = {
 					title: $(".temp.blog-post-title").last().val(),
 					content: compileHTMLContent(),
-					date: getPostDate(),
+					time: getPostDate(),
 					geometry: JSON.stringify(geometry),
 					mapState: JSON.stringify(mapState)
 				}
@@ -239,8 +239,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				if(map.infoWindow.getSelectedFeature() && map.infoWindow.isShowing){
 					return {
-						graphic: map.infoWindow.getSelectedFeature().toJson(),
-						layerId: map.infoWindow.getSelectedFeature().getLayer().id
+						content: escape(map.infoWindow._contentPane.innerHTML),
+						location: map.infoWindow._location
 					}
 				}
 				else{

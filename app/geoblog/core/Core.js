@@ -48,23 +48,7 @@ define(["esri/map",
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
 				blogData: new BlogData(configOptions.reverseOrder),
-				blog: new BlogView(blogSelector,"content",function(){
-					if($("#blog").data("mCustomScrollbarIndex")){
-						$("#blog").mCustomScrollbar("update");
-					}
-					else{
-						$("#blog").mCustomScrollbar({
-							theme: "dark-2"
-						});
-					}
-					$(".blog-post-photo").load(function(){
-						$("#blog").mCustomScrollbar("update");
-					});
-
-					app.blogData.setBlogElements($(".geoblog-post"),0,app.blog.selectPost);
-
-					resizeBlogElements();
-				})
+				blog: null
 			}
 
 			if (!configOptions.sharingurl) {
@@ -122,6 +106,24 @@ define(["esri/map",
 
 		function loadBlog()
 		{
+			app.blog = new BlogView(blogSelector,app.map,"content","time","mapState",function(){
+				if($("#blog").data("mCustomScrollbarIndex")){
+					$("#blog").mCustomScrollbar("update");
+				}
+				else{
+					$("#blog").mCustomScrollbar({
+						theme: "dark-2"
+					});
+				}
+				$(".blog-post-photo").load(function(){
+					$("#blog").mCustomScrollbar("update");
+				});
+
+				app.blogData.setBlogElements($(".geoblog-post"),0,app.blog.selectPost);
+
+				resizeBlogElements();
+			});
+
 			app.blogData.init(app.blogLayer,app.blog.update);
 
 			//Add post editor
