@@ -12,16 +12,19 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 		return function BlogEditor(selector,map,onSave)
 		{
-			var _this = this;
-			var _mapLayer = new esri.layers.GraphicsLayer();
+			var _this = this,
+				_mapLayer = new esri.layers.GraphicsLayer(),
+				_onAddEditFeature;
 
-			this.init = function()
+			this.init = function(onAddEditFeature)
 			{
 				$(selector).append('<div class="add-blog-post">+</div>');
 				$(".add-blog-post").click(function(){
 					initNewPost();
 				});
 				addLayerSelector();
+
+				_onAddEditFeature = onAddEditFeature;
 			}
 
 			function initNewPost()
@@ -66,6 +69,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					else{
 						savePost();
 					}
+
+					setTimeout(function(){
+						_onAddEditFeature();
+					},50);
 				});
 
 				$(".form_datetime").last().datetimepicker({
@@ -92,34 +99,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function addPhotoEditor()
 			{
 				$(".temp-post-controls").last().before(
-					'<img class="temp blog-post-photo img-polaroid" src="" alt="preview">\
-					<input type="text" class="temp photo-url post-item" placeholder="Paste photo url...">\
+					'<input type="text" class="temp photo-url post-item" placeholder="Paste photo url...">\
 					<input type="text" class="temp photo-caption post-item" placeholder="Type photo caption...">'
 				);
-
-				$(".temp.photo-url").last().change(function(){
-					$(".temp.blog-post-photo").last().attr("src",$(this).val());
-				});
-
-				$(".temp.blog-post-photo").last().load(function(){
-					$(this).fadeIn();
-				});
 			}
 
 			function addEmbedEditor()
 			{
 				$(".temp-post-controls").last().before(
-					'<div class="temp blog-post-embed-wrapper"></div>\
-					<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code..."></textarea>'
+					'<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code..."></textarea>'
 				);
-
-				$(".temp.post-embed-code ").last().change(function(){
-					$(".temp.blog-post-embed-wrapper").last().html($(this).val());
-				});
-
-				$(".temp.blog-post-photo").last().load(function(){
-					$(this).fadeIn();
-				});
 			}
 
 			function addLocationEditor()
@@ -168,8 +157,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					mapState: JSON.stringify(mapState)
 				}
 
-				console.log(getPostDate());
-				onSave(blogPost);
+				onSave(blogPost,geometry);
 			}
 
 			function compileHTMLContent()
@@ -201,11 +189,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				if($(".temp.blog-post-date").last().val() === ""){
 					var date = new Date();
-					return date.valueOf();
+					return date
 				}
 				else{
 					var date = new Date($(".temp.blog-post-date").last().val());
-					return date.valueOf();
+					return date;
 				}
 			}
 

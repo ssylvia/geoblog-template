@@ -91,6 +91,7 @@ define(["esri/map",
 
 			mapDeferred.addCallback(function(response){
 				app.map = response.map;
+				//app.map.addLayer(app.blogLayer);
 
 				if (app.map.loaded){
 					initializeApp(response);
@@ -113,7 +114,7 @@ define(["esri/map",
 				else{
 					$("#blog").mCustomScrollbar({
 						theme: "dark-2",
-						scrollInertia: 0,
+						scrollInertia: 500,
 						callbacks: {
 							onScroll: function(){
 								var scrollTop = $("#blog .mCSB_container").position().top;
@@ -131,6 +132,8 @@ define(["esri/map",
 							}
 						}
 					});
+					//Hide Loading animation
+					$(".loader").fadeOut();
 				}
 				$(".blog-post-photo").load(function(){
 					$("#blog").mCustomScrollbar("update");
@@ -146,20 +149,18 @@ define(["esri/map",
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(blogSelector,app.map,function(blog){
+					app.editor = new BlogEditor(blogSelector,app.map,function(blog,geo){
 						var graphic,
-							pt,
-							geometry = $.parseJSON(blog.geometry);
+							pt;
 						
-						if (geometry){
-							pt = new esri.geometry.Point({"x": geometry.x, "y": geometry.y," spatialReference": {" wkid": geometry.spatialReference.wkid }});
+						if (geo){
+							pt = geo;
 						}
 						else{
 							pt = new esri.geometry.Point(0, 0);
 						}
 
 						graphic = new esri.Graphic(pt,null,blog);
-						console.log(graphic);
 
 						app.blogData.saveNewBlogPost(graphic,function(){;
 							app.editor.discardEditor();
@@ -167,7 +168,10 @@ define(["esri/map",
 					});
 				});
 
-				app.editor.init();
+				app.editor.init(function(){
+					$("#blog").mCustomScrollbar("update");
+					$("#blog").mCustomScrollbar("scrollTo","bottom");
+				});
 			}
 		}
 
@@ -175,7 +179,6 @@ define(["esri/map",
 		{			
 			loadBlog();
 			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
-			$(".loader").fadeOut();
 		}
 
 		function resizeBlogElements()
@@ -183,7 +186,7 @@ define(["esri/map",
 			//Set embedable content to fill width of blog with a 16:9 ratio
 			$(".blog-post-embed-wrapper iframe").height($(".blog-post-embed-wrapper iframe").width() * 0.563);
 
-			$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
+			//$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
 
 			$("#blog").mCustomScrollbar("update");
 		}

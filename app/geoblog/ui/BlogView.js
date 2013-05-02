@@ -40,6 +40,8 @@ define([],
 				selectedEl.addClass("active");
 
 				//Set TimeExtent
+
+				//TODO: Cumaltive vs State in time
 				map.setTimeExtent(new esri.TimeExtent(null,new Date(selectedGrp.attributes[timeAttr])));
 
 				//TODO: is there a way to query graphic for popup
