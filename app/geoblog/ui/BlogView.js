@@ -37,17 +37,19 @@ define([],
 
 				//Set Blog State
 				elements.removeClass("active");
-				selectedEl.addClass("active").fadeTo(speed,1);
-				elements.not(selectedEl).fadeTo(speed,.5);
+				selectedEl.addClass("active");
 
 				//Set TimeExtent
 				map.setTimeExtent(new esri.TimeExtent(null,new Date(selectedGrp.attributes[timeAttr])));
 
-				//TODO: is there a way to query graphic
+				//TODO: is there a way to query graphic for popup
 				if(mapState.infoWindow){
 					map.infoWindow.setContent(unescape(mapState.infoWindow.content));
 					map.infoWindow.setTitle("");
 					map.infoWindow.show(mapState.infoWindow.location);
+				}
+				else{
+					map.infoWindow.hide();
 				}
 
 				toggleVisibleLayers(mapState.hiddenLayers);

@@ -112,7 +112,24 @@ define(["esri/map",
 				}
 				else{
 					$("#blog").mCustomScrollbar({
-						theme: "dark-2"
+						theme: "dark-2",
+						scrollInertia: 0,
+						callbacks: {
+							onScroll: function(){
+								var scrollTop = $("#blog .mCSB_container").position().top;
+								var buffer = $("#blog").height() / 4;
+								if($("#blog .mCSB_container").height() + scrollTop - (buffer*4) < 50){
+									app.blogData.setPostByIndex($(".geoblog-post").length - 1,app.blog.selectPost);
+								}
+								else{
+									$(".geoblog-post").each(function(){
+										if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0 && !$(this).hasClass("active")){
+											app.blogData.setPostByIndex($(this).index(),app.blog.selectPost);
+										}
+									});
+								}	
+							}
+						}
 					});
 				}
 				$(".blog-post-photo").load(function(){
@@ -167,6 +184,8 @@ define(["esri/map",
 			$(".blog-post-embed-wrapper iframe").height($(".blog-post-embed-wrapper iframe").width() * 0.563);
 
 			$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
+
+			$("#blog").mCustomScrollbar("update");
 		}
 
 		return {

@@ -2,10 +2,19 @@
 	margin: 0 5%;
 	padding: 25px 0;
 	border-top: 1px solid #dadada;
+	opacity: .5;
+	filter: alpha(opacity=50);
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 }
 
 .geoblog-post:first-child{
 	border: none;
+}
+
+.geoblog-post.active{
+	opacity: .99;
+	filter: alpha(opacity=99);
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=99)";
 }
 
 .blog-item{
