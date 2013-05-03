@@ -10,7 +10,7 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,cumulative,contentAttr,timeAttr,mapAttr,loadCallback)
+		return function BlogView(selector,map,cumulativeTime,contentAttr,timeAttr,mapAttr,loadCallback)
 		{
 
 			this.update = function(blogPosts) 
@@ -40,7 +40,7 @@ define([],
 				selectedEl.addClass("active");
 
 				//Set TimeExtent
-				if(cumulative){
+				if(cumulativeTime){
 					map.setTimeExtent(new esri.TimeExtent(app.blogLayer.timeInfo.timeExtent.startTime,new Date(selectedGrp.attributes[timeAttr])));
 				}
 				else{

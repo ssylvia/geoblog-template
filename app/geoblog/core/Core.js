@@ -107,7 +107,7 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(blogSelector,app.map,"content","time","mapState",function(){
+			app.blog = new BlogView(blogSelector,app.map,configOptions.cumulativeTime,"content","time","mapState",function(){
 				if($("#blog").data("mCustomScrollbarIndex")){
 					$("#blog").mCustomScrollbar("update");
 				}

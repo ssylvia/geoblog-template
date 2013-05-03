@@ -10,6 +10,8 @@ define([],
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog/FeatureServer/0",
 			//If starting blog from lastest post, set to true
 			reverseOrder: false,
+			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post
+			cumulativeTime: true,
 			//Enter a title, if no title is specified, the webmap's title is used.
 			title: "",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
