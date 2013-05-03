@@ -75,7 +75,7 @@ define([],
 
 			this.saveNewBlogPost = function(feature,onComplete)
 			{
-				if(_featureLayer.capabilities.search("Editing") >= 0){
+				if(_featureLayer.getEditCapabilities().canCreate){
 					_featureLayer.applyEdits([feature],null,null,onComplete,function(error){
 						console.log("Error: " + error.details);
 					});
