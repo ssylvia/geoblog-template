@@ -91,7 +91,7 @@ define(["esri/map",
 
 			mapDeferred.addCallback(function(response){
 				app.map = response.map;
-				//app.map.addLayer(app.blogLayer);
+				app.map.addLayer(app.blogLayer);
 
 				if (app.map.loaded){
 					initializeApp(response);
@@ -114,7 +114,7 @@ define(["esri/map",
 				else{
 					$("#blog").mCustomScrollbar({
 						theme: "dark-2",
-						scrollInertia: 500,
+						scrollInertia: 0,
 						callbacks: {
 							onScroll: function(){
 								var scrollTop = $("#blog .mCSB_container").position().top;

@@ -10,7 +10,7 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,contentAttr,timeAttr,mapAttr,loadCallback)
+		return function BlogView(selector,map,cumulative,contentAttr,timeAttr,mapAttr,loadCallback)
 		{
 
 			this.update = function(blogPosts) 
@@ -40,9 +40,12 @@ define([],
 				selectedEl.addClass("active");
 
 				//Set TimeExtent
-
-				//TODO: Cumaltive vs State in time
-				map.setTimeExtent(new esri.TimeExtent(null,new Date(selectedGrp.attributes[timeAttr])));
+				if(cumulative){
+					map.setTimeExtent(new esri.TimeExtent(app.blogLayer.timeInfo.timeExtent.startTime,new Date(selectedGrp.attributes[timeAttr])));
+				}
+				else{
+					map.setTimeExtent(new esri.TimeExtent(new Date(selectedGrp.attributes[timeAttr]),new Date(selectedGrp.attributes[timeAttr])));
+				}
 
 				//TODO: is there a way to query graphic for popup
 				if(mapState.infoWindow){

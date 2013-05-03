@@ -189,11 +189,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				if($(".temp.blog-post-date").last().val() === ""){
 					var date = new Date();
-					return date
+					return date.valueOf()
 				}
 				else{
 					var date = new Date($(".temp.blog-post-date").last().val());
-					return date;
+					return date.valueOf();
 				}
 			}
 
