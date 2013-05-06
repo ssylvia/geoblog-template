@@ -41,7 +41,7 @@ define([],
 
 				//Set TimeExtent
 				if(cumulativeTime){
-					map.setTimeExtent(new esri.TimeExtent(app.blogLayer.timeInfo.timeExtent.startTime,new Date(selectedGrp.attributes[timeAttr])));
+					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(selectedGrp.attributes[timeAttr])));
 					//map.setTimeExtent(new esri.TimeExtent(app.blogLayer.timeInfo.timeExtent.startTime,new Date(selectedGrp.attributes[timeAttr])));
 				}
 				else{

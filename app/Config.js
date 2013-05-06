@@ -8,6 +8,8 @@ define([],
 			webmap: "cffc475ae9d74d41aa21138c267ba9f5",
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog/FeatureServer/0",
+			//Display order of feature service
+			sortBy: "time",
 			//If starting blog from lastest post, set to true
 			reverseOrder: false,
 			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post

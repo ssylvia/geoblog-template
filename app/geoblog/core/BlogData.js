@@ -53,13 +53,6 @@ define([],
 			this.setBlogElements = function(elements,index,onSelect)
 			{
 				_blogPostElements = elements;
-				if(index != undefined){
-					_selectedElement = _blogPostElements.eq(index);
-					_selectedGraphic = _blogPostGraphics[index];
-					_selctedIndex = index;
-
-					onSelect(_selctedIndex,_blogPostGraphics,_blogPostElements);
-				}
 			}
 
 			this.setPostByIndex = function(index,onSelect)

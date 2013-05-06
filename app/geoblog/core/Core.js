@@ -116,20 +116,7 @@ define(["esri/map",
 						theme: "dark-2",
 						scrollInertia: 0,
 						callbacks: {
-							onScroll: function(){
-								var scrollTop = $("#blog .mCSB_container").position().top;
-								var buffer = $("#blog").height() / 4;
-								if($("#blog .mCSB_container").height() + scrollTop - (buffer*4) < 50){
-									app.blogData.setPostByIndex($(".geoblog-post").length - 1,app.blog.selectPost);
-								}
-								else{
-									$(".geoblog-post").each(function(){
-										if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0 && !$(this).hasClass("active")){
-											app.blogData.setPostByIndex($(this).index(),app.blog.selectPost);
-										}
-									});
-								}	
-							}
+							onScroll: selectPostByScrollPosition
 						}
 					});
 					//Hide Loading animation
@@ -139,7 +126,7 @@ define(["esri/map",
 					$("#blog").mCustomScrollbar("update");
 				});
 
-				app.blogData.setBlogElements($(".geoblog-post"),0,app.blog.selectPost);
+				app.blogData.setBlogElements($(".geoblog-post"));
 
 				resizeBlogElements();
 			});
@@ -179,6 +166,18 @@ define(["esri/map",
 		{			
 			loadBlog();
 			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
+		}
+
+		function selectPostByScrollPosition(){
+			var container = $("#blog .mCSB_container"),
+				scrollTop = container.position().top,
+				buffer = $("#blog").height() / 4;
+
+			$(".geoblog-post").each(function(){
+				if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0 && !$(this).hasClass("active")){
+					app.blogData.setPostByIndex($(this).index(),app.blog.selectPost);
+				}
+			});
 		}
 
 		function resizeBlogElements()
