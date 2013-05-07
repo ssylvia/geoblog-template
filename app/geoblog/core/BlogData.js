@@ -57,7 +57,7 @@ define([],
 
 			this.setPostByIndex = function(index,onSelect)
 			{
-				if(index != undefined){
+				if(index != undefined && index !== _selctedIndex){
 					_selectedElement = _blogPostElements.eq(index);
 					_selectedGraphic = _blogPostGraphics[index];
 					_selctedIndex = index;

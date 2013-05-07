@@ -171,13 +171,49 @@ define(["esri/map",
 		function selectPostByScrollPosition(){
 			var container = $("#blog .mCSB_container"),
 				scrollTop = container.position().top,
-				buffer = $("#blog").height() / 4;
+				buffer = $("#blog").height() / 4,
+				selectPosition = {
+					top: null,
+					bottom: null,
+					fullyShown: null,
+					topQuarter: null
+				};
 
-			$(".geoblog-post").each(function(){
-				if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0 && !$(this).hasClass("active")){
-					app.blogData.setPostByIndex($(this).index(),app.blog.selectPost);
-				}
-			});
+			if(scrollTop === 0){
+				selectPosition.top = 0;	
+			}
+			else if(container.height() + scrollTop - (buffer*4) < 50){
+				selectPosition.bottom = $(".geoblog-post").length - 1;
+			}
+			else{
+				$(".geoblog-post").each(function(){
+					if($(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height()){
+						selectPosition.fullyShown = $(this).index();
+					}
+					else if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0){
+						selectPosition.topQuarter = $(this).index();
+					}
+				});
+			}
+
+			var postIndex = null;
+
+			if(selectPosition.top !== null){
+				postIndex = selectPosition.top;
+			}
+			else if(selectPosition.bottom !== null){
+				postIndex = selectPosition.bottom;
+			}
+			else if(selectPosition.fullyShown !== null){
+				postIndex = selectPosition.fullyShown;
+			}
+			else if(selectPosition.topQuarter !== null){
+				postIndex = selectPosition.topQuarter;
+			}
+
+			if (postIndex !== null){
+				app.blogData.setPostByIndex(postIndex,app.blog.selectPost);
+			}
 		}
 
 		function resizeBlogElements()
