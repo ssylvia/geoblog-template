@@ -176,7 +176,8 @@ define(["esri/map",
 					top: null,
 					bottom: null,
 					fullyShown: null,
-					topQuarter: null
+					topQuarter: null,
+					bottomQuarter: null
 				};
 
 			if(scrollTop === 0){
@@ -187,11 +188,14 @@ define(["esri/map",
 			}
 			else{
 				$(".geoblog-post").each(function(){
-					if($(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height()){
+					if($(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height() && scrollTop + $(this).position().top >= 0){
 						selectPosition.fullyShown = $(this).index();
 					}
 					else if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0){
 						selectPosition.topQuarter = $(this).index();
+					}
+					else if($(this).position().top + $(this).outerHeight() + scrollTop >= $(blogSelector).height() - buffer && $(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height()){
+						selectPosition.bottomQuarter = $(this).index();
 					}
 				});
 			}
@@ -209,6 +213,9 @@ define(["esri/map",
 			}
 			else if(selectPosition.topQuarter !== null){
 				postIndex = selectPosition.topQuarter;
+			}
+			else if(selectPosition.bottomQuarter !== null){
+				postIndex = selectPosition.bottomQuarter;
 			}
 
 			if (postIndex !== null){
