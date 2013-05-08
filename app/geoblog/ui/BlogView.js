@@ -71,6 +71,10 @@ define([],
 					});
 				map.setExtent(extent,true);
 
+				$(".post-index-bullet").removeClass("active");
+				$(".post-index-bullet").eq(index).addClass("active");
+
+
 			}
 
 			function createBlogPost(editEl,blogContent)

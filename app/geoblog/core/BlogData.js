@@ -50,7 +50,7 @@ define([],
 
 			}
 
-			this.setBlogElements = function(elements,index,onSelect)
+			this.setBlogElements = function(elements,index,onSet)
 			{
 				_blogPostElements = elements;
 			}
@@ -77,6 +77,11 @@ define([],
 					//TODO: apply bootstrap modal
 					alert("Error: Your feature service layer is not editable!");
 				}
+			}
+
+			this.getSelectedIndex = function()
+			{
+				return _selctedIndex;
 			}
 		}
 

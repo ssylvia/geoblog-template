@@ -130,7 +130,11 @@ define(["esri/map",
 				resizeBlogElements();
 			});
 
-			app.blogData.init(app.blogLayer,app.blog.update);
+			app.blogData.init(app.blogLayer,function(graphics){
+				app.blog.update(graphics);
+
+				addIndexDots(graphics,true);
+			});
 
 			//Add post editor
 			if(isBuilder){
@@ -159,6 +163,35 @@ define(["esri/map",
 					$("#blog").mCustomScrollbar("scrollTo","bottom");
 				});
 			}
+
+			$(".nav-button").click(function(){
+				if($(this).hasClass("prev-post")){					
+					var index;
+
+					if(app.blogData.getSelectedIndex() === 0){
+						//TODO: Get previous page
+						index = $(".geoblog-post").length - 1;
+					}
+					else{
+						index = app.blogData.getSelectedIndex() - 1;
+					}
+
+					$("#blog").mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
+				}
+				else{
+					var index;
+					
+					if(app.blogData.getSelectedIndex() === $(".geoblog-post").length - 1){
+						//TODO: Get next page
+						index = 0;
+					}
+					else{
+						index = app.blogData.getSelectedIndex() + 1;
+					}
+
+					$("#blog").mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
+				}
+			});
 		}
 
 		function initializeApp(response)
@@ -222,12 +255,40 @@ define(["esri/map",
 			}
 		}
 
+		function addIndexDots(graphics,updateAll)
+		{
+
+			if(updateAll){
+				$("#nav-index-wrapper").empty();
+			}
+			
+			dojo.forEach(graphics,function(g){
+				$("#nav-index-wrapper").append('<p class="post-index-bullet" title="' + g.attributes.title + '">&#9679;</p>');
+			});
+
+			var bullets = $(".post-index-bullet");			
+			bullets.first().css("margin-top",($("#nav-index-wrapper").height() - (bullets.outerHeight() * bullets.length)) / 2);
+
+			if(updateAll){
+				$(".post-index-bullet").tooltip({
+					placement: "right"
+				}).click(function(){
+					if(!$(this).hasClass("active")){
+						$("#blog").mCustomScrollbar("scrollTo",".geoblog-post:eq(" + $(this).index() + ")");
+					}
+				});
+			}
+		}
+
 		function resizeBlogElements()
 		{
 			//Set embedable content to fill width of blog with a 16:9 ratio
 			$(".blog-post-embed-wrapper iframe").height($(".blog-post-embed-wrapper iframe").width() * 0.563);
 
-			//$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
+			$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
+
+			var bullets = $(".post-index-bullet");			
+			bullets.first().css("margin-top",($("#nav-index-wrapper").height() - (bullets.outerHeight() * bullets.length)) / 2);
 
 			$("#blog").mCustomScrollbar("update");
 		}
