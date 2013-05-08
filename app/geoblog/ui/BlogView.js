@@ -1,5 +1,5 @@
-define([],
-	function()
+define(["storymaps/utils/multiTips/MultiTips"],
+	function(MultiTips)
 	{
 		/**
 		 * BlogView
@@ -10,7 +10,7 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,cumulativeTime,contentAttr,timeAttr,mapAttr,loadCallback)
+		return function BlogView(selector,map,cumulativeTime,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
 		{
 
 			this.update = function(blogPosts) 
@@ -38,6 +38,17 @@ define([],
 				//Set Blog State
 				elements.removeClass("active");
 				selectedEl.addClass("active");
+
+				var mapTips = new MultiTips({
+					map: map,
+					content: selectedGrp.attributes.title,
+					pointArray: [selectedGrp],
+					labelDirection: "auto",
+					backgroundColor: "#444444",
+					pointerColor: "#444444",
+					textColor: "#ffffff",
+					offsetTop: iconHeight - 8
+				});
 
 				//Set TimeExtent
 				if(cumulativeTime){

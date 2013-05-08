@@ -8,6 +8,8 @@ define([],
 			webmap: "cffc475ae9d74d41aa21138c267ba9f5",
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog/FeatureServer/0",
+			//Height of feature service icon
+			iconHeight: 32,
 			//Display order of feature service
 			sortBy: "time",
 			//If starting blog from lastest post, set to true
