@@ -39,32 +39,6 @@ textarea.temp{
 	display: none;
 }
 
-.layer-selector-wrapper{
-	position: absolute;
-	background-color: #fff;
-	top: 0;
-	left: 25px;
-	width: 300px;
-	border: 2px solid #888;
-	z-index: 100;
-}
-
-.layer-selector-toggle{
-	padding: 6px 15px 8px;
-	background-color: #888;
-	color: #fff;
-	font-weight: bold;
-	cursor: pointer;
-}
-
-.layer-selector-content{
-	display: none;
-	padding: 15px;
-	max-height: 300px;
-	overflow: auto;
-	word-break: break-all;
-}
-
 .temp.post-embed-code{
 	height: 100px;
 }

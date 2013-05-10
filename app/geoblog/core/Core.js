@@ -91,8 +91,11 @@ define(["esri/map",
 
 			mapDeferred.addCallback(function(response){
 				app.map = response.map;
+
 				app.map.blogLayer = app.blogLayer
 				app.map.addLayer(app.map.blogLayer);
+
+				app.map.legendLayers = esri.arcgis.utils.getLegendLayers(response);
 
 				if (app.map.loaded){
 					initializeApp(response);
@@ -145,7 +148,7 @@ define(["esri/map",
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(blogSelector,app.map,function(blog,geo){
+					app.editor = new BlogEditor(blogSelector,app.map,".legend-toggle",".legend-content",function(blog,geo){
 						var graphic,
 							pt;
 						
@@ -168,6 +171,18 @@ define(["esri/map",
 					$("#blog").mCustomScrollbar("update");
 					$("#blog").mCustomScrollbar("scrollTo","bottom");
 				});
+			}
+			else{
+				if (app.map.legendLayers.length > 0) {
+					var legend = new esri.dijit.Legend({
+						map:app.map,
+						layerInfos: app.map.legendLayers
+					},"legend");
+					legend.startup();
+				}
+				else{
+					$(".legend-toggle").hide();
+				}
 			}
 
 			$(".nav-button").click(function(){
@@ -197,6 +212,10 @@ define(["esri/map",
 
 					$("#blog").mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
 				}
+			});
+
+			$(".legend-toggle").click(function(){
+				$(this).next().stop(true,true).slideToggle();
 			});
 		}
 

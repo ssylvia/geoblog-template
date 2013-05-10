@@ -47,6 +47,31 @@
 	margin-left: -8px;
 }
 
+.legend-wrapper{
+	position: absolute;
+	background-color: #fff;
+	top: 0;
+	left: 25px;
+	width: 300px;
+	border: 2px solid #888;
+	z-index: 100;
+}
+
+.legend-toggle{
+	padding: 6px 15px 8px;
+	background-color: #888;
+	color: #fff;
+	cursor: pointer;
+}
+
+.legend-content{
+	display: none;
+	padding: 15px;
+	max-height: 300px;
+	overflow: auto;
+	word-break: break-all;
+}
+
 /* Custom Scrollbar */
 .mCSB_container{
 	margin-right: 16px;

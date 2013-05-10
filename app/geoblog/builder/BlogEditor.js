@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,onSave)
+		return function BlogEditor(selector,map,legendToggleSelector,legendContentSelector,onSave)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -238,18 +238,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			function addLayerSelector()
 			{
-				var mapSelector = '#'+app.map.container.id;
-
-				$(mapSelector).append(
-					'<div class="layer-selector-wrapper">\
-						<div class="layer-selector-toggle">Choose visible layers</div>\
-						<div class="layer-selector-content"></div>\
-					</div>');
+				$(legendToggleSelector).html("CHOOSE VISIBLE LAYERS");
 
 				dojo.forEach(map.layerIds,function(id){
 					var visible = map.getLayer(id).visible;
 
-					$(".layer-selector-content").last().prepend(
+					$(legendContentSelector).last().prepend(
 						'<label class="checkbox">\
 							<input type="checkbox" class="layer-select" value="'+id+'"> '+id+'\
 						</label><br>');
@@ -270,7 +264,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				dojo.forEach(map.graphicsLayerIds,function(id){
 					var visible = map.getLayer(id).visible;
 
-					$(".layer-selector-content").last().prepend(
+					$(legendContentSelector).last().prepend(
 						'<label class="checkbox">\
 							<input type="checkbox" class="layer-select" value="'+id+'"> '+id+'\
 						</label><br>');
@@ -286,10 +280,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							map.getLayer($(this).val()).hide();
 						}
 					});
-				});
-
-				$(".layer-selector-toggle").click(function(){
-					$(this).next().stop(true,true).slideToggle();
 				});
 			}
 
