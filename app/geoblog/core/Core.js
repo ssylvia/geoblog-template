@@ -115,6 +115,7 @@ define(["esri/map",
 				else{
 					$("#blog").mCustomScrollbar({
 						theme: "dark-2",
+						scrollInertia: 0,
 						callbacks: {
 							onScroll: selectPostByScrollPosition
 						}
@@ -212,6 +213,7 @@ define(["esri/map",
 				selectPosition = {
 					top: null,
 					bottom: null,
+					atTop: null,
 					fullyShown: null,
 					topQuarter: null,
 					bottomQuarter: null
@@ -224,14 +226,17 @@ define(["esri/map",
 				selectPosition.bottom = $(".geoblog-post").length - 1;
 			}
 			else{
-				$(".geoblog-post").each(function(){
+				$(".geoblog-post").each(function(){					
+					if(scrollTop + $(this).position().top === 0){
+						selectPosition.atTop = $(this).index();
+					}
 					if($(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height() && scrollTop + $(this).position().top >= 0){
 						selectPosition.fullyShown = $(this).index();
 					}
-					else if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0){
+					if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0){
 						selectPosition.topQuarter = $(this).index();
 					}
-					else if($(this).position().top + $(this).outerHeight() + scrollTop >= $(blogSelector).height() - buffer && $(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height()){
+					if($(this).position().top + $(this).outerHeight() + scrollTop >= $(blogSelector).height() - buffer && $(this).position().top + $(this).outerHeight() + scrollTop < $(blogSelector).height()){
 						selectPosition.bottomQuarter = $(this).index();
 					}
 				});
@@ -245,6 +250,9 @@ define(["esri/map",
 			else if(selectPosition.bottom !== null){
 				postIndex = selectPosition.bottom;
 			}
+			else if(selectPosition.atTop !== null){
+				postIndex = selectPosition.atTop;
+			}
 			else if(selectPosition.fullyShown !== null){
 				postIndex = selectPosition.fullyShown;
 			}
@@ -254,6 +262,8 @@ define(["esri/map",
 			else if(selectPosition.bottomQuarter !== null){
 				postIndex = selectPosition.bottomQuarter;
 			}
+
+			console.log(selectPosition);
 
 			if (postIndex !== null){
 				app.blogData.setPostByIndex(postIndex,app.blog.selectPost);
@@ -290,7 +300,7 @@ define(["esri/map",
 			//Set embedable content to fill width of blog with a 16:9 ratio
 			$(".blog-post-embed-wrapper iframe").height($(".blog-post-embed-wrapper iframe").width() * 0.563);
 
-			$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
+			//$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
 
 			var bullets = $(".post-index-bullet");			
 			bullets.first().css("margin-top",($("#nav-index-wrapper").height() - (bullets.outerHeight() * bullets.length)) / 2);

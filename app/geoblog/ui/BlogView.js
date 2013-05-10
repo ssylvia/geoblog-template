@@ -53,7 +53,6 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				//Set TimeExtent
 				if(cumulativeTime){
 					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(selectedGrp.attributes[timeAttr])));
-					//map.setTimeExtent(new esri.TimeExtent(app.blogLayer.timeInfo.timeExtent.startTime,new Date(selectedGrp.attributes[timeAttr])));
 				}
 				else{
 					map.setTimeExtent(new esri.TimeExtent(new Date(selectedGrp.attributes[timeAttr]),new Date(selectedGrp.attributes[timeAttr])));
@@ -80,7 +79,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 					"spatialReference":{
 						"wkid":mapState.extent.spatialReference.wkid}
 					});
-				map.setExtent(extent,true);
+				map.setExtent(extent);
 
 				$(".post-index-bullet").removeClass("active");
 				$(".post-index-bullet").eq(index).addClass("active");

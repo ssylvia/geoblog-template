@@ -5,7 +5,7 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "cffc475ae9d74d41aa21138c267ba9f5",
+			webmap: "077a689e3d834444973541a374663fe8",
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog/FeatureServer/0",
 			//Height of feature service icon
@@ -15,7 +15,7 @@ define([],
 			//If starting blog from lastest post, set to true
 			reverseOrder: false,
 			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post
-			cumulativeTime: false,
+			cumulativeTime: true,
 			//Enter a title, if no title is specified, the webmap's title is used.
 			title: "",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
