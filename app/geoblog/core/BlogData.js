@@ -33,14 +33,12 @@ define([],
 
 			function queryFeatureService()
 			{
-				var queryTask = new esri.tasks.QueryTask(_featureLayer.url);
-
 				var query = new esri.tasks.Query();
 				query.returnGeometry = true;
 				query.outFields = ["*"];
 				query.where = "1=1";
 
-				queryTask.execute(query,function(result){
+				_featureLayer.queryFeatures(query,function(result){
 					_blogPostGraphics = result.features;
 					_events.onQueryComplete(_blogPostGraphics);
 				},
