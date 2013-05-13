@@ -10,10 +10,12 @@ define([],
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog/FeatureServer/0",
 			//Height of feature service icon
 			iconHeight: 32,
-			//Display order of feature service
-			sortBy: "time",
-			//If starting blog from lastest post, set to true
-			reverseOrder: false,
+			//Feature servide field to sort by
+			sortBy: "FID",
+			//Display order of feature service; specfiy "ASC" (ascending) or "DESC" (descending).
+			order: "ASC",
+			//Number of post available per pages (recommend 10 for smaller screens);
+			postsPerPage: 10,
 			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post
 			cumulativeTime: true,
 			//Enter a title, if no title is specified, the webmap's title is used.

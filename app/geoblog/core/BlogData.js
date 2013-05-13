@@ -10,10 +10,13 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogData(reverseOrder)
+		return function BlogData(orderBy,queryCount)
 		{
 			var _this = this,
 				_featureLayer,
+				_featureIds,
+				_queryIndex = 0,
+				_queryCount = queryCount,
 				_blogPostGraphics,
 				_blogPostElements,
 				_selectedGraphic,
@@ -21,22 +24,38 @@ define([],
 				_selctedIndex,
 				_events = {
 					onQueryComplete: null
-				}
+				};
 
 			this.init = function(featureLayer,onQueryComplete)
 			{
 				_featureLayer = featureLayer;
 				_events.onQueryComplete = onQueryComplete;
 
-				queryFeatureService();
+				queryFeatureIds();
+			}
+
+			function queryFeatureIds()
+			{
+				var query = new esri.tasks.Query();
+					query.where = "1=1";
+					query.orderByFields = [orderBy];
+
+				_featureLayer.queryIds(query,function(objectIds){
+					_featureIds = objectIds;
+					queryFeatureService();
+				},
+				function(error){
+					console.log("Error: " + error.message);
+				});
 			}
 
 			function queryFeatureService()
 			{
 				var query = new esri.tasks.Query();
-				query.returnGeometry = true;
-				query.outFields = ["*"];
-				query.where = "1=1";
+					query.returnGeometry = true;
+					query.outFields = ["*"];
+					query.orderByFields = [orderBy];
+					query.objectIds = _featureIds.slice(_queryIndex,_queryIndex + _queryCount);
 
 				_featureLayer.queryFeatures(query,function(result){
 					_blogPostGraphics = result.features;
@@ -47,6 +66,47 @@ define([],
 				});
 
 			}
+
+			function nextPage()
+			{
+				if(_queryIndex + _queryCount >= _featureIds.length){
+					_queryIndex = 0;
+				}
+				else{
+					_queryIndex+=_queryCount;
+				}
+				queryFeatureService();
+			}
+
+			function prevPage()
+			{
+				if(_queryIndex - _queryCount < 0){
+					_queryIndex = _featureIds.length - _queryCount;
+				}
+				else{
+					_queryIndex-=_queryCount;
+				}
+				queryFeatureService();
+			}
+
+			this.goToPageByItem = function(OID,scrollItem)
+			{
+				pageByItem(OID,scrollItem);
+			}
+
+			function pageByItem(OID,scrollItem)
+			{
+				var index = $.inArray(OID,_featureIds);
+
+				if(index < _queryIndex || index >= _queryIndex + _queryCount){
+					_queryIndex = index;
+					queryFeatureService();
+				}
+				else{
+					var newItem = index - _queryIndex;
+					scrollItem(newItem);
+				}
+			}			
 
 			this.setBlogElements = function(elements,index,onSet)
 			{
@@ -67,7 +127,10 @@ define([],
 			this.saveNewBlogPost = function(feature,onComplete)
 			{
 				if(_featureLayer.getEditCapabilities().canCreate){
-					_featureLayer.applyEdits([feature],null,null,onComplete,function(error){
+					_featureLayer.applyEdits([feature],null,null,function(){
+						queryFeatureIds();
+						onComplete();
+					},function(error){
 						console.log("Error: " + error.details);
 					});
 				}

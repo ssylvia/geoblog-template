@@ -61,13 +61,12 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				}
 
 				//TODO: is there a way to query graphic for popup
+				map.infoWindow.clearFeatures();
+				map.infoWindow.hide();
 				if(mapState.infoWindow){
 					map.infoWindow.setContent(unescape(mapState.infoWindow.content));
 					map.infoWindow.setTitle("");
 					map.infoWindow.show(mapState.infoWindow.location);
-				}
-				else{
-					map.infoWindow.hide();
 				}
 
 				toggleVisibleLayers(mapState.hiddenLayers);

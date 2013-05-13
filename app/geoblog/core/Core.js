@@ -42,6 +42,8 @@ define(["esri/map",
 
 		function init()
 		{
+			var orderByFields = configOptions.sortBy + " " + configOptions.order;
+
 			app = {
 				//Esri map variable
 				map: null,
@@ -49,10 +51,11 @@ define(["esri/map",
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
 					outFields: ["*"]
 				}),
-				blogData: new BlogData(configOptions.reverseOrder),
+				blogData: new BlogData(orderByFields,configOptions.postsPerPage),
 				blog: null
 			}
 
+			//TODO: move before init
 			if (!configOptions.sharingurl) {
 				if(location.host.match("localhost") || location.host.match("storymaps.esri.com") || location.host.match("c9.io"))
 					configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
@@ -104,6 +107,20 @@ define(["esri/map",
 						if(g.attributes.geometry === "false"){
 							g.hide();
 						}
+					});
+				});
+
+				dojo.connect(app.map.blogLayer,"onMouseOver",function(){
+					app.map.setMapCursor("pointer");
+				});
+
+				dojo.connect(app.map.blogLayer,"onMouseOut",function(){
+					app.map.setMapCursor("defualt");
+				});
+
+				dojo.connect(app.map.blogLayer,"onClick",function(event){
+					app.blogData.goToPageByItem(event.graphic.attributes[event.graphic.getLayer().objectIdField],function(index){
+						$("#blog").mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
 					});
 				});
 
