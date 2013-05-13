@@ -17,7 +17,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 			{
 				_blogPostGraphics = blogPosts;
 
-				$("geoblog-post").remove();
+				$(".geoblog-post").remove();
 
 				var editEl = $(selector).children().first();
 

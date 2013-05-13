@@ -67,6 +67,11 @@ define([],
 
 			}
 
+			this.goToNextPage = function()
+			{
+				nextPage();
+			}
+
 			function nextPage()
 			{
 				if(_queryIndex + _queryCount >= _featureIds.length){
@@ -76,6 +81,11 @@ define([],
 					_queryIndex+=_queryCount;
 				}
 				queryFeatureService();
+			}
+
+			this.goToPrevPage = function()
+			{
+				prevPage();
 			}
 
 			function prevPage()
