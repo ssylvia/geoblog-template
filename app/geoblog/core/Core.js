@@ -46,7 +46,9 @@ define(["esri/map",
 				//Esri map variable
 				map: null,
 				//Feature services layer holding blog posts
-				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService),
+				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
+					outFields: ["*"]
+				}),
 				blogData: new BlogData(configOptions.reverseOrder),
 				blog: null
 			}
@@ -96,6 +98,14 @@ define(["esri/map",
 				app.map.addLayer(app.map.blogLayer);
 
 				app.map.legendLayers = esri.arcgis.utils.getLegendLayers(response);
+
+				dojo.connect(app.map.blogLayer,"onUpdateEnd",function(){
+					dojo.forEach(app.map.blogLayer.graphics,function(g){
+						if(g.attributes.geometry === "false"){
+							g.hide();
+						}
+					});
+				});
 
 				if (app.map.loaded){
 					initializeApp(response);
@@ -281,8 +291,6 @@ define(["esri/map",
 			else if(selectPosition.bottomQuarter !== null){
 				postIndex = selectPosition.bottomQuarter;
 			}
-
-			console.log(selectPosition);
 
 			if (postIndex !== null){
 				app.blogData.setPostByIndex(postIndex,app.blog.selectPost);
