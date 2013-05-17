@@ -188,7 +188,7 @@ define(["esri/map",
 						graphic = new esri.Graphic(pt,null,blog);
 
 						app.blogData.saveNewBlogPost(graphic,function(){;
-							app.editor.discardEditor();
+							app.editor.cleanupEditor();
 						});
 					});
 				});

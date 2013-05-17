@@ -14,12 +14,14 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
+				_activeEditSession = false,
 				_onAddEditFeature;
 
 			this.init = function(onAddEditFeature)
 			{
 				$(selector).append('<div class="add-blog-post">+</div>');
 				$(".add-blog-post").click(function(){
+					_activeEditSession = true;
 					initNewPost();
 				});
 				addLayerSelector();
@@ -64,7 +66,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						addLocationEditor();
 					}
 					else if($(this).hasClass("discard-editor")){
-						_this.discardEditor();
+						_this.cleanupEditor(true);
 					}
 					else{
 						savePost();
@@ -131,13 +133,21 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 			}
 
-			this.discardEditor = function()
+			this.cleanupEditor = function(discard)
 			{
-				//TODO: Add confirm popup
-				$(".temp-blog-post").remove();
-				$(".add-blog-post").show();
-				_mapLayer.clear();
-				map.removeLayer(_mapLayer);
+				var cleanup = true;
+
+				if(discard){
+					cleanup = confirm("Are you sure you want to discard these edits?");
+				}
+
+				if(cleanup){
+					$(".temp-blog-post").remove();
+					$(".add-blog-post").show();
+					_mapLayer.clear();
+					map.removeLayer(_mapLayer);
+					_activeEditSession = false;
+				}
 			}
 
 			function savePost()
