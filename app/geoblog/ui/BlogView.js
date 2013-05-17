@@ -28,63 +28,66 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				loadCallback();
 			}
 
-			this.selectPost = function(index,graphics,elements)
+			this.selectPost = function(index,graphics,elements,editing)
 			{
-				var selectedEl = elements.eq(index),
-					selectedGrp = graphics[index],
-					mapState = $.parseJSON(selectedGrp.attributes[mapAttr]),
-					speed = 200;
+				if(!editing){
 
-				//Set Blog State
-				elements.removeClass("active");
-				selectedEl.addClass("active");
+					var selectedEl = elements.eq(index),
+						selectedGrp = graphics[index],
+						mapState = $.parseJSON(selectedGrp.attributes[mapAttr]),
+						speed = 200;
 
-				if(selectedGrp.attributes.geometry != "false"){
-					var mapTips = new MultiTips({
-						map: map,
-						content: selectedGrp.attributes.title,
-						pointArray: [selectedGrp],
-						labelDirection: "auto",
-						backgroundColor: "#444444",
-						pointerColor: "#444444",
-						textColor: "#ffffff",
-						offsetTop: iconHeight - 8
-					});
-				}	
+					//Set Blog State
+					elements.removeClass("active");
+					selectedEl.addClass("active");
 
-				//Set TimeExtent
-				if(cumulativeTime){
-					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(selectedGrp.attributes[timeAttr])));
+					if(selectedGrp.attributes.geometry != "false"){
+						var mapTips = new MultiTips({
+							map: map,
+							content: selectedGrp.attributes.title,
+							pointArray: [selectedGrp],
+							labelDirection: "auto",
+							backgroundColor: "#444444",
+							pointerColor: "#444444",
+							textColor: "#ffffff",
+							offsetTop: iconHeight - 8
+						});
+					}	
+
+					//Set TimeExtent
+					if(cumulativeTime){
+						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(selectedGrp.attributes[timeAttr])));
+					}
+					else{
+						map.setTimeExtent(new esri.TimeExtent(new Date(selectedGrp.attributes[timeAttr]),new Date(selectedGrp.attributes[timeAttr])));
+					}
+
+					//TODO: is there a way to query graphic for popup
+					map.infoWindow.clearFeatures();
+					map.infoWindow.hide();
+					if(mapState.infoWindow){
+						map.infoWindow.setContent(unescape(mapState.infoWindow.content));
+						map.infoWindow.setTitle("");
+						map.infoWindow.show(mapState.infoWindow.location);
+					}
+
+					toggleVisibleLayers(mapState.hiddenLayers);
+
+					//Set map state
+					var extent = new esri.geometry.Extent({
+						"xmin":mapState.extent.xmin,
+						"ymin":mapState.extent.ymin,
+						"xmax":mapState.extent.xmax,
+						"ymax":mapState.extent.ymax, 
+						"spatialReference":{
+							"wkid":mapState.extent.spatialReference.wkid}
+						});
+					map.setExtent(extent);
+
+					$(".post-index-bullet").removeClass("active");
+					$(".post-index-bullet").eq(index).addClass("active");
+
 				}
-				else{
-					map.setTimeExtent(new esri.TimeExtent(new Date(selectedGrp.attributes[timeAttr]),new Date(selectedGrp.attributes[timeAttr])));
-				}
-
-				//TODO: is there a way to query graphic for popup
-				map.infoWindow.clearFeatures();
-				map.infoWindow.hide();
-				if(mapState.infoWindow){
-					map.infoWindow.setContent(unescape(mapState.infoWindow.content));
-					map.infoWindow.setTitle("");
-					map.infoWindow.show(mapState.infoWindow.location);
-				}
-
-				toggleVisibleLayers(mapState.hiddenLayers);
-
-				//Set map state
-				var extent = new esri.geometry.Extent({
-					"xmin":mapState.extent.xmin,
-					"ymin":mapState.extent.ymin,
-					"xmax":mapState.extent.xmax,
-					"ymax":mapState.extent.ymax, 
-					"spatialReference":{
-						"wkid":mapState.extent.spatialReference.wkid}
-					});
-				map.setExtent(extent);
-
-				$(".post-index-bullet").removeClass("active");
-				$(".post-index-bullet").eq(index).addClass("active");
-
 
 			}
 

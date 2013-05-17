@@ -123,14 +123,14 @@ define([],
 				_blogPostElements = elements;
 			}
 
-			this.setPostByIndex = function(index,onSelect)
+			this.setPostByIndex = function(index,editing,onSelect)
 			{
 				if(index != undefined && index !== _selctedIndex){
 					_selectedElement = _blogPostElements.eq(index);
 					_selectedGraphic = _blogPostGraphics[index];
 					_selctedIndex = index;
 
-					onSelect(_selctedIndex,_blogPostGraphics,_blogPostElements);
+					onSelect(_selctedIndex,_blogPostGraphics,_blogPostElements,editing);
 				}
 			}
 

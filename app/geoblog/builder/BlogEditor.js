@@ -32,6 +32,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_onAddEditFeature = onAddEditFeature;
 			}
 
+			this.getEditStatus = function()
+			{
+				return _activeEditSession;
+			}
+
 			function initNewPost()
 			{
 				$(".add-blog-post").hide();

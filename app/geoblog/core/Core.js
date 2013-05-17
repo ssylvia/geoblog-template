@@ -309,7 +309,7 @@ define(["esri/map",
 			}
 
 			if (postIndex !== null){
-				app.blogData.setPostByIndex(postIndex,app.blog.selectPost);
+				app.blogData.setPostByIndex(postIndex,app.editor.getEditStatus(),app.blog.selectPost);
 			}
 		}
 
