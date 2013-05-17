@@ -23,6 +23,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				$(".add-blog-post").click(function(){
 					_activeEditSession = true;
 					initNewPost();
+					setTimeout(function(){
+						_onAddEditFeature();
+					},50);
 				});
 				addLayerSelector();
 
