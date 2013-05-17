@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,legendToggleSelector,legendContentSelector,onSave)
+		return function BlogEditor(selector,map,cumulativeTime,legendToggleSelector,legendContentSelector,onSave)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -40,6 +40,22 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function initNewPost()
 			{
 				$(".add-blog-post").hide();
+
+				//Prepare map and blog state
+				$(".geoblog-post").removeClass("active");
+				$(".multiTip").hide();
+				$(".mtArrow").hide();
+				map.infoWindow.hide();
+
+				if(cumulativeTime){
+					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date()));
+				}
+				else{
+					map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date()));
+				}
+
+				updateLayerSelector();
+
 				$(".add-blog-post").before(
 					'<form class="temp-blog-post" action="javascript:void(0);">\
 						<input type="text" class="temp blog-post-title post-item" placeholder="Type post title...">\
@@ -91,6 +107,13 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					autoclose: true,
 					todayBtn: true,
 					pickerPosition: "bottom-left"
+				}).change(function(){
+					if(cumulativeTime){
+						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(getPostDate())));
+					}
+					else{
+						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date(getPostDate())));
+					}
 				});
 			}
 
@@ -298,6 +321,13 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							map.getLayer($(this).val()).hide();
 						}
 					});
+				});
+			}
+
+			function updateLayerSelector()
+			{
+				$(".layer-select").each(function(){
+					$(".layer-select").first().prop("checked",map.getLayer($(this).val()).visible);
 				});
 			}
 

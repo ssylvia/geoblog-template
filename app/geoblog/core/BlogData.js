@@ -138,8 +138,18 @@ define([],
 			{
 				if(_featureLayer.getEditCapabilities().canCreate){
 					_featureLayer.applyEdits([feature],null,null,function(){
-						queryFeatureIds();
+
+						var newIndex = 0;
+
+						if(_featureIds.length - _queryCount - 1 > newIndex){
+							newIndex = _featureIds.length - _queryCount - 1
+						}
+
+						_queryIndex = newIndex;
+						
 						onComplete();
+
+						queryFeatureIds();
 					},function(error){
 						console.log("Error: " + error.details);
 					});

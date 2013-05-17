@@ -174,7 +174,7 @@ define(["esri/map",
 			//Add post editor
 			if(isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(blogSelector,app.map,".legend-toggle",".legend-content",function(blog,geo){
+					app.editor = new BlogEditor(blogSelector,app.map,configOptions.cumulativeTime,".legend-toggle",".legend-content",function(blog,geo){
 						var graphic,
 							pt;
 						
@@ -187,8 +187,9 @@ define(["esri/map",
 
 						graphic = new esri.Graphic(pt,null,blog);
 
-						app.blogData.saveNewBlogPost(graphic,function(){;
+						app.blogData.saveNewBlogPost(graphic,function(){
 							app.editor.cleanupEditor();
+							$("#blog").mCustomScrollbar("scrollTo","bottom");
 						});
 					});
 				});
@@ -309,7 +310,17 @@ define(["esri/map",
 			}
 
 			if (postIndex !== null){
-				app.blogData.setPostByIndex(postIndex,app.editor.getEditStatus(),app.blog.selectPost);
+				app.blogData.setPostByIndex(postIndex,getEditStatus(),app.blog.selectPost);
+			}
+		}
+
+		function getEditStatus()
+		{
+			if(app.editor === undefined){
+				return false;
+			}
+			else{
+				return app.editor.getEditStatus();
 			}
 		}
 
