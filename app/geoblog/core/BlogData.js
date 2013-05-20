@@ -22,6 +22,7 @@ define([],
 				_selectedGraphic,
 				_selectedElement,
 				_selctedIndex,
+				_startPosition = "top";
 				_events = {
 					onQueryComplete: null
 				};
@@ -51,6 +52,8 @@ define([],
 
 			function queryFeatureService()
 			{
+				_selctedIndex = null;
+
 				var query = new esri.tasks.Query();
 					query.returnGeometry = true;
 					query.outFields = ["*"];
@@ -59,7 +62,8 @@ define([],
 
 				_featureLayer.queryFeatures(query,function(result){
 					_blogPostGraphics = result.features;
-					_events.onQueryComplete(_blogPostGraphics);
+					_events.onQueryComplete(_blogPostGraphics,_startPosition);
+					_startPosition = "top";
 				},
 				function(error){
 					console.log("Error: " + error.details);
@@ -96,6 +100,7 @@ define([],
 				else{
 					_queryIndex-=_queryCount;
 				}
+				_startPosition = "bottom";
 				queryFeatureService();
 			}
 
@@ -125,7 +130,7 @@ define([],
 
 			this.setPostByIndex = function(index,editing,onSelect)
 			{
-				if(index != undefined && index !== _selctedIndex){
+				if(index != undefined && index != _selctedIndex){
 					_selectedElement = _blogPostElements.eq(index);
 					_selectedGraphic = _blogPostGraphics[index];
 					_selctedIndex = index;
@@ -149,6 +154,7 @@ define([],
 						
 						onComplete();
 
+						_startPosition = "bottom";
 						queryFeatureIds();
 					},function(error){
 						console.log("Error: " + error.details);
