@@ -181,6 +181,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					format: "dd MM yyyy HH:ii p",
 					showMeridian: true,
 					autoclose: true,
+					todayBtn: true,
 					pickerPosition: "bottom-left"
 				}).change(function(){
 					if(cumulativeTime){
@@ -336,8 +337,15 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function getInfoWindowFeature()
 			{
 				if(map.infoWindow.getSelectedFeature() && map.infoWindow.isShowing){
+					// return {
+					// 	content: escape(map.infoWindow._contentPane.innerHTML),
+					// 	location: map.infoWindow._location
+					// }
 					return {
-						content: escape(map.infoWindow._contentPane.innerHTML),
+						objectIdField: map.infoWindow.getSelectedFeature().getLayer().objectIdField,
+						feature: map.infoWindow.getSelectedFeature().attributes[map.infoWindow.getSelectedFeature().getLayer().objectIdField],
+						layerId: map.infoWindow.getSelectedFeature().getLayer().id,
+						url: map.infoWindow.getSelectedFeature().getLayer().url,
 						location: map.infoWindow._location
 					}
 				}

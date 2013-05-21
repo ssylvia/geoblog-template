@@ -70,9 +70,46 @@ define(["storymaps/utils/multiTips/MultiTips"],
 					map.infoWindow.clearFeatures();
 					map.infoWindow.hide();
 					if(mapState.infoWindow){
-						map.infoWindow.setContent(unescape(mapState.infoWindow.content));
-						map.infoWindow.setTitle("");
-						map.infoWindow.show(mapState.infoWindow.location);
+						if(mapState.infoWindow.content !== undefined){
+							map.infoWindow.setContent(unescape(mapState.infoWindow.content));
+							map.infoWindow.setTitle("");
+							map.infoWindow.show(mapState.infoWindow.location);
+						}
+						else{
+							if(mapState.infoWindow.url != undefined){
+								var queryTask = new esri.tasks.QueryTask(mapState.infoWindow.url);
+								var query = new esri.tasks.Query();
+									query.objectIds = [mapState.infoWindow.feature];
+									query.returnGeometry = true;
+									query.outFields = ["*"];
+
+								queryTask.execute(query,function(result){
+									ftr = result.features[0];
+									if(ftr.infoTemplate === undefined){
+										ftr.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
+									}
+									map.infoWindow.setFeatures([ftr]);
+									map.infoWindow.show(mapState.infoWindow.location);
+								});
+
+							}
+							else{
+								var graphic;
+								dojo.forEach(map.getLayer(mapState.infoWindow.layerId).graphics,function(g){
+									if(g.attributes[mapState.infoWindow.objectIdField] === mapState.infoWindow.feature){
+										graphic = g;
+									}
+								});
+
+								if(graphic != undefined){
+									if(graphic.infoTemplate === undefined){
+										graphic.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
+									}
+									map.infoWindow.setFeatures([graphic]);
+									map.infoWindow.show(mapState.infoWindow.location);
+								}
+							}
+						}
 					}
 
 					toggleVisibleLayers(mapState.hiddenLayers);
