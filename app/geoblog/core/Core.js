@@ -160,11 +160,29 @@ define(["esri/map",
 
 				setTimeout(function(){
 					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
+					if(_scrollableBlog){
+						if(_startPosition === "top"){
+							_selectByIndex = {
+								active: true,
+								index: 0
+							}
+						}
+						else{
+							_selectByIndex = {
+								active: true,
+								index: $(".geoblog-post").length - 1
+							}
+						}
+						selectPostByIndex();
+					}
 				},500);
 
 				$(".blog-post-photo").load(function(){
 					$(_blogSelector).mCustomScrollbar("update");
 					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
+					if(_scrollableBlog){
+						selectPostByIndex();
+					}
 				});
 
 				app.blogData.setBlogElements($(".geoblog-post"));
