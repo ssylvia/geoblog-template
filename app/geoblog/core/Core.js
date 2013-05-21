@@ -150,6 +150,7 @@ define(["esri/map",
 				}
 				$(_blogSelector).mCustomScrollbar({
 					theme: "dark-2",
+					scrollInertia: 0,
 					callbacks: {
 						onScroll: selectPostByScrollPosition
 					}

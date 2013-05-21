@@ -42,6 +42,75 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				updateLayerSelector();
 			}
 
+			function getTimeStamp(date)
+			{
+				var day = date.getDate();
+				var month = date.getMonth();
+				var monthString;
+				var year = date.getFullYear() ;
+				var hour = date.getHours();
+				var displayHour = ""
+				var minute = date.getMinutes();
+				var timeQualifier = "";
+				var abv = "am";
+
+				switch(month)
+				{
+					case 0:
+						monthString = "January";
+						break;
+					case 1:
+						monthString = "February";
+						break;
+					case 2:
+						monthString = "March";
+						break;
+					case 3:
+						monthString = "April";
+						break;
+					case 4:
+						monthString = "May";
+						break;
+					case 5:
+						monthString = "June";
+						break;
+					case 6:
+						monthString = "July";
+						break;
+					case 7:
+						monthString = "August";
+						break;
+					case 8:
+						monthString = "September";
+						break;
+					case 9:
+						monthString = "October";
+						break;
+					case 10:
+						monthString = "November";
+						break;
+					case 11:
+						monthString = "December";
+						break;
+				}
+
+				if(hour > 12){
+					displayHour = hour - 12;
+					abv = "pm";
+					if (displayHour < 10){
+						timeQualifier = 0;
+					}
+				}
+				else{
+					displayHour = hour;
+					if (displayHour < 10){
+						timeQualifier = 0;
+					}					
+				}
+
+				return day + " " + monthString + " " + year + " " + timeQualifier + displayHour + ":" + minute + " " + abv;
+			}
+
 			function initNewPost()
 			{
 				$(".add-blog-post").hide();
@@ -61,11 +130,13 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				updateLayerSelector();
 
+				var startDate = new Date();
+
 				$(".add-blog-post").before(
 					'<form class="temp-blog-post" action="javascript:void(0);">\
 						<input type="text" class="temp blog-post-title post-item" placeholder="Type post title...">\
 						<div class="input-append date form_datetime">\
-							<input class="temp blog-post-date" size="20" type="text" value="" readonly>\
+							<input class="temp blog-post-date" size="20" type="text" value="'+ getTimeStamp(new Date()) +'" readonly>\
 							<span class="add-on"><i class="icon-calendar"></i></span>\
 						</div>\
 						<div class="temp-post-controls">\
@@ -110,7 +181,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					format: "dd MM yyyy HH:ii p",
 					showMeridian: true,
 					autoclose: true,
-					todayBtn: true,
 					pickerPosition: "bottom-left"
 				}).change(function(){
 					if(cumulativeTime){
@@ -233,14 +303,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			function getPostDate()
 			{
-				if($(".temp.blog-post-date").last().val() === ""){
-					var date = new Date();
-					return date.valueOf()
-				}
-				else{
-					var date = new Date($(".temp.blog-post-date").last().val());
-					return date.valueOf();
-				}
+				var date = new Date($(".temp.blog-post-date").last().val());
+				return date.valueOf();
 			}
 
 			function getPostGeometry()
@@ -332,7 +396,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function updateLayerSelector()
 			{
 				$(".layer-select").each(function(){
-					console.log(map.getLayer($(this).val()).visible);
 					$(this).prop("checked",map.getLayer($(this).val()).visible);
 				});
 			}

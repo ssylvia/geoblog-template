@@ -1,3 +1,7 @@
+html, body, #application-window{
+	overflow: hidden;
+}
+
 #blog-wrapper{
 	height: 100%;
 	width: 40%;
