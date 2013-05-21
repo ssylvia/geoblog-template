@@ -15,6 +15,7 @@ define([],
 			var _this = this,
 				_featureLayer,
 				_featureIds,
+				_updateFromSave = false,
 				_queryIndex = 0,
 				_queryCount = queryCount,
 				_blogPostGraphics,
@@ -53,6 +54,11 @@ define([],
 			function queryFeatureService()
 			{
 				_selctedIndex = null;
+
+				if (_updateFromSave){
+					_updateFromSave = false;
+					_queryIndex = _featureIds.length - _queryCount;
+				}
 
 				var query = new esri.tasks.Query();
 					query.returnGeometry = true;
@@ -144,13 +150,7 @@ define([],
 				if(_featureLayer.getEditCapabilities().canCreate){
 					_featureLayer.applyEdits([feature],null,null,function(){
 
-						var newIndex = 0;
-
-						if(_featureIds.length - _queryCount - 1 > newIndex){
-							newIndex = _featureIds.length - _queryCount - 1
-						}
-
-						_queryIndex = newIndex;
+						_updateFromSave = true;
 						
 						onComplete();
 
