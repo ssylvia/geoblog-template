@@ -37,6 +37,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				return _activeEditSession;
 			}
 
+			this.updateEditor = function()
+			{
+				updateLayerSelector();
+			}
+
 			function initNewPost()
 			{
 				$(".add-blog-post").hide();
@@ -327,7 +332,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function updateLayerSelector()
 			{
 				$(".layer-select").each(function(){
-					$(".layer-select").first().prop("checked",map.getLayer($(this).val()).visible);
+					console.log(map.getLayer($(this).val()).visible);
+					$(this).prop("checked",map.getLayer($(this).val()).visible);
 				});
 			}
 

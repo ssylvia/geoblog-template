@@ -363,7 +363,7 @@ define(["esri/map",
 				}
 
 				if (postIndex !== null){
-					app.blogData.setPostByIndex(postIndex,getEditStatus(),app.blog.selectPost);
+					app.blogData.setPostByIndex(postIndex,getEditStatus(),selectPostCallback);
 				}
 			}
 			else{
@@ -375,7 +375,15 @@ define(["esri/map",
 		{
 			if (_selectByIndex.active){
 				_selectByIndex.active = false;
-				app.blogData.setPostByIndex(_selectByIndex.index,getEditStatus(),app.blog.selectPost);
+				app.blogData.setPostByIndex(_selectByIndex.index,getEditStatus(),selectPostCallback);
+			}
+		}
+
+		function selectPostCallback(selctedIndex,blogPostGraphics,blogPostElements,editing)
+		{
+			app.blog.selectPost(selctedIndex,blogPostGraphics,blogPostElements,editing);
+			if(_isBuilder){
+				app.editor.updateEditor();
 			}
 		}
 
