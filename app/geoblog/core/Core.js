@@ -33,8 +33,7 @@ define(["esri/map",
 				active: false,
 				index: 0
 			},
-			_startPosition = "top",
-			_scrollableBlog = $(_blogSelector).height() >= $(".mCSB_container").height();
+			_startPosition = "top";
 
 		$(window).resize(function(){
 			Helper.resetLayout();
@@ -161,7 +160,7 @@ define(["esri/map",
 
 				setTimeout(function(){
 					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
-					if(_scrollableBlog){
+					if($(_blogSelector).height() >= $(".mCSB_container").height()){
 						if(_startPosition === "top"){
 							_selectByIndex = {
 								active: true,
@@ -181,7 +180,7 @@ define(["esri/map",
 				$(".blog-post-photo").load(function(){
 					$(_blogSelector).mCustomScrollbar("update");
 					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
-					if(_scrollableBlog){
+					if($(_blogSelector).height() >= $(".mCSB_container").height()){
 						selectPostByIndex();
 					}
 				});
@@ -194,7 +193,7 @@ define(["esri/map",
 						index: $(this).index()
 					}
 					$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + $(this).index() + ")");
-					if(_scrollableBlog){
+					if($(_blogSelector).height() >= $(".mCSB_container").height()){
 						selectPostByIndex();
 					}
 				})
@@ -267,7 +266,7 @@ define(["esri/map",
 							index: index
 						}
 						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
-						if(_scrollableBlog){
+						if($(_blogSelector).height() >= $(".mCSB_container").height()){
 							selectPostByIndex();
 						}
 					}
@@ -287,7 +286,7 @@ define(["esri/map",
 							index: index
 						}
 						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
-						if(_scrollableBlog){
+						if($(_blogSelector).height() >= $(".mCSB_container").height()){
 							selectPostByIndex();
 						}
 					}
@@ -422,7 +421,7 @@ define(["esri/map",
 							index: $(this).index()
 						}
 						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + $(this).index() + ")");
-						if(_scrollableBlog){
+						if($(_blogSelector).height() >= $(".mCSB_container").height()){
 							selectPostByIndex();
 						}
 					}
