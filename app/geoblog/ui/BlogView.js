@@ -12,6 +12,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 
 		return function BlogView(selector,map,cumulativeTime,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
 		{
+			var mapTips = null;
 
 			this.update = function(blogPosts) 
 			{
@@ -41,8 +42,11 @@ define(["storymaps/utils/multiTips/MultiTips"],
 					elements.removeClass("active");
 					selectedEl.addClass("active");
 
+					if(mapTips != null){
+						mapTips.clean();
+					}
 					if(selectedGrp.attributes.geometry != "false"){
-						var mapTips = new MultiTips({
+						mapTips = new MultiTips({
 							map: map,
 							content: selectedGrp.attributes.title,
 							pointArray: [selectedGrp],
