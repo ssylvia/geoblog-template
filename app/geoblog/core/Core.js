@@ -364,7 +364,18 @@ define(["esri/map",
 				}
 
 				if (postIndex !== null){
-					app.blogData.setPostByIndex(postIndex,getEditStatus(),selectPostCallback);
+					var current = app.blogData.getSelectedIndex();
+
+					if(postIndex != current){
+						if(postIndex > current){
+							postIndex = current + 1;
+						}
+						else{
+							postIndex = current - 1;
+						}
+
+						app.blogData.setPostByIndex(postIndex,getEditStatus(),selectPostCallback);
+					}
 				}
 			}
 			else{
