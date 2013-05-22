@@ -10,7 +10,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,cumulativeTime,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
+		return function BlogView(selector,map,blogLayer,cumulativeTime,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
 		{
 			var mapTips = null;
 
@@ -29,7 +29,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				loadCallback();
 			}
 
-			this.selectPost = function(index,graphics,elements,editing)
+			this.selectPost = function(index,graphics,elements,alwaysDisplayPoints,editing)
 			{
 				if(!editing){
 
@@ -113,6 +113,10 @@ define(["storymaps/utils/multiTips/MultiTips"],
 					}
 
 					toggleVisibleLayers(mapState.hiddenLayers);
+
+					if(alwaysDisplayPoints){
+						blogLayer.show();
+					}
 
 					//Set map state
 					var extent = new esri.geometry.Extent({

@@ -143,7 +143,7 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(_blogSelector,app.map,configOptions.cumulativeTime,"content","time","mapState",configOptions.iconHeight,function(){
+			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"content","time","mapState",configOptions.iconHeight,function(){
 				if($(_blogSelector).data("mCustomScrollbarIndex")){
 					$(_blogSelector).mCustomScrollbar("destroy");
 				}
@@ -157,6 +157,7 @@ define(["esri/map",
 
 				//Hide Loading animation
 				$(".loader").fadeOut();
+				$(".legend-wrapper").show();
 
 				setTimeout(function(){
 					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
@@ -381,7 +382,7 @@ define(["esri/map",
 
 		function selectPostCallback(selctedIndex,blogPostGraphics,blogPostElements,editing)
 		{
-			app.blog.selectPost(selctedIndex,blogPostGraphics,blogPostElements,editing);
+			app.blog.selectPost(selctedIndex,blogPostGraphics,blogPostElements,configOptions.alwaysDisplayPoints,editing);
 			if(_isBuilder){
 				app.editor.updateEditor();
 			}

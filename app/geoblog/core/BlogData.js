@@ -57,7 +57,13 @@ define([],
 
 				if (_updateFromSave){
 					_updateFromSave = false;
-					_queryIndex = _featureIds.length - _queryCount;
+					if(orderBy.search("DESC") <= 0){
+						_queryIndex = 0;
+						_startPosition = "top";
+					}
+					else{
+						_queryIndex = _featureIds.length - _queryCount;
+					}
 				}
 
 				var query = new esri.tasks.Query();
@@ -84,13 +90,10 @@ define([],
 
 			function nextPage()
 			{
-				if(_queryIndex + _queryCount >= _featureIds.length){
-					_queryIndex = 0;
-				}
-				else{
+				if(_queryIndex + _queryCount < _featureIds.length){
 					_queryIndex+=_queryCount;
+					queryFeatureService();
 				}
-				queryFeatureService();
 			}
 
 			this.goToPrevPage = function()
@@ -100,14 +103,16 @@ define([],
 
 			function prevPage()
 			{
-				if(_queryIndex - _queryCount < 0){
-					_queryIndex = _featureIds.length - _queryCount;
+				if(_queryIndex != 0){
+					if(_queryIndex - _queryCount < 0){
+						_queryIndex = 0;
+					}
+					else{
+						_queryIndex-=_queryCount;
+					}
+					_startPosition = "bottom";
+					queryFeatureService();
 				}
-				else{
-					_queryIndex-=_queryCount;
-				}
-				_startPosition = "bottom";
-				queryFeatureService();
 			}
 
 			this.goToPageByItem = function(OID,scrollItem)

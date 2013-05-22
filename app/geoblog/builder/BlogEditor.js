@@ -51,7 +51,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				var hour = date.getHours();
 				var displayHour = ""
 				var minute = date.getMinutes();
-				var timeQualifier = "";
+				var hourQualifier = "";
+				var minuteQualifier = "";
 				var abv = "am";
 
 				switch(month)
@@ -108,7 +109,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}					
 				}
 
-				return day + " " + monthString + " " + year + " " + timeQualifier + displayHour + ":" + minute + " " + abv;
+				if (minute < 10){
+					minuteQualifier = 0;
+				}
+
+				return day + " " + monthString + " " + year + " " + hourQualifier + displayHour + ":" + minuteQualifier + minute + " " + abv;
 			}
 
 			function initNewPost()
