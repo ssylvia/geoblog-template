@@ -12,7 +12,8 @@ define(["storymaps/utils/multiTips/MultiTips"],
 
 		return function BlogView(selector,map,blogLayer,cumulativeTime,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
 		{
-			var mapTips = null;
+			var _mapTips = null,
+				_homeExtent = null;
 
 			this.update = function(blogPosts) 
 			{
@@ -29,6 +30,11 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				loadCallback();
 			}
 
+			this.getHomeExtent = function()
+			{
+				return _homeExtent;
+			}
+
 			this.selectPost = function(index,graphics,elements,alwaysDisplayPoints,editing)
 			{
 				if(!editing){
@@ -42,11 +48,11 @@ define(["storymaps/utils/multiTips/MultiTips"],
 					elements.removeClass("active");
 					selectedEl.addClass("active");
 
-					if(mapTips != null){
-						mapTips.clean();
+					if(_mapTips != null){
+						_mapTips.clean();
 					}
 					if(selectedGrp.attributes.geometry != "false"){
-						mapTips = new MultiTips({
+						_mapTips = new MultiTips({
 							map: map,
 							content: selectedGrp.attributes.title,
 							pointArray: [selectedGrp],
@@ -128,6 +134,8 @@ define(["storymaps/utils/multiTips/MultiTips"],
 							"wkid":mapState.extent.spatialReference.wkid}
 						});
 					map.setExtent(extent);
+						
+					_homeExtent = extent;
 
 					$(".post-index-bullet").removeClass("active");
 					$(".post-index-bullet").eq(index).addClass("active");
