@@ -217,9 +217,12 @@ define(["esri/map",
 
 						graphic = new esri.Graphic(pt,null,blog);
 
+						app.editor.cleanupEditor();
+						$(".loader").fadeIn();
+
 						app.blogData.saveNewBlogPost(graphic,function(){
-							app.editor.cleanupEditor();
 							$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
+							$(".loader").fadeOut();
 						});
 					});
 				});
