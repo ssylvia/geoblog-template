@@ -33,7 +33,8 @@ define(["esri/map",
 				active: false,
 				index: 0
 			},
-			_startPosition = "top";
+			_startPosition = null,
+			_selectReady = false;
 
 		$(window).resize(function(){
 			Helper.resetLayout();
@@ -143,7 +144,10 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"content","time","mapState",configOptions.iconHeight,function(){
+			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"content","time","mapState",configOptions.iconHeight,function(){				
+				
+				app.blogData.setBlogElements($(".geoblog-post"));
+
 				if($(_blogSelector).data("mCustomScrollbarIndex")){
 					$(_blogSelector).mCustomScrollbar("destroy");
 				}
@@ -155,38 +159,26 @@ define(["esri/map",
 					}
 				});
 
+				_selectByIndex = {
+					active: true,
+					index: _startPosition
+				}
+
+				setTimeout(function(){
+					$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + _startPosition + ")");
+					_selectReady = true;
+				},100);
+
+				selectPostByIndex();
+
 				//Hide Loading animation
 				$(".loader").fadeOut();
 				$(".legend-wrapper").show();
 
-				setTimeout(function(){
-					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
-					if($(_blogSelector).height() >= $(".mCSB_container").height()){
-						if(_startPosition === "top"){
-							_selectByIndex = {
-								active: true,
-								index: 0
-							}
-						}
-						else{
-							_selectByIndex = {
-								active: true,
-								index: $(".geoblog-post").length - 1
-							}
-						}
-						selectPostByIndex();
-					}
-				},500);
-
 				$(".blog-post-photo").load(function(){
 					$(_blogSelector).mCustomScrollbar("update");
-					$(_blogSelector).mCustomScrollbar("scrollTo",_startPosition);
-					if($(_blogSelector).height() >= $(".mCSB_container").height()){
-						selectPostByIndex();
-					}
+					$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + _startPosition + ")");
 				});
-
-				app.blogData.setBlogElements($(".geoblog-post"));
 
 				$(".geoblog-post").click(function(){
 					_selectByIndex = {
@@ -203,11 +195,10 @@ define(["esri/map",
 			});
 
 			app.blogData.init(app.blogLayer,function(graphics,startPosition){
-				app.blog.update(graphics);
-
-				addIndexDots(graphics,true);
-
+				_selectReady = false;
 				_startPosition = startPosition;
+				addIndexDots(graphics,true);
+				app.blog.update(graphics);
 			});
 
 			//Add post editor
@@ -312,86 +303,88 @@ define(["esri/map",
 		}
 
 		function selectPostByScrollPosition(){
-			if (!_selectByIndex.active){
-				var container = $("#blog .mCSB_container"),
-					scrollTop = container.position().top,
-					buffer = $(_blogSelector).height() / 4,
-					selectPosition = {
-						top: null,
-						bottom: null,
-						atTop: null,
-						fullyShown: null,
-						topQuarter: null,
-						bottomQuarter: null
-					};
+			if(_selectReady){
+				if (!_selectByIndex.active){
+					var container = $("#blog .mCSB_container"),
+						scrollTop = container.position().top,
+						buffer = $(_blogSelector).height() / 4,
+						selectPosition = {
+							top: null,
+							bottom: null,
+							atTop: null,
+							fullyShown: null,
+							topQuarter: null,
+							bottomQuarter: null
+						};
 
-				if(scrollTop === 0){
-					selectPosition.top = 0;	
-				}
-				else if(container.height() + scrollTop - (buffer*4) < 50){
-					selectPosition.bottom = $(".geoblog-post").length - 1;
-				}
-				else{
-					$(".geoblog-post").each(function(){					
-						if(scrollTop + $(this).position().top === 0){
-							selectPosition.atTop = $(this).index();
-						}
-						if($(this).position().top + $(this).outerHeight() + scrollTop < $(_blogSelector).height() && scrollTop + $(this).position().top >= 0){
-							selectPosition.fullyShown = $(this).index();
-						}
-						if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0){
-							selectPosition.topQuarter = $(this).index();
-						}
-						if($(this).position().top + $(this).outerHeight() + scrollTop >= $(_blogSelector).height() - buffer && $(this).position().top + $(this).outerHeight() + scrollTop < $(_blogSelector).height()){
-							selectPosition.bottomQuarter = $(this).index();
-						}
-					});
-				}
+					if(scrollTop === 0){
+						selectPosition.top = 0;	
+					}
+					else if(container.height() + scrollTop - (buffer*4) < 50){
+						selectPosition.bottom = $(".geoblog-post").length - 1;
+					}
+					else{
+						$(".geoblog-post").each(function(){					
+							if(scrollTop + $(this).position().top === 0){
+								selectPosition.atTop = $(this).index();
+							}
+							if($(this).position().top + $(this).outerHeight() + scrollTop < $(_blogSelector).height() && scrollTop + $(this).position().top >= 0){
+								selectPosition.fullyShown = $(this).index();
+							}
+							if(scrollTop + $(this).position().top <= buffer && scrollTop + $(this).position().top >= 0){
+								selectPosition.topQuarter = $(this).index();
+							}
+							if($(this).position().top + $(this).outerHeight() + scrollTop >= $(_blogSelector).height() - buffer && $(this).position().top + $(this).outerHeight() + scrollTop < $(_blogSelector).height()){
+								selectPosition.bottomQuarter = $(this).index();
+							}
+						});
+					}
 
-				var postIndex = null;
+					var postIndex = null;
 
-				if(selectPosition.top !== null){
-					postIndex = selectPosition.top;
-				}
-				else if(selectPosition.bottom !== null){
-					postIndex = selectPosition.bottom;
-				}
-				else if(selectPosition.atTop !== null){
-					postIndex = selectPosition.atTop;
-				}
-				else if(selectPosition.fullyShown !== null){
-					postIndex = selectPosition.fullyShown;
-				}
-				else if(selectPosition.topQuarter !== null){
-					postIndex = selectPosition.topQuarter;
-				}
-				else if(selectPosition.bottomQuarter !== null){
-					postIndex = selectPosition.bottomQuarter;
-				}
+					if(selectPosition.top !== null){
+						postIndex = selectPosition.top;
+					}
+					else if(selectPosition.bottom !== null){
+						postIndex = selectPosition.bottom;
+					}
+					else if(selectPosition.atTop !== null){
+						postIndex = selectPosition.atTop;
+					}
+					else if(selectPosition.fullyShown !== null){
+						postIndex = selectPosition.fullyShown;
+					}
+					else if(selectPosition.topQuarter !== null){
+						postIndex = selectPosition.topQuarter;
+					}
+					else if(selectPosition.bottomQuarter !== null){
+						postIndex = selectPosition.bottomQuarter;
+					}
 
-				if (postIndex !== null){
-					var current = app.blogData.getSelectedIndex();
+					if (postIndex !== null){
+						var current = app.blogData.getSelectedIndex();
 
-					if(postIndex != current){
-						if(postIndex > current){
-							postIndex = current + 1;
+						if(postIndex != current){
+							if(postIndex > current){
+								postIndex = current + 1;
+							}
+							else{
+								postIndex = current - 1;
+							}
+
+							app.blogData.setPostByIndex(postIndex,getEditStatus(),selectPostCallback);
 						}
-						else{
-							postIndex = current - 1;
-						}
-
-						app.blogData.setPostByIndex(postIndex,getEditStatus(),selectPostCallback);
 					}
 				}
-			}
-			else{
-				selectPostByIndex();
+				else{
+					selectPostByIndex();
+				}
 			}
 		}
 
 		function selectPostByIndex()
 		{
-			if (_selectByIndex.active){
+			if (_selectByIndex.active && _selectByIndex.index !== null){
 				_selectByIndex.active = false;
 				app.blogData.setPostByIndex(_selectByIndex.index,getEditStatus(),selectPostCallback);
 			}

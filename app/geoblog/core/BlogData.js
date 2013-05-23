@@ -23,7 +23,7 @@ define([],
 				_selectedGraphic,
 				_selectedElement,
 				_selctedIndex,
-				_startPosition = "top";
+				_startPosition = 0;
 				_events = {
 					onQueryComplete: null
 				};
@@ -57,12 +57,14 @@ define([],
 
 				if (_updateFromSave){
 					_updateFromSave = false;
-					if(orderBy.search("DESC") <= 0){
+					if(orderBy.search("DESC") >= 0){
 						_queryIndex = 0;
-						_startPosition = "top";
+						_startPosition = 0;
 					}
 					else{
-						_queryIndex = _featureIds.length - _queryCount;
+						var remainder = _featureIds.length % _queryCount;
+						_queryIndex = _featureIds.length - remainder;
+						_startPosition = "bottom";
 					}
 				}
 
@@ -74,8 +76,11 @@ define([],
 
 				_featureLayer.queryFeatures(query,function(result){
 					_blogPostGraphics = result.features;
+					if(_startPosition === "bottom"){
+						_startPosition = _blogPostGraphics.length - 1;
+					}
 					_events.onQueryComplete(_blogPostGraphics,_startPosition);
-					_startPosition = "top";
+					_startPosition = 0;
 				},
 				function(error){
 					console.log("Error: " + error.details);
@@ -145,7 +150,6 @@ define([],
 					_selectedElement = _blogPostElements.eq(index);
 					_selectedGraphic = _blogPostGraphics[index];
 					_selctedIndex = index;
-
 					onSelect(_selctedIndex,_blogPostGraphics,_blogPostElements,editing);
 				}
 			}
@@ -158,8 +162,6 @@ define([],
 						_updateFromSave = true;
 						
 						onComplete();
-
-						_startPosition = "bottom";
 						queryFeatureIds();
 					},function(error){
 						console.log("Error: " + error.details);
