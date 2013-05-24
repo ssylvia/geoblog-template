@@ -415,15 +415,15 @@ define(["esri/map",
 		{
 
 			if(updateAll){
-				$("#nav-index-wrapper").empty();
+				$("#nav-index").empty();
 			}
 			
 			dojo.forEach(graphics,function(g){
-				$("#nav-index-wrapper").append('<p class="post-index-bullet" title="' + g.attributes.title + '">&#9679;</p>');
+				$("#nav-index").append('<p class="post-index-bullet" title="' + g.attributes.title + '">&#9679;</p>');
 			});
 
-			var bullets = $(".post-index-bullet");			
-			bullets.first().css("margin-top",($("#nav-index-wrapper").height() - (bullets.outerHeight() * bullets.length)) / 2);
+			var bullets = $(".post-index-bullet");
+			$("#nav-index-wrapper").css("margin-top",($("#nav-index-wrapper").height() - ($(".page-button").height()*2) - (bullets.outerHeight() * bullets.length)) / 2);
 
 			if(updateAll){
 				$(".post-index-bullet").tooltip({
@@ -450,8 +450,8 @@ define(["esri/map",
 
 			//$(".blog-post-photo").width($(".blog-post-embed-wrapper iframe").width() - 10);
 
-			var bullets = $(".post-index-bullet");			
-			bullets.first().css("margin-top",($("#nav-index-wrapper").height() - (bullets.outerHeight() * bullets.length)) / 2);
+			var bullets = $(".post-index-bullet");
+			$("#nav-index-wrapper").css("margin-top",($("#nav-index-wrapper").height() - ($(".page-button").height()*2) - (bullets.outerHeight() * bullets.length)) / 2);
 
 			$(_blogSelector).mCustomScrollbar("update");
 		}

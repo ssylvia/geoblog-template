@@ -34,6 +34,16 @@ html, body, #application-window{
 	color: #fff;
 }
 
+.page-button{
+	font-size: 22px;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.page-button:hover{
+	color: #dadada;
+}
+
 .post-index-bullet{
 	color: #444;
 	font-size: 18px;

@@ -68,6 +68,19 @@ define([],
 					}
 				}
 
+				if(_queryIndex === 0){
+					$(".page-button.page-up").hide();
+					$(".page-button.page-down").show();
+				}
+				else if(_featureIds.length - _queryIndex <= _queryCount){
+					$(".page-button.page-up").show();
+					$(".page-button.page-down").hide();
+				}
+				else{
+					$(".page-button.page-up").show();
+					$(".page-button.page-down").show();
+				}
+
 				var query = new esri.tasks.Query();
 					query.returnGeometry = true;
 					query.outFields = ["*"];

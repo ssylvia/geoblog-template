@@ -120,10 +120,13 @@
 
 					<div id="blog-navigation" class="region-left">
 						<div id="nav-buttons-wrapper" class="region-top">
-							<p class="nav-button prev-post">&#9650;</p>
-							<p class="nav-button next-post">&#9660;</p>
+							<p class="nav-button prev-post" title="Previous Post">&#9650;</p>
+							<p class="nav-button next-post" title="Next Post">&#9660;</p>
 						</div><!--/nav-buttons-wrapper-->
 						<div id="nav-index-wrapper" class="region-center">
+							<i id="page-up" class="page-button page-up icon-chevron-up" title="Previous Page" onclick="app.blogData.goToPrevPage()"></i>
+							<div id="nav-index"></div>
+							<i id="page-down" class="page-button page-down icon-chevron-down" title="Next Page" onclick="app.blogData.goToNextPage()"></i>
 						</div><!--/nav-index-wrapper-->
 					</div><!--blog-navigation-->
 
