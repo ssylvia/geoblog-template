@@ -45,3 +45,7 @@ textarea.temp{
 .temp.post-embed-code{
 	height: 100px;
 }
+
+.remove-item{
+	margin: -5px 0 10px 0;
+}

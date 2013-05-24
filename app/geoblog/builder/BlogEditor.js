@@ -15,9 +15,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
 				_activeEditSession = false,
-				_onAddEditFeature;
+				_onAddEditFeature,
+				_onRemoveEditFeature;
 
-			this.init = function(onAddEditFeature)
+			this.init = function(onAddEditFeature,onRemoveEditFeature)
 			{
 				$(selector).append('<div class="add-blog-post" title="Add a new post">+</div>');
 				$(".add-blog-post").tooltip({
@@ -31,7 +32,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				});
 				addLayerSelector();
 
-				_onAddEditFeature = onAddEditFeature;
+				if(onAddEditFeature){
+					_onAddEditFeature = onAddEditFeature;
+				}
+				if(onRemoveEditFeature){
+					_onRemoveEditFeature = onRemoveEditFeature;
+				}
 			}
 
 			this.getEditStatus = function()
@@ -180,7 +186,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 
 					setTimeout(function(){
-						_onAddEditFeature();
+						if(_onAddEditFeature){
+							_onAddEditFeature();
+						}
 					},50);
 				});
 
@@ -202,7 +210,23 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			function addTextEditor()
 			{
-				$(".temp-post-controls").last().before('<textarea type="textarea" class="temp blog-post-text post-item" placeholder="Type text content..."></textarea>');
+				$(".temp-post-controls").last().before('<textarea type="textarea" class="temp blog-post-text post-item" placeholder="Type text content..."></textarea>\
+					<button class="btn btn-danger btn-mini remove-text-item remove-item" type="button">Remove text</button>');
+
+				$(".remove-text-item").last().click(function(){
+					if(confirm("Are you sure you want to remove this text?")){
+						$(this).prev(".wysihtml5-sandbox").prev("input").remove();
+						$(this).prevUntil(".wysihtml5-toolbar").remove();
+						$(this).prev(".wysihtml5-toolbar").remove();
+						$(this).remove();
+
+						setTimeout(function(){
+							if(_onRemoveEditFeature()){
+								_onRemoveEditFeature();
+							}
+						},50);
+					}
+				});
 
 				$(".temp.blog-post-text").last().wysihtml5({
 					"stylesheets": ["lib/bootstrap-wysihtml5/lib/css/wysiwyg-color.css"],
@@ -216,15 +240,43 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				$(".temp-post-controls").last().before(
 					'<input type="text" class="temp photo-url post-item" placeholder="Paste photo url...">\
-					<input type="text" class="temp photo-caption post-item" placeholder="Type photo caption...">'
+					<input type="text" class="temp photo-caption post-item" placeholder="Type photo caption...">\
+					<button class="btn btn-danger btn-mini remove-photo-item remove-item" type="button">Remove photo</button>'
 				);
+				$(".remove-photo-item").last().click(function(){
+					if(confirm("Are you sure you want to remove this photo?")){
+						$(this).prev(".temp.photo-caption").remove();
+						$(this).prev(".temp.photo-url").remove();
+						$(this).remove();
+
+						setTimeout(function(){
+							if(_onRemoveEditFeature()){
+								_onRemoveEditFeature();
+							}
+						},50);
+					}
+				});
 			}
 
 			function addEmbedEditor()
 			{
 				$(".temp-post-controls").last().before(
-					'<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code..."></textarea>'
+					'<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code..."></textarea>\
+					<button class="btn btn-danger btn-mini remove-video-item remove-item" type="button">Remove video</button>'
 				);
+
+				$(".remove-video-item").last().click(function(){
+					if(confirm("Are you sure you want to remove this video?")){
+						$(this).prev(".temp.post-embed-code").remove();
+						$(this).remove();
+
+						setTimeout(function(){
+							if(_onRemoveEditFeature()){
+								_onRemoveEditFeature();
+							}
+						},50);
+					}
+				});
 			}
 
 			function addLocationEditor()
@@ -235,6 +287,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						$(".editor-ctrl.add-location").last().removeClass("active");
 						_mapLayer.clear();
 						map.removeLayer(_mapLayer);
+
+						if(_onRemoveEditFeature()){
+							_onRemoveEditFeature();
+						}
 					}
 					else{
 						$(".editor-ctrl.add-location").last().addClass("active");

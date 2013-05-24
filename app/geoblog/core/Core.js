@@ -230,6 +230,9 @@ define(["esri/map",
 				app.editor.init(function(){
 					$(_blogSelector).mCustomScrollbar("update");
 					$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
+				},function(){
+					$(_blogSelector).mCustomScrollbar("update");
+					$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 				});
 			}
 			else{
