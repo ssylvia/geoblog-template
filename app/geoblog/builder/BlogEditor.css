@@ -1,6 +1,8 @@
 .add-blog-post{
-	margin: 25px 5%;
-	padding: 10px;
+	position:fixed;
+	bottom: 0;
+	/*margin: 25px 5%;*/
+	padding: 10px 22px;
 	background-color: #dadada;
 	color: #444;
 	text-align: center;

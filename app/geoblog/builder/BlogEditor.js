@@ -19,8 +19,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			this.init = function(onAddEditFeature)
 			{
-				$(selector).append('<div class="add-blog-post">+</div>');
-				$(".add-blog-post").click(function(){
+				$(selector).append('<div class="add-blog-post" title="Add a new post">+</div>');
+				$(".add-blog-post").tooltip({
+					placement: "right"
+				}).click(function(){
 					_activeEditSession = true;
 					initNewPost();
 					setTimeout(function(){
