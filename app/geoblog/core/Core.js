@@ -224,6 +224,13 @@ define(["esri/map",
 							$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 							$(".loader").fadeOut();
 						});
+					},function(){
+						_selectByIndex = {
+							active: true,
+							index: $(".geoblog-post").length - 1
+						}
+						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + ($(".geoblog-post").length - 1) + ")");
+						selectPostByIndex();
 					});
 				});
 

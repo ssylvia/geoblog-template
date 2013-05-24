@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,cumulativeTime,legendToggleSelector,legendContentSelector,onSave)
+		return function BlogEditor(selector,map,cumulativeTime,legendToggleSelector,legendContentSelector,onSave,onDiscard)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -317,6 +317,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
 					_activeEditSession = false;
+					if(discard && onDiscard){
+						onDiscard();
+					}
 				}
 			}
 
@@ -337,7 +340,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					mapState: JSON.stringify(mapState)
 				}
 
-				onSave(blogPost,geometry);
+				if(onSave){
+					onSave(blogPost,geometry);
+				}
 			}
 
 			function compileHTMLContent()
