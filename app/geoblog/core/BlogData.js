@@ -190,6 +190,11 @@ define([],
 			{
 				return _selctedIndex;
 			}
+
+			this.getBlogElements = function()
+			{
+				return _blogPostElements;
+			}
 		}
 
 	}

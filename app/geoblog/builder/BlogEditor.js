@@ -50,6 +50,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				updateLayerSelector();
 			}
 
+			this.addEditButtons = function(elements)
+			{
+				elements.each(function(){
+					$(this).append('<button class="btn edit-blog-post" title="Edit blog post"><i class="icon-pencil"></i> Edit</button>');
+				});
+				$(".btn.edit-blog-post").click(function(){
+					alert("TODO: Initialize blog editor");
+				});
+			}
+
 			function getTimeStamp(date)
 			{
 				var day = date.getDate();

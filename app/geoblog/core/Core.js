@@ -192,6 +192,10 @@ define(["esri/map",
 				})
 
 				resizeBlogElements();
+
+				if(_isBuilder){
+					app.editor.addEditButtons(app.blogData.getBlogElements());
+				}
 			});
 
 			app.blogData.init(app.blogLayer,function(graphics,startPosition){
