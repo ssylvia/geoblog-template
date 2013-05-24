@@ -148,10 +148,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						</div>\
 						<div class="temp-post-controls">\
 							<div class="btn-group">\
-								<button class="btn editor-ctrl add-text" title="Add text"><i class="icon-align-left" onclick=""></i></button>\
-								<button class="btn editor-ctrl add-photo" title="Add a photo"><i class="icon-picture"></i></button>\
-								<button class="btn editor-ctrl add-embed" title="Embed video or other content"><i class="icon-facetime-video"></i></button>\
-								<button class="btn editor-ctrl add-location" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
+								<button class="btn editor-ctrl add-text-item" title="Add text"><i class="icon-align-left"></i></button>\
+								<button class="btn editor-ctrl add-photo-item" title="Add a photo"><i class="icon-picture"></i></button>\
+								<button class="btn editor-ctrl add-embed-item" title="Embed video or other content"><i class="icon-facetime-video"></i></button>\
+								<button class="btn editor-ctrl add-location-item" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
 							<button class="btn btn-danger editor-ctrl discard-editor" type="button">Discard</button>\
@@ -160,16 +160,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					</form>');
 
 				$(".editor-ctrl").click(function(){
-					if($(this).hasClass("add-text")){
+					if($(this).hasClass("add-text-item")){
 						addTextEditor();
 					}
-					else if($(this).hasClass("add-photo")){
+					else if($(this).hasClass("add-photo-item")){
 						addPhotoEditor();
 					}
-					else if($(this).hasClass("add-embed")){
+					else if($(this).hasClass("add-embed-item")){
 						addEmbedEditor();
 					}
-					else if($(this).hasClass("add-location")){
+					else if($(this).hasClass("add-location-item")){
 						addLocationEditor();
 					}
 					else if($(this).hasClass("discard-editor")){
