@@ -155,6 +155,9 @@ define([],
 			this.setBlogElements = function(elements,index,onSet)
 			{
 				_blogPostElements = elements;
+				_blogPostElements.each(function(i){
+					$(this).data("graphicAttributes",_blogPostGraphics[i].attributes)
+				});
 			}
 
 			this.setPostByIndex = function(index,editing,onSelect)

@@ -238,12 +238,35 @@ define(["esri/map",
 					});
 				});
 
-				app.editor.init(function(){
+				app.editor.init("graphicAttributes",function(newPost){
 					$(_blogSelector).mCustomScrollbar("update");
-					$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
-				},function(){
+					if(newPost === true){
+						$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
+					}
+					else if(newPost === "newEdit"){
+						$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post:eq(0)").position().top);
+					}
+					else{
+						if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
+							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
+						}
+						else{
+							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post:eq(0)").position().top);	
+						}
+					}
+				},function(newPost){
 					$(_blogSelector).mCustomScrollbar("update");
-					$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
+					if(newPost === true){
+						$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
+					}
+					else{
+						if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
+							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
+						}
+						else{
+							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post:eq(0)").position().top);	
+						}
+					}
 				});
 			}
 			else{

@@ -15,22 +15,24 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
 				_activeEditSession = false,
+				_dataAttribute,
 				_onAddEditFeature,
 				_onRemoveEditFeature;
 
-			this.init = function(onAddEditFeature,onRemoveEditFeature)
+			this.init = function(dataAttribute,onAddEditFeature,onRemoveEditFeature)
 			{
 				$(selector).append('<div class="add-blog-post" title="Add a new post">+</div>');
 				$(".add-blog-post").tooltip({
 					placement: "right"
 				}).click(function(){
-					_activeEditSession = true;
 					initNewPost();
 					setTimeout(function(){
 						_onAddEditFeature();
 					},50);
 				});
 				addLayerSelector();
+
+				_dataAttribute = dataAttribute;
 
 				if(onAddEditFeature){
 					_onAddEditFeature = onAddEditFeature;
@@ -56,7 +58,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					$(this).append('<button class="btn edit-blog-post" title="Edit blog post"><i class="icon-pencil"></i> Edit</button>');
 				});
 				$(".btn.edit-blog-post").click(function(){
-					alert("TODO: Initialize blog editor");
+					var parent = $(this).parent();
+					if (parent.hasClass("active")){
+						initPostEditor(parent);
+					}
+					else{
+						setTimeout(function()
+						{
+							initPostEditor(parent)
+						},50);
+					}
 				});
 			}
 
@@ -136,30 +147,85 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			function initNewPost()
 			{
-				$(".add-blog-post").hide();
+				if(!_activeEditSession){
+					_activeEditSession = true;
+					$(".add-blog-post").hide();
 
-				//Prepare map and blog state
-				$(".geoblog-post").removeClass("active");
-				$(".multiTip").hide();
-				$(".mtArrow").hide();
-				map.infoWindow.hide();
+					//Prepare map and blog state
+					$(".geoblog-post").removeClass("active");
+					$(".multiTip").hide();
+					$(".mtArrow").hide();
+					map.infoWindow.hide();
 
-				if(cumulativeTime){
-					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date()));
+					if(cumulativeTime){
+						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date()));
+					}
+					else{
+						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date()));
+					}
+
+					updateLayerSelector();
+
+					prepareEditorState();
 				}
-				else{
-					map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date()));
+			}
+
+			function initPostEditor(element)
+			{
+				if(!_activeEditSession){
+					_activeEditSession = true;
+
+					prepareEditorState(element);
+
+					element.children(".blog-item").each(function(){
+						if($(this).hasClass("blog-post-title")){
+							var title = $(this).html();
+							$(".temp.blog-post-title").val(title);
+						}
+						else if($(this).hasClass("blog-post-text")){
+							var text = $(this).html()
+							addTextEditor(text);
+						}
+						else if($(this).hasClass("blog-post-photo")){
+							var url = $(this).attr("src");
+							var caption = null;
+							if($(this).next().hasClass("blog-post-photo-caption")){
+								caption = $(this).next().html();
+							}
+							addPhotoEditor(url,caption);
+						}
+						else if($(this).hasClass("blog-post-embed-wrapper")){
+							var embed = $(this).html()
+							addEmbedEditor(embed);
+						}
+					});
+
+					setTimeout(function(){
+						if(_onAddEditFeature){
+							_onAddEditFeature("newEdit");
+						}
+					},50);
+				}
+			}
+
+			function prepareEditorState(element)
+			{
+				var newPost = true,
+					data,
+					time = new Date(),
+					deleteBtn = "";
+				if (element){
+					newPost = false;
+					data = element.data(_dataAttribute);
+					time = new Date(data.time);
+					deleteBtn = '<button class="btn btn-danger editor-ctrl discard-editor" type="button">Delete Post</button>';
+					element.hide();
 				}
 
-				updateLayerSelector();
-
-				var startDate = new Date();
-
-				$(".add-blog-post").before(
-					'<form class="temp-blog-post" action="javascript:void(0);">\
+				var htmlString = '<form class="temp-blog-post" action="javascript:void(0);">\
 						<input type="text" class="temp blog-post-title post-item" placeholder="Type post title...">\
 						<div class="input-append date form_datetime">\
-							<input class="temp blog-post-date" size="20" type="text" value="'+ getTimeStamp(new Date()) +'" readonly>\
+							<input class="temp blog-post-date" size="20" type="text" value="'+ getTimeStamp(time) +'" readonly>\
 							<span class="add-on"><i class="icon-calendar"></i></span>\
 						</div>\
 						<div class="temp-post-controls">\
@@ -170,20 +236,28 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 								<button class="btn editor-ctrl add-location-item" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
-							<button class="btn btn-danger editor-ctrl discard-editor" type="button">Discard</button>\
+							<button class="btn btn-inverse editor-ctrl discard-editor" type="button">Discard</button>\
+							'+ deleteBtn +'\
 						</div>\
 						<div class="temp-post-messages"></div>\
-					</form>');
+					</form>';
+
+				if(element){
+					element.after(htmlString);
+				}
+				else{
+					$(".add-blog-post").before(htmlString);
+				}
 
 				$(".editor-ctrl").click(function(){
 					if($(this).hasClass("add-text-item")){
-						addTextEditor();
+						addTextEditor(null,newPost);
 					}
 					else if($(this).hasClass("add-photo-item")){
-						addPhotoEditor();
+						addPhotoEditor(null,null,newPost);
 					}
 					else if($(this).hasClass("add-embed-item")){
-						addEmbedEditor();
+						addEmbedEditor(null,newPost);
 					}
 					else if($(this).hasClass("add-location-item")){
 						addLocationEditor();
@@ -213,15 +287,17 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(getPostDate())));
 					}
 					else{
-						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date(getPostDate())));
+						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date(getPostDate())));	
 					}
 				});
 			}
 
-			function addTextEditor()
+			function addTextEditor(text,newPost)
 			{
-				$(".temp-post-controls").last().before('<textarea type="textarea" class="temp blog-post-text post-item" placeholder="Type text content..."></textarea>\
-					<button class="btn btn-danger btn-mini remove-text-item remove-item" type="button">Remove text</button>');
+				var insert = (text === undefined || text === null) ? "" : text;
+
+				$(".temp-post-controls").last().before('<textarea type="textarea" class="temp blog-post-text post-item" placeholder="Type text content...">' + insert + '</textarea>\
+					<button class="btn btn-inverse btn-mini remove-text-item remove-item" type="button">Remove text</button>');
 
 				$(".remove-text-item").last().click(function(){
 					if(confirm("Are you sure you want to remove this text?")){
@@ -231,8 +307,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						$(this).remove();
 
 						setTimeout(function(){
-							if(_onRemoveEditFeature()){
-								_onRemoveEditFeature();
+							if(_onRemoveEditFeature){
+								_onRemoveEditFeature(newPost);
 							}
 						},50);
 					}
@@ -246,12 +322,15 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				});
 			}
 
-			function addPhotoEditor()
+			function addPhotoEditor(url,caption,newPost)
 			{
+				var urlInsert = (url === undefined || url === null) ? "" : url;
+				var captionInsert = (caption === undefined || caption === null) ? "" : caption;
+
 				$(".temp-post-controls").last().before(
-					'<input type="text" class="temp photo-url post-item" placeholder="Paste photo url...">\
-					<input type="text" class="temp photo-caption post-item" placeholder="Type photo caption...">\
-					<button class="btn btn-danger btn-mini remove-photo-item remove-item" type="button">Remove photo</button>'
+					'<input type="text" class="temp photo-url post-item" placeholder="Paste photo url..." value="' + urlInsert + '">\
+					<input type="text" class="temp photo-caption post-item" placeholder="Type photo caption..." value="' + captionInsert + '">\
+					<button class="btn btn-inverse btn-mini remove-photo-item remove-item" type="button">Remove photo</button>'
 				);
 				$(".remove-photo-item").last().click(function(){
 					if(confirm("Are you sure you want to remove this photo?")){
@@ -260,19 +339,21 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						$(this).remove();
 
 						setTimeout(function(){
-							if(_onRemoveEditFeature()){
-								_onRemoveEditFeature();
+							if(_onRemoveEditFeature){
+								_onRemoveEditFeature(newPost);
 							}
 						},50);
 					}
 				});
 			}
 
-			function addEmbedEditor()
+			function addEmbedEditor(embed,newPost)
 			{
+				var insert = (embed === undefined || embed === null) ? "" : embed;
+
 				$(".temp-post-controls").last().before(
-					'<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code..."></textarea>\
-					<button class="btn btn-danger btn-mini remove-video-item remove-item" type="button">Remove video</button>'
+					'<textarea type="textarea" class="temp post-embed-code post-item" placeholder="Paste embed code...">' + insert + '</textarea>\
+					<button class="btn btn-inverse btn-mini remove-video-item remove-item" type="button">Remove video</button>'
 				);
 
 				$(".remove-video-item").last().click(function(){
@@ -281,8 +362,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						$(this).remove();
 
 						setTimeout(function(){
-							if(_onRemoveEditFeature()){
-								_onRemoveEditFeature();
+							if(_onRemoveEditFeature){
+								_onRemoveEditFeature(newPost);
 							}
 						},50);
 					}
@@ -298,7 +379,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						_mapLayer.clear();
 						map.removeLayer(_mapLayer);
 
-						if(_onRemoveEditFeature()){
+						if(_onRemoveEditFeature){
 							_onRemoveEditFeature();
 						}
 					}

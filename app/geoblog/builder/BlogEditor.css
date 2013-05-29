@@ -25,8 +25,10 @@
 
 .temp-blog-post{
 	min-height: 320px;
-	padding: 25px 5%;
-	margin-right: 14px;
+	position: relative;
+	margin: 0 5%;
+	padding: 25px 0;
+	border-top: 1px solid #dadada;
 }
 
 .temp.blog-post-title{
@@ -35,6 +37,10 @@
 
 input.temp{
 	width: 100%;
+}
+
+.wysihtml5-toolbar li{
+	padding-top: 0;
 }
 
 textarea.temp{
