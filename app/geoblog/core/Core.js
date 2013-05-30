@@ -181,15 +181,17 @@ define(["esri/map",
 				});
 
 				$(".geoblog-post").click(function(){
-					_selectByIndex = {
-						active: true,
-						index: $(this).index()
+					if(!getEditStatus()){
+						_selectByIndex = {
+							active: true,
+							index: $(this).index()
+						}
+						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + $(this).index() + ")");
+						if($(_blogSelector).height() >= $(".mCSB_container").height()){
+							selectPostByIndex();
+						}
 					}
-					$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + $(this).index() + ")");
-					if($(_blogSelector).height() >= $(".mCSB_container").height()){
-						selectPostByIndex();
-					}
-				})
+				});
 
 				resizeBlogElements();
 
@@ -244,14 +246,18 @@ define(["esri/map",
 						$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 					}
 					else if(newPost === "newEdit"){
-						$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post:eq(0)").position().top);
+						if($(".temp-blog-post").position()){
+							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);
+						}
 					}
 					else{
-						if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
-							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
-						}
-						else{
-							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post:eq(0)").position().top);	
+						if($(".temp-blog-post").position()){
+							if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
+								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
+							}
+							else{
+								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);	
+							}
 						}
 					}
 				},function(newPost){
@@ -260,11 +266,13 @@ define(["esri/map",
 						$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 					}
 					else{
-						if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
-							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
-						}
-						else{
-							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post:eq(0)").position().top);	
+						if($(".temp-blog-post").position()){
+							if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
+								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
+							}
+							else{
+								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);	
+							}
 						}
 					}
 				});

@@ -149,7 +149,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				if(!_activeEditSession){
 					_activeEditSession = true;
-					$(".add-blog-post").hide();
 
 					//Prepare map and blog state
 					$(".geoblog-post").removeClass("active");
@@ -222,6 +221,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					element.hide();
 				}
 
+				$(".add-blog-post").hide();
+
 				var htmlString = '<form class="temp-blog-post" action="javascript:void(0);">\
 						<input type="text" class="temp blog-post-title post-item" placeholder="Type post title...">\
 						<div class="input-append date form_datetime">\
@@ -263,7 +264,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						addLocationEditor();
 					}
 					else if($(this).hasClass("discard-editor")){
-						_this.cleanupEditor(true);
+						_this.cleanupEditor(true,element);
 					}
 					else{
 						savePost();
@@ -394,7 +395,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 			}
 
-			this.cleanupEditor = function(discard)
+			this.cleanupEditor = function(discard,hiddenElement)
 			{
 				var cleanup = true;
 
@@ -404,6 +405,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				if(cleanup){
 					$(".temp-blog-post").remove();
+					if(hiddenElement){
+						hiddenElement.show();
+					}
 					$(".add-blog-post").show();
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
@@ -430,6 +434,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					geometry: JSON.stringify(geometry),
 					mapState: JSON.stringify(mapState)
 				}
+
+				console.log(blogPost);
 
 				if(onSave){
 					onSave(blogPost,geometry);
