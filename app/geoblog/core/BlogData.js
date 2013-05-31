@@ -194,6 +194,16 @@ define([],
 				},function(error){
 					console.log("Error: " + error.details);
 				});
+
+				if(!_featureLayer.getEditCapabilities().canCreate && adds){
+					alert("Error: You do not have permissions to add new blog posts.");
+				}
+				if(!_featureLayer.getEditCapabilities().canUpdate && edits){
+					alert("Error: You do not have permissions to edit this blog post.");
+				}
+				if(!_featureLayer.getEditCapabilities().canDelete && deletes){
+					alert("Error: You do not have permissions to delete this blog post.");
+				}
 			}
 
 			this.getSelectedIndex = function()
