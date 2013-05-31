@@ -15,7 +15,7 @@ define([],
 			var _this = this,
 				_featureLayer,
 				_featureIds,
-				_updateFromSave = false,
+				_upddateFromSave = false,
 				_queryIndex = 0,
 				_queryCount = queryCount,
 				_blogPostGraphics,
@@ -55,17 +55,22 @@ define([],
 			{
 				_selctedIndex = null;
 
-				if (_updateFromSave){
-					_updateFromSave = false;
-					if(orderBy.search("DESC") >= 0){
-						_queryIndex = 0;
-						_startPosition = 0;
+				if (_upddateFromSave){
+					if(typeof _upddateFromSave === 'number' && isFinite(_upddateFromSave)){
+						_startPosition = _upddateFromSave;
 					}
 					else{
-						var remainder = _featureIds.length % _queryCount;
-						_queryIndex = _featureIds.length - remainder;
-						_startPosition = "bottom";
+						if(orderBy.search("DESC") >= 0){
+							_queryIndex = 0;
+							_startPosition = 0;
+						}
+						else{
+							var remainder = _featureIds.length % _queryCount;
+							_queryIndex = _featureIds.length - remainder;
+							_startPosition = "bottom";
+						}
 					}
+					_upddateFromSave = false;
 				}
 
 				if(_queryIndex === 0){
@@ -170,30 +175,19 @@ define([],
 				}
 			}
 
-			this.saveNewBlogPost = function(feature,onComplete)
-			{
-				if(_featureLayer.getEditCapabilities().canCreate){
-					_featureLayer.applyEdits([feature],null,null,function(){
-
-						_updateFromSave = true;
-						
-						onComplete();
-						queryFeatureIds();
-					},function(error){
-						console.log("Error: " + error.details);
-					});
-				}
-				else{
-					//TODO: apply bootstrap modal
-					alert("Error: Your feature service layer is not editable!");
-				}
-			}
-
-			this.editBlogPosts = function(adds,edits,deletes,onComplete)
+			this.editBlogPosts = function(adds,edits,deletes,position,onComplete)
 			{
 				_featureLayer.applyEdits(adds,edits,deletes,function(){
 
-					_updateFromSave = true;
+					if(adds){
+						_upddateFromSave = true;
+					}
+					else if(position){
+						_upddateFromSave = position;
+					}
+					else{
+						_upddateFromSave = false;
+					}
 					
 					onComplete();
 					queryFeatureIds();

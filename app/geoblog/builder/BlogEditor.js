@@ -221,14 +221,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				var newPost = true,
 					data,
 					time = new Date(),
-					deleteBtn = "";
+					deleteBtn = "".
+					position;
 				if (element){
 					newPost = false;
 					data = element.data(_dataAttribute);					
 					_currentOID = data[_blogLayer.objectIdField];
 					time = new Date(data.time);
 					deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete Post</button>';
-					element.hide();
+					element.hide(),
+					position = element.index();
 				}
 
 				$(".add-blog-post").hide();
@@ -285,7 +287,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						savePost(true);
 					}
 					else{
-						savePost();
+						savePost(false,position);
 					}
 
 					setTimeout(function(){
@@ -455,7 +457,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 			}
 
-			function savePost(deletePost)
+			function savePost(deletePost,position)
 			{
 				var saveStatus,
 					geometry = getPostGeometry(),
@@ -488,7 +490,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 
 				if(onSave){
-					onSave(saveStatus,blogPost,geometry);
+					onSave(saveStatus,blogPost,geometry,position);
 				}
 			}
 
