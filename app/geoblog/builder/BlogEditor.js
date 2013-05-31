@@ -227,7 +227,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					data = element.data(_dataAttribute);					
 					_currentOID = data[_blogLayer.objectIdField];
 					time = new Date(data.time);
-					deleteBtn = '<button class="btn btn-danger editor-ctrl discard-editor" type="button">Delete Post</button>';
+					deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete Post</button>';
 					element.hide();
 				}
 
@@ -255,8 +255,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				if(element){
 					element.after(htmlString);
-					if(data[_geoAttr]){
-						var geoJSON = $.parseJSON(data[_geoAttr]);
+					var geoJSON = $.parseJSON(data[_geoAttr]);
+					if(geoJSON){
 						var newPt = new esri.geometry.Point(geoJSON);
 						addLocationEditor(newPt);
 					}
@@ -280,6 +280,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 					else if($(this).hasClass("discard-editor")){
 						_this.cleanupEditor(true,element);
+					}
+					else if($(this).hasClass("delete-item")){
+						savePost(true);
 					}
 					else{
 						savePost();
@@ -429,7 +432,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			this.cleanupEditor = function(discard,hiddenElement)
 			{
-				var cleanup = true;
+				var cleanup = true,
+					index = null;
 
 				if(discard){
 					cleanup = confirm("Are you sure you want to discard these edits?");
@@ -439,20 +443,22 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					$(".temp-blog-post").remove();
 					if(hiddenElement){
 						hiddenElement.show();
+						index = hiddenElement.index();
 					}
 					$(".add-blog-post").show();
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
 					_activeEditSession = false;
 					if(discard && onDiscard){
-						onDiscard();
+						onDiscard(index);
 					}
 				}
 			}
 
-			function savePost()
+			function savePost(deletePost)
 			{
-				var geometry = getPostGeometry(),
+				var saveStatus,
+					geometry = getPostGeometry(),
 					mapState = {
 						extent: map.extent.toJson(),
 						hiddenLayers: getHiddenLayers(),
@@ -467,10 +473,22 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					mapState: JSON.stringify(mapState)
 				}
 
-				console.log(blogPost);
+				if(deletePost && _currentOID){
+					blogPost[_blogLayer.objectIdField] = _currentOID;
+					saveStatus = "delete";
+					_currentOID = null;
+				}
+				else if(_currentOID){
+					blogPost[_blogLayer.objectIdField] = _currentOID;
+					saveStatus = "edit";
+					_currentOID = null;
+				}
+				else{
+					saveStatus = "add";
+				}
 
 				if(onSave){
-					onSave(blogPost,geometry);
+					onSave(saveStatus,blogPost,geometry);
 				}
 			}
 

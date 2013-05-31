@@ -242,12 +242,14 @@ define(["esri/map",
 							$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 							$(".loader").fadeOut();
 						});
-					},function(){
+					},function(index){
 						_selectByIndex = {
 							active: true,
-							index: $(".geoblog-post").length - 1
+							index: index || $(".geoblog-post").length - 1
 						}
-						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + ($(".geoblog-post").length - 1) + ")");
+						if(!index){
+							$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + ($(".geoblog-post").length - 1) + ")");
+						}
 						selectPostByIndex();
 					});
 				});
