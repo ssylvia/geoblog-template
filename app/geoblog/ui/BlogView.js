@@ -35,6 +35,11 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				return _homeExtent;
 			}
 
+			this.getMultiTips = function()
+			{
+				return _mapTips;
+			}
+
 			this.selectPost = function(index,graphics,elements,alwaysDisplayPoints,editing)
 			{
 				if(!editing){

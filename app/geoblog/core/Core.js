@@ -240,24 +240,31 @@ define(["esri/map",
 					});
 				});
 
-				app.editor.init("graphicAttributes",function(newPost){
-					$(_blogSelector).mCustomScrollbar("update");
-					if(newPost === true){
-						$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
-					}
-					else if(newPost === "newEdit"){
-						if($(".temp-blog-post").position()){
-							$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);
+				app.editor.init(app.blogLayer,"graphicAttributes","time","geometry","mapState",function(newPost,location){
+					if(!location){
+						$(_blogSelector).mCustomScrollbar("update");
+						if(newPost === true){
+							$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
+						}
+						else if(newPost === "newEdit"){
+							if($(".temp-blog-post").position()){
+								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);
+							}
+						}
+						else{
+							if($(".temp-blog-post").position()){
+								if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
+									$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
+								}
+								else{
+									$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);	
+								}
+							}
 						}
 					}
 					else{
-						if($(".temp-blog-post").position()){
-							if($(".temp-blog-post").outerHeight() > $(_blogSelector).height()){
-								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top + $(".temp-blog-post").outerHeight() - $("#blog").height());
-							}
-							else{
-								$(_blogSelector).mCustomScrollbar("scrollTo",$(".temp-blog-post").position().top);	
-							}
+						if(app.blog.getMultiTips()){
+							app.blog.getMultiTips().clean();
 						}
 					}
 				},function(newPost){

@@ -15,11 +15,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
 				_activeEditSession = false,
+				_currentOID,
 				_dataAttribute,
+				_timeAttr,
+				_blogLayer,
+				_geoAttr,
+				_mapStateAttr,
 				_onAddEditFeature,
 				_onRemoveEditFeature;
 
-			this.init = function(dataAttribute,onAddEditFeature,onRemoveEditFeature)
+			this.init = function(blogLayer,dataAttribute,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature)
 			{
 				$(selector).append('<div class="add-blog-post" title="Add a new post">+</div>');
 				$(".add-blog-post").tooltip({
@@ -32,7 +37,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				});
 				addLayerSelector();
 
+				_blogLayer = blogLayer;
 				_dataAttribute = dataAttribute;
+				_timeAttr = timeAttr;
+				_geoAttr = geoAttr;
+				_mapStateAttr = mapStateAttr;
 
 				if(onAddEditFeature){
 					_onAddEditFeature = onAddEditFeature;
@@ -215,7 +224,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					deleteBtn = "";
 				if (element){
 					newPost = false;
-					data = element.data(_dataAttribute);
+					data = element.data(_dataAttribute);					
+					_currentOID = data[_blogLayer.objectIdField];
 					time = new Date(data.time);
 					deleteBtn = '<button class="btn btn-danger editor-ctrl discard-editor" type="button">Delete Post</button>';
 					element.hide();
@@ -245,6 +255,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				if(element){
 					element.after(htmlString);
+					if(data[_geoAttr]){
+						var geoJSON = $.parseJSON(data[_geoAttr]);
+						var newPt = new esri.geometry.Point(geoJSON);
+						addLocationEditor(newPt);
+					}
 				}
 				else{
 					$(".add-blog-post").before(htmlString);
@@ -371,12 +386,20 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				});
 			}
 
-			function addLocationEditor()
+			function addLocationEditor(pt)
 			{
+				if(pt){
+					dojo.forEach(_blogLayer.graphics,function(g){
+						if(g.attributes[_blogLayer.objectIdField] = _currentOID){
+							g.hide();
+						}
+					});
+				}
+
 				var pms = new esri.symbol.PictureMarkerSymbol('resources/icons/EditMarker.png', 50, 50).setOffset(0,20);
 				if(map){
-					if($(".editor-ctrl.add-location").last().hasClass("active")){
-						$(".editor-ctrl.add-location").last().removeClass("active");
+					if($(".editor-ctrl.add-location-item").last().hasClass("active")){
+						$(".editor-ctrl.add-location-item").last().removeClass("active");
 						_mapLayer.clear();
 						map.removeLayer(_mapLayer);
 
@@ -385,12 +408,21 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						}
 					}
 					else{
-						$(".editor-ctrl.add-location").last().addClass("active");
-						var graphic = new esri.Graphic(map.extent.getCenter(),pms);
+						$(".editor-ctrl.add-location-item").last().addClass("active");
+						var startPoint = pt || map.extent.getCenter();
+						var graphic = new esri.Graphic(startPoint,pms);
 						map.addLayer(_mapLayer);
 						_mapLayer.clear();
 						_mapLayer.add(graphic);
 						var mg = new MovableGraphic(map, _mapLayer, _mapLayer.graphics[0]);
+						if(_onAddEditFeature){
+							if(pt){
+								_onAddEditFeature(false,true);
+							}
+							else{
+								_onAddEditFeature(true,true);
+							}
+						}
 					}
 				}
 			}
