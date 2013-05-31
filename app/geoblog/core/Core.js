@@ -210,9 +210,12 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,".legend-toggle",".legend-content",function(blog,geo){
+					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,".legend-toggle",".legend-content",function(status,blog,geo){
 						var graphic,
-							pt;
+							pt,
+							adds,
+							edits,
+							deletes;
 						
 						if (geo){
 							pt = geo;
@@ -226,7 +229,16 @@ define(["esri/map",
 						app.editor.cleanupEditor();
 						$(".loader").fadeIn();
 
-						app.blogData.saveNewBlogPost(graphic,function(){
+						if(status === "add"){
+							adds = [graphic];
+						}
+						else if(status === "edit"){
+							edits = [graphic];
+						}
+						else if(status === "delete"){
+							deletes = [graphic];
+						}
+						app.blogData.editBlogPosts(adds,edits,deletes,function(){
 							$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 							$(".loader").fadeOut();
 						});

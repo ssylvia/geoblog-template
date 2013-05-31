@@ -189,6 +189,19 @@ define([],
 				}
 			}
 
+			this.editBlogPosts = function(adds,edits,deletes,onComplete)
+			{
+				_featureLayer.applyEdits(adds,edits,deletes,function(){
+
+					_updateFromSave = true;
+					
+					onComplete();
+					queryFeatureIds();
+				},function(error){
+					console.log("Error: " + error.details);
+				});
+			}
+
 			this.getSelectedIndex = function()
 			{
 				return _selctedIndex;
