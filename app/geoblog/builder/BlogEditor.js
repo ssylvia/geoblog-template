@@ -221,7 +221,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				var newPost = true,
 					data,
 					time = new Date(),
-					deleteBtn = "".
+					deleteBtn = "",
 					position;
 				if (element){
 					newPost = false;

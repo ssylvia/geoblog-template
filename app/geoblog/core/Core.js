@@ -1,4 +1,5 @@
 define(["esri/map",
+		"esri/arcgis/Portal",
 		"esri/arcgis/utils",
 		"esri/layout",
 		"esri/widgets",
@@ -8,6 +9,7 @@ define(["esri/map",
 		"dojo/has"],
 	function(
 		Map,
+		Portal,
 		Utils,
 		Layout,
 		Widgets,
@@ -83,7 +85,47 @@ define(["esri/map",
 				_isBuilder = true;
 			}
 
-			loadMap();
+			checkCredentials();
+		}
+
+		function checkCredentials()
+		{
+			if(_isBuilder){
+				portalLogin().then(function(){
+					loadMap();
+				})
+			}
+			else{
+				loadMap();
+			}
+		}
+
+		function portalLogin()
+		{
+			var resultDeferred = new dojo.Deferred();
+			var portalUrl = configOptions.sharingurl.split('/sharing/')[0];
+			app.portal = new esri.arcgis.Portal(portalUrl);
+
+			dojo.connect(esri.id, "onDialogCreate", styleIdentityManagerForLoad);
+			app.portal.signIn().then(
+				function() {
+					resultDeferred.resolve();
+				},
+				function(error) {
+					resultDeferred.reject();
+				}
+			);
+
+			return resultDeferred;
+		}
+
+		function styleIdentityManagerForLoad()
+		{
+			// Hide default message
+			$(".esriSignInDialog").find("#dijitDialogPaneContentAreaLoginText").css("display", "none");
+
+			// Setup a more friendly text
+			$(".esriSignInDialog").find(".dijitDialogPaneContentArea:first-child").find(":first-child").first().after("<div id='dijitDialogPaneContentAreaAtlasLoginText'>Please sign in with an account on <a href='http://" + esri.id._arcgisUrl + "' title='" + esri.id._arcgisUrl + "' target='_blank'>" + esri.id._arcgisUrl + "</a> to configure this application.</div>");
 		}
 
 		function setupBanner(title,subtitle)
@@ -139,6 +181,18 @@ define(["esri/map",
 					});
 				}
 
+			});
+		}
+
+		function initializeApp(response)
+		{			
+			loadBlog();
+			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
+
+			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
+			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
+			$(".initExtentButton").click(function(){
+				app.map.setExtent(app.blog.getHomeExtent());
 			});
 		}
 
@@ -356,18 +410,6 @@ define(["esri/map",
 
 			$(".legend-toggle").click(function(){
 				$(this).next().stop(true,true).slideToggle();
-			});
-		}
-
-		function initializeApp(response)
-		{			
-			loadBlog();
-			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
-
-			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
-			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
-			$(".initExtentButton").click(function(){
-				app.map.setExtent(app.blog.getHomeExtent());
 			});
 		}
 
