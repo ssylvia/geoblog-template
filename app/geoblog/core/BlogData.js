@@ -39,7 +39,7 @@ define([],
 			function queryFeatureIds()
 			{
 				var query = new esri.tasks.Query();
-					query.where = "1=1";
+					query.where = "status='Published'";
 					query.orderByFields = [orderBy];
 
 				_featureLayer.queryIds(query,function(objectIds){
@@ -75,7 +75,12 @@ define([],
 
 				if(_queryIndex === 0){
 					$(".page-button.page-up").hide();
-					$(".page-button.page-down").show();
+					if(_featureIds.length < _queryCount){
+						$(".page-button.page-down").hide();
+					}
+					else{
+						$(".page-button.page-down").show();
+					}
 				}
 				else if(_featureIds.length - _queryIndex <= _queryCount){
 					$(".page-button.page-up").show();

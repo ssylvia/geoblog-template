@@ -63,6 +63,12 @@
       "label": "Cumulative Time:"
     },{
       "type": "boolean",
+      "fieldName": "allowDeletes",
+      "tooltip": "Allow blog post to be deleted from app. Will be fully removed from feature service.",
+      "placeHolder": "",
+      "label": "Cumulative Time:"
+    },{
+      "type": "boolean",
       "fieldName": "alwaysDisplayPoints",
       "tooltip": "Always show blog post points on map",
       "placeHolder": "",

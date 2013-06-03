@@ -88,6 +88,7 @@ define(["esri/map",
 						if(response.values.sortBy !== undefined) {configOptions.sortBy = response.values.sortBy;}
 						if(response.values.order !== undefined){configOptions.order = response.values.order;}
 						if(response.values.postsPerPage !== undefined){configOptions.postsPerPage = response.values.postsPerPage;}
+						if(response.values.allowDeletes !== undefined) {configOptions.allowDeletes = response.values.allowDeletes;}
 						if(response.values.cumulativeTime !== undefined) {configOptions.cumulativeTime = response.values.cumulativeTime;}
 						if(response.values.alwaysDisplayPoints !== undefined){configOptions.alwaysDisplayPoints = response.values.alwaysDisplayPoints;}
 						createAppVariables();
@@ -261,17 +262,19 @@ define(["esri/map",
 					}
 				});
 
-				_selectByIndex = {
-					active: true,
-					index: _startPosition
+				if(app.blogData.getBlogElements.length > 0){
+					_selectByIndex = {
+						active: true,
+						index: _startPosition
+					}
+
+					setTimeout(function(){
+						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + _startPosition + ")");
+						_selectReady = true;
+					},100);
+
+					selectPostByIndex();
 				}
-
-				setTimeout(function(){
-					$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + _startPosition + ")");
-					_selectReady = true;
-				},100);
-
-				selectPostByIndex();
 
 				//Hide Loading animation
 				$(".loader").fadeOut();

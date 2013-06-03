@@ -284,7 +284,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						_this.cleanupEditor(true,element);
 					}
 					else if($(this).hasClass("delete-item")){
-						savePost(true);
+						if(confirm("Are you sure you want to discard these edits? This will completely remove all data from the feature service.")){
+							savePost(true);
+						}
 					}
 					else{
 						savePost(false,position);
