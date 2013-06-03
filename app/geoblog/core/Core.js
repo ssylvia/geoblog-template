@@ -115,7 +115,7 @@ define(["esri/map",
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
 					outFields: ["*"]
 				}),
-				blogData: new BlogData(_isBuilder,orderByFields,configOptions.postsPerPage),
+				blogData: new BlogData(_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage),
 				blog: null
 			}
 
@@ -567,6 +567,26 @@ define(["esri/map",
 			}
 			else{
 				return app.editor.getEditStatus();
+			}
+		}
+
+		function getDraftVisible()
+		{
+			if(app.editor === undefined){
+				return false;
+			}
+			else{
+				return app.editor.getDraftVisible();
+			}
+		}
+
+		function getHiddenVisible()
+		{
+			if(app.editor === undefined){
+				return false;
+			}
+			else{
+				return app.editor.getHiddenVisible();
 			}
 		}
 

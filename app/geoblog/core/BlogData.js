@@ -3,17 +3,16 @@ define([],
 	{
 		/**
 		 * BlogView
-		 * @class BlogView
+		 * @class BlogData
 		 *
 		 * Blog data model
 		 *
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogData(isBuilder,orderBy,queryCount)
+		return function BlogData(isBuilder,draftVisible,hiddenVisible,orderBy,queryCount)
 		{
 			var _this = this,
-				_showHidden = false,
 				_featureLayer,
 				_featureIds,
 				_upddateFromSave = false,
@@ -40,11 +39,14 @@ define([],
 			function queryFeatureIds()
 			{
 				var query = new esri.tasks.Query();
-					if(isBuilder && _showHidden){
+					if(isBuilder && hiddenVisible() && draftVisible()){
 						query.where = "status='Published' OR status='Draft' OR status='Hidden'";
 					}
-					else if(isBuilder){
+					else if(isBuilder && draftVisible()){
 						query.where = "status='Published' OR status='Draft'";
+					}
+					else if(isBuilder && hiddenVisible()){
+						query.where = "status='Published' OR status='Hidden'";
 					}
 					else{
 						query.where = "status='Published'";

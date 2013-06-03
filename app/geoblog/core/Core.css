@@ -96,3 +96,8 @@ html, body, #application-window{
 	height: 98%;
 	top: 1%;
 }
+
+/* Fix tooltip position */
+#blog .tooltip{
+	position: fixed;
+}

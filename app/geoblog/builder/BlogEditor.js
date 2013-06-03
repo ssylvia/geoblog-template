@@ -15,6 +15,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
 				_activeEditSession = false,
+				_hiddenVisible = false,
+				_draftVisible = false,
 				_currentOID,
 				_dataAttribute,
 				_timeAttr,
@@ -28,7 +30,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				$(selector).append('<div class="add-blog-post" title="Add a new post">+</div>');
 				$(".add-blog-post").tooltip({
-					placement: "right"
+					placement: "top"
 				}).click(function(){
 					initNewPost();
 					setTimeout(function(){
@@ -54,6 +56,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			this.getEditStatus = function()
 			{
 				return _activeEditSession;
+			}
+
+			this.getHiddenVisible = function()
+			{
+				return _hiddenVisible
+			}
+
+			this.getDraftVisible = function()
+			{
+				return _draftVisible
 			}
 
 			this.updateEditor = function()
