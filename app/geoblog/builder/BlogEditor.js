@@ -472,7 +472,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					content: compileHTMLContent(),
 					time: getPostDate(),
 					geometry: JSON.stringify(geometry),
-					mapState: JSON.stringify(mapState)
+					mapState: JSON.stringify(mapState),
+					status: "Published"
 				}
 
 				if(deletePost && _currentOID){

@@ -50,20 +50,6 @@ define(["esri/map",
 
 		function init()
 		{
-			var orderByFields = configOptions.sortBy + " " + configOptions.order;
-
-			app = {
-				//Esri map variable
-				map: null,
-				//Feature services layer holding blog posts
-				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
-					outFields: ["*"]
-				}),
-				blogData: new BlogData(orderByFields,configOptions.postsPerPage),
-				blog: null
-			}
-
-			//TODO: move before init
 			if (!configOptions.sharingurl) {
 				if(location.host.match("localhost") || location.host.match("storymaps.esri.com") || location.host.match("c9.io"))
 					configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
@@ -85,15 +71,77 @@ define(["esri/map",
 				_isBuilder = true;
 			}
 
+			//is an appid specified - if so read json from there
+			if(configOptions.appid || (urlObject.query && urlObject.query.appid)){
+				var appid = configOptions.appid || urlObject.query.appid;
+				var requestHandle = esri.request({
+					url: configOptions.sharingurl + "/" + appid + "/data",
+					content: {f:"json"},
+					callbackParamName:"callback",
+					load: function(response){
+						if(response.values.title !== undefined){configOptions.title = response.values.title;}
+						if(response.values.subtitle !== undefined){configOptions.subtitle = response.values.subtitle;}
+						if(response.values.webmap !== undefined) {configOptions.webmap = response.values.webmap;}
+						if(response.values.editors !== undefined) {configOptions.authorizedEditors = unescape(response.values.editors).split(",");}
+						if(response.values.featureService !== undefined){configOptions.featureService = response.values.featureService;}
+						if(response.values.iconHeight !== undefined){configOptions.iconHeight = response.values.iconHeight;}
+						if(response.values.sortBy !== undefined) {configOptions.sortBy = response.values.sortBy;}
+						if(response.values.order !== undefined){configOptions.order = response.values.order;}
+						if(response.values.postsPerPage !== undefined){configOptions.postsPerPage = response.values.postsPerPage;}
+						if(response.values.cumulativeTime !== undefined) {configOptions.cumulativeTime = response.values.cumulativeTime;}
+						if(response.values.alwaysDisplayPoints !== undefined){configOptions.alwaysDisplayPoints = response.values.alwaysDisplayPoints;}
+						createAppVariables();
+					},
+					error: function(response){
+						var e = response.message;
+						alert("Error: " +  response.message);
+					}
+				});
+			}
+			else{
+				createAppVariables();
+			}
+		}
+
+		function createAppVariables()
+		{
+			var orderByFields = configOptions.sortBy + " " + configOptions.order;
+
+			app = {
+				//Esri map variable
+				map: null,
+				//Feature services layer holding blog posts
+				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
+					outFields: ["*"]
+				}),
+				blogData: new BlogData(orderByFields,configOptions.postsPerPage),
+				blog: null
+			}
+
 			checkCredentials();
 		}
 
 		function checkCredentials()
 		{
-			if(_isBuilder){
+			if(_isBuilder && configOptions.authorizedEditors.length > 0){
 				portalLogin().then(function(){
-					loadMap();
-				})
+					console.log(esri.id.credentials);
+					var load = false;
+					dojo.forEach(esri.id.credentials,function(user){
+						if($.inArray(user.userId,configOptions.authorizedEditors) >= 0){
+							load = true;
+						}
+					});
+					if(load){
+						loadMap();
+					}
+					else{
+						if(confirm("You do not have permissions to edit the blog. Would you like to return to blog preview?")){
+							_isBuilder = false;
+							loadMap();
+						}
+					}
+				});
 			}
 			else{
 				loadMap();

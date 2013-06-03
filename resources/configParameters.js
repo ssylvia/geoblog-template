@@ -13,31 +13,60 @@
       "tooltip": "Specify a subtitle for the application",
       "placeHolder": "Subtitle",
       "label": "Subtitle:"
-    }]
-  },{
-    "category": "<b>Webmaps</b>",
-    "fields": [{
-      "fieldName": "webmap",
-      "label": "Webmap IDs:",
-      "stringFieldOption": "textarea",
-      "tooltip": "Enter web map ids for maps separated by commas"
-    },{
-      "type": "paragraph",
-      "value": "Enter webmap ID's separated with a comma. The ID can be found in the URL when looking at the details page of a web map."
     },{
       "type": "string",
-      "fieldName": "mapTitle",
-      "label": "Map Titles:",
-      "stringFieldOption": "textarea",
-      "tooltip": "Enter labels for tabs separated by commas"
+      "fieldName": "editors",
+      "tooltip": "ArcGIS Online usernames separated by commas",
+      "placeHolder": "",
+      "label": "Authorized Editors:"
     },{
-      "type": "paragraph",
-      "value": "Enter the labels to be displayed on accodion, separated with a comma. The order of the labels must be in the same order as the webmaps ID's above that they are associated with."
+      "type": "string",
+      "fieldName": "featureService",
+      "tooltip": "Paste feature service url",
+      "placeHolder": "",
+      "label": "Feature Service URL:"
+    },{
+      "type": "number",
+      "fieldName": "iconHeight",
+      "tooltip": "Height of icons symbolizing feature service",
+      "placeHolder": "32",
+      "label": "Icon Height:"
+    },{
+      "type": "string",
+      "fieldName": "sortBy",
+      "tooltip": "Attribute to sort blog posts",
+      "placeHolder": "FID",
+      "label": "Sort By:"
+    },{
+      "type": "options",
+      "fieldName": "order",
+      "tooltip": "Choose display order",
+      "label": "Order:",
+      "options": [{
+        "label": "Ascending",
+        "value": "ASC"
+      },{
+        "label": "Descending",
+        "value": "DESC"
+      }]
+    },{
+      "type": "number",
+      "fieldName": "postsPerPage",
+      "tooltip": "Number of posts to display per page",
+      "placeHolder": "10",
+      "label": "Posts per page:"
     },{
       "type": "boolean",
-      "fieldName": "syncMaps",
-      "label": "Sync scale and location of maps",
-      "tooltip": ""
+      "fieldName": "cumulativeTime",
+      "tooltip": "Display all previous blog post points on map",
+      "placeHolder": "",
+      "label": "Cumulative Time:"
+    },{
+      "type": "boolean",
+      "fieldName": "alwaysDisplayPoints",
+      "tooltip": "Always show blog post points on map",
+      "placeHolder": "",
+      "label": "Always show blog post points:"
     }]
   }],
     "values":{

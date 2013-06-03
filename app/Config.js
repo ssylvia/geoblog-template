@@ -6,6 +6,8 @@ define([],
 			appid: "",
 			//The web map id
 			webmap: "9d6a0d8bf65042c184983278e8965242",
+			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
+			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/geoblog/FeatureServer/0",
 			//Height of feature service icon
