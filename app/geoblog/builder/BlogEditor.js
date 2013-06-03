@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,cumulativeTime,legendToggleSelector,legendContentSelector,onSave,onDiscard)
+		return function BlogEditor(selector,map,cumulativeTime,allowDeletes,legendToggleSelector,legendContentSelector,onSave,onDiscard)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -228,7 +228,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					data = element.data(_dataAttribute);					
 					_currentOID = data[_blogLayer.objectIdField];
 					time = new Date(data.time);
-					deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete Post</button>';
+					if(allowDeletes){
+						deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete</button>';
+					}
 					element.hide(),
 					position = element.index();
 				}
@@ -248,7 +250,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 								<button class="btn editor-ctrl add-embed-item" title="Embed video or other content"><i class="icon-facetime-video"></i></button>\
 								<button class="btn editor-ctrl add-location-item" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
 							</div>\
-							<button class="btn btn-primary editor-ctrl" type="button">Save</button>\
+							<button class="btn btn-primary editor-ctrl save-item" type="button">Save as Draft</button>\
+							<button class="btn btn-success editor-ctrl publish-item" type="button">Save & Publish</button>\
+							<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>\
 							<button class="btn btn-inverse editor-ctrl discard-editor" type="button">Discard</button>\
 							'+ deleteBtn +'\
 						</div>\
@@ -285,11 +289,25 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 					else if($(this).hasClass("delete-item")){
 						if(confirm("Are you sure you want to discard these edits? This will completely remove all data from the feature service.")){
-							savePost(true);
+							savePost("Delete");
 						}
 					}
+					else if($(this).hasClass("toggle-item-visibility")){
+						if($(".temp-blog-post").hasClass("hidden-post")){
+							$(this).html("Hide");
+							$(".temp-blog-post").removeClass("hidden-post");
+						}
+						else{
+							$(this).html("Show");
+							$(".temp-blog-post").addClass("hidden-post");
+							savePost("Hidden",position);
+						}
+					}
+					else if($(this).hasClass("publish-item")){
+						savePost("Published",position);
+					}
 					else{
-						savePost(false,position);
+						savePost("Draft",position);
 					}
 
 					setTimeout(function(){
@@ -459,7 +477,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 			}
 
-			function savePost(deletePost,position)
+			function savePost(status,position)
 			{
 				var saveStatus,
 					geometry = getPostGeometry(),
@@ -475,10 +493,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					time: getPostDate(),
 					geometry: JSON.stringify(geometry),
 					mapState: JSON.stringify(mapState),
-					status: "Published"
+					status: status
 				}
 
-				if(deletePost && _currentOID){
+				if(status === "Delete" && _currentOID){
 					blogPost[_blogLayer.objectIdField] = _currentOID;
 					saveStatus = "delete";
 					_currentOID = null;

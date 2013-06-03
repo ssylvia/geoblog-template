@@ -10,9 +10,10 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogData(orderBy,queryCount)
+		return function BlogData(isBuilder,orderBy,queryCount)
 		{
 			var _this = this,
+				_showHidden = false,
 				_featureLayer,
 				_featureIds,
 				_upddateFromSave = false,
@@ -39,7 +40,15 @@ define([],
 			function queryFeatureIds()
 			{
 				var query = new esri.tasks.Query();
-					query.where = "status='Published'";
+					if(isBuilder && _showHidden){
+						query.where = "status='Published' OR status='Draft' OR status='Hidden'";
+					}
+					else if(isBuilder){
+						query.where = "status='Published' OR status='Draft'";
+					}
+					else{
+						query.where = "status='Published'";
+					}
 					query.orderByFields = [orderBy];
 
 				_featureLayer.queryIds(query,function(objectIds){

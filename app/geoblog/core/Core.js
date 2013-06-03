@@ -115,7 +115,7 @@ define(["esri/map",
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
 					outFields: ["*"]
 				}),
-				blogData: new BlogData(orderByFields,configOptions.postsPerPage),
+				blogData: new BlogData(_isBuilder,orderByFields,configOptions.postsPerPage),
 				blog: null
 			}
 
@@ -262,7 +262,7 @@ define(["esri/map",
 					}
 				});
 
-				if(app.blogData.getBlogElements.length > 0){
+				if(app.blogData.getBlogElements().length > 0){
 					_selectByIndex = {
 						active: true,
 						index: _startPosition
@@ -315,7 +315,7 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,".legend-toggle",".legend-content",function(status,blog,geo,position){
+					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,configOptions.allowDeletes,".legend-toggle",".legend-content",function(status,blog,geo,position){
 						var graphic,
 							pt,
 							adds,

@@ -11,7 +11,7 @@ define([],
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/CSV_Starter/FeatureServer/0",
 			//Allow deletes from app
-			allowDeletes: false,
+			allowDeletes: true,
 			//Height of feature service icon
 			iconHeight: 32,
 			//Feature servide field to sort by

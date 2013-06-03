@@ -46,3 +46,7 @@
 .blog-post-embed-wrapper iframe{
 	width: 100%;
 }
+
+.multiTip{
+	max-width: 180px;
+}
