@@ -247,7 +247,7 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"content","time","mapState",configOptions.iconHeight,function(){				
+			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"status","content","time","mapState",configOptions.iconHeight,function(){				
 				
 				app.blogData.setBlogElements($(".geoblog-post"));
 
@@ -401,7 +401,7 @@ define(["esri/map",
 							}
 						}
 					}
-				});
+				},queryOnPostVisibilityChange);
 			}
 			else{
 				if (app.map.legendLayers.length > 0) {
@@ -588,6 +588,12 @@ define(["esri/map",
 			else{
 				return app.editor.getHiddenVisible();
 			}
+		}
+
+		function queryOnPostVisibilityChange()
+		{
+			$(".loader").fadeIn();
+			app.blogData.updateQuery();
 		}
 
 		function addIndexDots(graphics,updateAll)

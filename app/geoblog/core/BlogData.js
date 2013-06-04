@@ -36,6 +36,11 @@ define([],
 				queryFeatureIds();
 			}
 
+			this.updateQuery = function()
+			{
+				queryFeatureIds();
+			}
+
 			function queryFeatureIds()
 			{
 				var query = new esri.tasks.Query();

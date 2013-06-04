@@ -10,7 +10,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,blogLayer,cumulativeTime,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
+		return function BlogView(selector,map,blogLayer,cumulativeTime,statusAttr,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
 		{
 			var _mapTips = null,
 				_homeExtent = null;
@@ -24,7 +24,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				var editEl = $(selector).children().first();
 
 				dojo.forEach(blogPosts,function(post){
-					createBlogPost(editEl,post.attributes[contentAttr]);
+					createBlogPost(editEl,post.attributes[statusAttr],post.attributes[contentAttr]);
 				});
 
 				loadCallback();
@@ -149,15 +149,26 @@ define(["storymaps/utils/multiTips/MultiTips"],
 
 			}
 
-			function createBlogPost(editEl,blogContent)
+			function createBlogPost(editEl,status,blogContent)
 			{
 				var content = unescape(blogContent);
 
-				if(editEl.length > 0){
-					editEl.before('<div class="geoblog-post">'+content+'</div>');
+				var elementStr;
+				if(status === "Draft"){
+					elementStr = '<div class="geoblog-post draft-post">'+content+'</div>';
+				}
+				else if(status === "Hidden"){
+					elementStr = '<div class="geoblog-post hidden-post">'+content+'</div>';
 				}
 				else{
-					$(selector).append('<div class="geoblog-post">'+content+'</div>');
+					elementStr = '<div class="geoblog-post">'+content+'</div>';
+				}
+
+				if(editEl.length > 0){
+					editEl.before(elementStr);
+				}
+				else{
+					$(selector).append(elementStr);
 				}
 			}
 

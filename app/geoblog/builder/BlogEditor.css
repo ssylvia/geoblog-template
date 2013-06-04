@@ -1,3 +1,28 @@
+.blog-visibility-toggles{
+	position: fixed;
+	bottom: 0;
+	margin-left: 74px;
+	background-color: #dadada;
+	padding: 8px 17px 8px 12px;
+	border-top: 2px solid #848484;
+	border-right: 2px solid #848484;
+}
+
+.blog-visibility-toggles label{
+	display: inline-block;
+	line-height: 21px;
+	padding-left: 25px;
+}
+
+label.draft-post-toggle{
+	border-left: 3px solid #3e78b7;
+}
+
+label.hidden-post-toggle{
+	border-left: 3px solid #848484;
+	margin-left: 8px;
+}
+
 .add-blog-post{
 	position:fixed;
 	bottom: 0;

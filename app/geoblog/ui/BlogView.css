@@ -9,13 +9,23 @@
 }
 
 .geoblog-post:first-child{
-	border: none;
+	border-top: none;
 }
 
 .geoblog-post.active{
 	opacity: .99;
 	filter: alpha(opacity=99);
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=99)";
+}
+
+.draft-post{
+	padding-left: 15px;
+	border-left: 3px solid #3e78b7;
+}
+
+.hidden-post{
+	padding-left: 15px;
+	border-left: 3px solid #848484;
 }
 
 .blog-item{

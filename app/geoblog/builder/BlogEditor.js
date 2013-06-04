@@ -26,9 +26,21 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_onAddEditFeature,
 				_onRemoveEditFeature;
 
-			this.init = function(blogLayer,dataAttribute,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature)
+			this.init = function(blogLayer,dataAttribute,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
-				$(selector).append('<div class="add-blog-post" title="Add a new post">+</div>');
+				$(selector).append('\
+					<div class="blog-visibility-toggles">\
+						<label class="checkbox draft-post-toggle">\
+							<input class="draft-post-toggle" type="checkbox" value="">\
+							Show draft posts\
+						</label>\
+						<label class="checkbox hidden-post-toggle">\
+							<input class="hidden-post-toggle" type="checkbox" value="">\
+							Show hidden posts\
+						</label>\
+					</div>\
+					<div class="add-blog-post" title="Add a new post">+</div>');
+
 				$(".add-blog-post").tooltip({
 					placement: "top"
 				}).click(function(){
@@ -37,6 +49,19 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						_onAddEditFeature();
 					},50);
 				});
+
+				$(".blog-visibility-toggles input").click(function(){
+					if($(this).hasClass("draft-post-toggle")){
+						_draftVisible = $(this).is(":checked");
+					}
+					else{
+						_hiddenVisible = $(this).is(":checked");
+					}
+					if(onPostVisibilityChange){
+						onPostVisibilityChange();
+					}
+				});
+
 				addLayerSelector();
 
 				_blogLayer = blogLayer;
@@ -247,7 +272,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					position = element.index();
 				}
 
-				$(".add-blog-post").hide();
+				$(".add-blog-post, .blog-visibility-toggles").hide();
 
 				var htmlString = '<form class="temp-blog-post" action="javascript:void(0);">\
 						<input type="text" class="temp blog-post-title post-item" placeholder="Type post title...">\
@@ -479,7 +504,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						hiddenElement.show();
 						index = hiddenElement.index();
 					}
-					$(".add-blog-post").show();
+					$(".add-blog-post, .blog-visibility-toggles").show();
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
 					_activeEditSession = false;
