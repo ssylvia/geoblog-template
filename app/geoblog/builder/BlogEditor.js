@@ -259,6 +259,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				var newPost = true,
 					data,
+					delayedPost,
 					time = new Date(),
 					deleteBtn = "",
 					hideBtn = '<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>',
@@ -269,6 +270,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					_currentOID = data[_blogLayer.objectIdField];
 					if(data[_statusAttr] === "Hidden"){
 						hideBtn = "";
+					}
+					else if(!isNaN(data[_statusAttr]) && isFinite(data[_statusAttr])){
+						delayedPost = true;
 					}
 					time = new Date(data.time);
 					if(allowDeletes){
@@ -318,6 +322,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					$(".add-blog-post").before(htmlString);
 				}
 
+				if(delayedPost){
+					$("input.delay-post-option").prop("checked",true);
+				}
+
 				$(".editor-ctrl").click(function(){
 					if($(this).hasClass("add-text-item")){
 						addTextEditor(null,newPost);
@@ -343,7 +351,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						savePost("Hidden",position);
 					}
 					else if($(this).hasClass("publish-item")){
-						if($("input.delay-post-option").is(":checked")){
+						var date = new Date();
+						if($("input.delay-post-option").is(":checked") && getPostDate() <= date.valueOf()){
 							savePost(getPostDate(),position);
 						}
 						else{

@@ -47,16 +47,19 @@ define([],
 				var dateVal = date.valueOf();
 				var query = new esri.tasks.Query();
 					if(isBuilder && hiddenVisible() && draftVisible()){
-						query.where = "status='Published' OR status='Draft' OR status='Hidden' OR status<=" + dateVal;
+						query.where = "status='Published' OR status='Draft' OR status='Hidden' OR ISNUMERIC(status)=1";
 					}
 					else if(isBuilder && draftVisible()){
-						query.where = "status='Published' OR status='Draft' OR status<=" + dateVal;
+						query.where = "status='Published' OR status='Draft' OR ISNUMERIC(status)=1";
 					}
 					else if(isBuilder && hiddenVisible()){
-						query.where = "status='Published' OR status='Hidden' OR status<=" + dateVal;
+						query.where = "status='Published' OR status='Hidden' OR ISNUMERIC(status)=1";
+					}
+					else if(isBuilder){
+						query.where = "status='Published' OR ISNUMERIC(status)=1";
 					}
 					else{
-						query.where = "status='Published' OR status<=" + dateVal;
+						query.where = "status='Published' OR (ISNUMERIC(status)=1 AND status<=" + dateVal + ")";
 					}
 					query.orderByFields = [orderBy];
 
@@ -65,7 +68,9 @@ define([],
 					queryFeatureService();
 				},
 				function(error){
-					console.log("Error: " + error.message);
+					dojo.forEach(error.details,function(message){
+						console.log("Error: " + message);
+					});
 				});
 			}
 
