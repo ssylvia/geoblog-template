@@ -20,13 +20,14 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_currentOID,
 				_dataAttribute,
 				_timeAttr,
+				_statusAttr,
 				_blogLayer,
 				_geoAttr,
 				_mapStateAttr,
 				_onAddEditFeature,
 				_onRemoveEditFeature;
 
-			this.init = function(blogLayer,dataAttribute,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
+			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
 				$(selector).append('\
 					<div class="blog-visibility-toggles">\
@@ -67,6 +68,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_blogLayer = blogLayer;
 				_dataAttribute = dataAttribute;
 				_timeAttr = timeAttr;
+				_statusAttr = statusAttr;
 				_geoAttr = geoAttr;
 				_mapStateAttr = mapStateAttr;
 
@@ -259,11 +261,15 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					data,
 					time = new Date(),
 					deleteBtn = "",
+					hideBtn = '<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>',
 					position;
 				if (element){
 					newPost = false;
 					data = element.data(_dataAttribute);					
 					_currentOID = data[_blogLayer.objectIdField];
+					if(data[_statusAttr] === "Hidden"){
+						hideBtn = "";
+					}
 					time = new Date(data.time);
 					if(allowDeletes){
 						deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete</button>';
@@ -289,7 +295,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							</div>\
 							<button class="btn btn-primary editor-ctrl save-item" type="button">Save as Draft</button>\
 							<button class="btn btn-success editor-ctrl publish-item" type="button">Save & Publish</button>\
-							<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>\
+							' + hideBtn + '\
 							<button class="btn btn-inverse editor-ctrl discard-editor" type="button">Discard</button>\
 							'+ deleteBtn +'\
 						</div>\
@@ -330,15 +336,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						}
 					}
 					else if($(this).hasClass("toggle-item-visibility")){
-						if($(".temp-blog-post").hasClass("hidden-post")){
-							$(this).html("Hide");
-							$(".temp-blog-post").removeClass("hidden-post");
-						}
-						else{
-							$(this).html("Show");
-							$(".temp-blog-post").addClass("hidden-post");
-							savePost("Hidden",position);
-						}
+						savePost("Hidden",position);
 					}
 					else if($(this).hasClass("publish-item")){
 						savePost("Published",position);

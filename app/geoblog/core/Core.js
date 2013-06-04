@@ -359,7 +359,7 @@ define(["esri/map",
 					});
 				});
 
-				app.editor.init(app.blogLayer,"graphicAttributes","time","geometry","mapState",function(newPost,location){
+				app.editor.init(app.blogLayer,"graphicAttributes","status","time","geometry","mapState",function(newPost,location){
 					if(!location){
 						$(_blogSelector).mCustomScrollbar("update");
 						if(newPost === true){
