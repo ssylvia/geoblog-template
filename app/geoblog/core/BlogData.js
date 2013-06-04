@@ -43,18 +43,20 @@ define([],
 
 			function queryFeatureIds()
 			{
+				var date = new Date();
+				var dateVal = date.valueOf();
 				var query = new esri.tasks.Query();
 					if(isBuilder && hiddenVisible() && draftVisible()){
-						query.where = "status='Published' OR status='Draft' OR status='Hidden'";
+						query.where = "status='Published' OR status='Draft' OR status='Hidden' OR status<=" + dateVal;
 					}
 					else if(isBuilder && draftVisible()){
-						query.where = "status='Published' OR status='Draft'";
+						query.where = "status='Published' OR status='Draft' OR status<=" + dateVal;
 					}
 					else if(isBuilder && hiddenVisible()){
-						query.where = "status='Published' OR status='Hidden'";
+						query.where = "status='Published' OR status='Hidden' OR status<=" + dateVal;
 					}
 					else{
-						query.where = "status='Published'";
+						query.where = "status='Published' OR status<=" + dateVal;
 					}
 					query.orderByFields = [orderBy];
 

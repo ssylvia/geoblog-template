@@ -286,6 +286,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<input class="temp blog-post-date" size="20" type="text" value="'+ getTimeStamp(time) +'" readonly>\
 							<span class="add-on"><i class="icon-calendar"></i></span>\
 						</div>\
+						<label class="checkbox delay-post-option">\
+							<input class="delay-post-option" type="checkbox" value="">\
+							Use as publish date\
+						</label>\
 						<div class="temp-post-controls">\
 							<div class="btn-group">\
 								<button class="btn editor-ctrl add-text-item" title="Add text"><i class="icon-align-left"></i></button>\
@@ -339,7 +343,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						savePost("Hidden",position);
 					}
 					else if($(this).hasClass("publish-item")){
-						savePost("Published",position);
+						if($("input.delay-post-option").is(":checked")){
+							savePost(getPostDate(),position);
+						}
+						else{
+							savePost("Published",position);
+						}
 					}
 					else{
 						savePost("Draft",position);
