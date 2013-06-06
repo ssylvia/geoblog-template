@@ -245,6 +245,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							var embed = $(this).html()
 							addEmbedEditor(embed);
 						}
+						else if($(this).hasClass("blog-post-audio-wrapper")){
+							var embed = $(this).html()
+							addEmbedEditor(embed);
+						}
 					});
 
 					setTimeout(function(){
@@ -298,7 +302,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<div class="btn-group">\
 								<button class="btn editor-ctrl add-text-item" title="Add text"><i class="icon-align-left"></i></button>\
 								<button class="btn editor-ctrl add-photo-item" title="Add a photo"><i class="icon-picture"></i></button>\
-								<button class="btn editor-ctrl add-embed-item" title="Embed video or other content"><i class="icon-facetime-video"></i></button>\
+								<button class="btn editor-ctrl add-embed-item" title="Embed video"><i class="icon-facetime-video"></i></button>\
+								<button class="btn editor-ctrl add-audio-item" title="Embed audio"><i class="icon-music"></i></button>\
 								<button class="btn editor-ctrl add-location-item" title="Pinpoint location"><i class="icon-map-marker"></i></button>\
 							</div>\
 							<button class="btn btn-primary editor-ctrl save-item" type="button">Save as Draft</button>\
@@ -335,6 +340,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 					else if($(this).hasClass("add-embed-item")){
 						addEmbedEditor(null,newPost);
+					}
+					else if($(this).hasClass("add-audio-item")){
+						addAudioEditor(null,newPost);
 					}
 					else if($(this).hasClass("add-location-item")){
 						addLocationEditor();
@@ -452,6 +460,29 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				$(".remove-video-item").last().click(function(){
 					if(confirm("Are you sure you want to remove this video?")){
+						$(this).prev(".temp.post-embed-code").remove();
+						$(this).remove();
+
+						setTimeout(function(){
+							if(_onRemoveEditFeature){
+								_onRemoveEditFeature(newPost);
+							}
+						},50);
+					}
+				});
+			}
+
+			function addAudioEditor(embed,newPost)
+			{
+				var insert = (embed === undefined || embed === null) ? "" : embed;
+
+				$(".temp-post-controls").last().before(
+					'<textarea type="textarea" class="temp post-audio-code post-item" placeholder="Paste embed code...">' + insert + '</textarea>\
+					<button class="btn btn-inverse btn-mini remove-audio-item remove-item" type="button">Remove audio</button>'
+				);
+
+				$(".remove-audio-item").last().click(function(){
+					if(confirm("Are you sure you want to remove this audio?")){
 						$(this).prev(".temp.post-embed-code").remove();
 						$(this).remove();
 
@@ -587,6 +618,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 					else if($(this).hasClass("post-embed-code") && $(this).val() != ""){
 						HTML += '<div class="blog-post-embed-wrapper blog-item">'+$(this).val()+'</div>';
+					}
+					else if($(this).hasClass("post-audio-code") && $(this).val() != ""){
+						HTML += '<div class="blog-post-audio-wrapper blog-item">'+$(this).val()+'</div>';
 					}
 				});
 

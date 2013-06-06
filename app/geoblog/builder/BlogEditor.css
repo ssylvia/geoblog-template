@@ -93,3 +93,7 @@ textarea.temp{
 .remove-item{
 	margin: -5px 0 10px 0;
 }
+
+.editor-ctrl{
+	margin-bottom: 5px;
+}
