@@ -247,7 +247,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						}
 						else if($(this).hasClass("blog-post-audio-wrapper")){
 							var embed = $(this).html()
-							addEmbedEditor(embed);
+							addAudioEditor(embed);
 						}
 					});
 
@@ -483,7 +483,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				$(".remove-audio-item").last().click(function(){
 					if(confirm("Are you sure you want to remove this audio?")){
-						$(this).prev(".temp.post-embed-code").remove();
+						$(this).prev(".temp.post-audio-code").remove();
 						$(this).remove();
 
 						setTimeout(function(){
