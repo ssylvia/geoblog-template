@@ -352,7 +352,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 					else if($(this).hasClass("publish-item")){
 						var date = new Date();
-						if($("input.delay-post-option").is(":checked") && getPostDate() <= date.valueOf()){
+						if($("input.delay-post-option").is(":checked") && getPostDate() >= date.valueOf()){
 							savePost(getPostDate(),position);
 						}
 						else{
