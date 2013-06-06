@@ -275,7 +275,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						delayedPost = true;
 					}
 					time = new Date(data.time);
-					if(allowDeletes){
+					if(allowDeletes && _blogLayer.getEditCapabilities().canDelete){
 						deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete</button>';
 					}
 					element.hide(),

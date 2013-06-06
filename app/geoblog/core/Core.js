@@ -111,6 +111,8 @@ define(["esri/map",
 			app = {
 				//Esri map variable
 				map: null,
+				//Portal
+				portal: null,
 				//Feature services layer holding blog posts
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
 					outFields: ["*"]
@@ -126,7 +128,6 @@ define(["esri/map",
 		{
 			if(_isBuilder && configOptions.authorizedEditors.length > 0){
 				portalLogin().then(function(){
-					console.log(esri.id.credentials);
 					var load = false;
 					dojo.forEach(esri.id.credentials,function(user){
 						if($.inArray(user.userId,configOptions.authorizedEditors) >= 0){
@@ -134,6 +135,7 @@ define(["esri/map",
 						}
 					});
 					if(load){
+						//initFeatureServiceCreator();
 						loadMap();
 					}
 					else{
@@ -166,6 +168,31 @@ define(["esri/map",
 			);
 
 			return resultDeferred;
+		}
+
+		function initFeatureServiceCreator()
+		{
+			require(["storymaps/geoblog/builder/FeatureServiceCreator"], function(FeatureServiceCreator){
+				app.FSCreator = new FeatureServiceCreator(app.portal);
+			});
+
+			if(app.FSCreator.userIsOrgaPublisher()){
+
+				app.portal.getPortalUser().getFolders().then(function(results){
+					dojo.forEach(results,function(folder){
+						$("#portal-folder-selector").append('<option data-id="' + folder.id + '">' + folder.title +'</option>')
+					});
+				});
+
+				$("#dataPopup").modal({
+					backdrop: false,
+					keyboard: false
+				});
+				
+				$("#create-feature-service").click(function(){
+					app.FSCreator.createFS($("#feature-service-name").val(),$("#portal-folder-selector option:selected").data("id"));
+				});
+			}
 		}
 
 		function styleIdentityManagerForLoad()

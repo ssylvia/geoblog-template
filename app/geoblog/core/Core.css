@@ -87,6 +87,11 @@ html, body, #application-window{
 	word-break: break-all;
 }
 
+.modal h2{
+	font-size: 18px;
+	font-weight: bold;
+}
+
 /* Custom Scrollbar */
 .mCSB_container{
 	margin-right: 16px;
