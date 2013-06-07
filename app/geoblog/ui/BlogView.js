@@ -123,7 +123,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 						}
 					}
 
-					toggleVisibleLayers(mapState.hiddenLayers);
+					toggleVisibleLayers(mapState.visibleLayers);
 
 					if(alwaysDisplayPoints){
 						blogLayer.show();
@@ -172,37 +172,37 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				}
 			}
 
-			function toggleVisibleLayers(hiddenLayers)
+			function toggleVisibleLayers(visibleLayers)
 			{
 				//TODO: fade layers
-				if (hiddenLayers){
+				if (visibleLayers){
 
 					dojo.forEach(map.layerIds,function(id){
-						if ($.inArray(id,hiddenLayers) >= 0){
-							map.getLayer(id).hide();
+						if ($.inArray(id,visibleLayers) >= 0){
+							map.getLayer(id).show();
 						}
 						else{
-							map.getLayer(id).show();
+							map.getLayer(id).hide();
 						}
 					});
 
 					dojo.forEach(map.graphicsLayerIds,function(id){
-						if ($.inArray(id,hiddenLayers) >= 0){
-							map.getLayer(id).hide();
+						if ($.inArray(id,visibleLayers) >= 0){
+							map.getLayer(id).show();
 						}
 						else{
-							map.getLayer(id).show();
+							map.getLayer(id).hide();
 						}
 					});
 
 				}
 				else{
 					dojo.forEach(map.layerIds,function(id){
-						map.getLayer(id).show();
+						map.getLayer(id).hide();
 					});
 
 					dojo.forEach(map.graphicsLayerIds,function(id){
-						map.getLayer(id).show();
+						map.getLayer(id).hide();
 					});
 				}
 			}

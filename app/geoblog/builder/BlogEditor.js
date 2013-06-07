@@ -567,7 +567,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					geometry = getPostGeometry(),
 					mapState = {
 						extent: map.extent.toJson(),
-						hiddenLayers: getHiddenLayers(),
+						visibleLayers: getVisibleLayers(),
 						infoWindow: getInfoWindowFeature()
 					};
 
@@ -643,11 +643,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 			}
 
-			function getHiddenLayers()
+			function getVisibleLayers()
 			{
 				var layers = [];
 				$(".layer-select").each(function(){
-					if(!$(this).is(":checked")){
+					if($(this).is(":checked")){
 						layers.push($(this).val());
 					}
 				});
