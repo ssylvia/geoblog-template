@@ -244,6 +244,10 @@ define(["esri/map",
 
 				dojo.connect(app.map.blogLayer,"onClick",function(event){
 					app.blogData.goToPageByItem(event.graphic.attributes[event.graphic.getLayer().objectIdField],function(index){
+						_selectByIndex = {
+							active: true,
+							index: index
+						}
 						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
 					});
 				});

@@ -25,7 +25,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_geoAttr,
 				_mapStateAttr,
 				_onAddEditFeature,
-				_onRemoveEditFeature;
+				_onRemoveEditFeature,
+				_mapStateLinkIndex = 0;
 
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
@@ -416,11 +417,23 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 				});
 
-				$(".temp.blog-post-text").last().wysihtml5({
+				var editor = $(".temp.blog-post-text").last();
+
+				editor.wysihtml5({
 					"stylesheets": ["lib/bootstrap-wysihtml5/lib/css/wysiwyg-color.css"],
 					"font-styles": false,
 					"image": false,
-					"color": true
+					"color": true,
+					toolbar: {
+						code: function(locale,options){
+							return '<li><a class="btn add-map-position-link" href="javascript:;" unselectable="on"><i class="icon-globe"></i> Link map position</li>'
+						}
+					}
+				});
+				$(".add-map-position-link").last().click(function(){
+					var wysi = editor.data("wysihtml5").editor;
+					wysi.composer.commands.exec("insertHTML", '<a href="javascript:" rel="nofollow" title="" data-map-state-link="'+ _mapStateLinkIndex +'" class="map-state-link">'+ wysi.composer.selection.getText() +'</a>');
+					++_mapStateLinkIndex;
 				});
 			}
 
