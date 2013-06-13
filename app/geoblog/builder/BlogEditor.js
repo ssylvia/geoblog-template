@@ -338,7 +338,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				$("#"+map.container.id).append('\
 					<div class="temp map-state-manager">\
 						<h4>Manage Map States</h4>\
-						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item.</h5>\
+						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item. All settings will be saved when the blog post is saved.</h5>\
 						<div class="home-state map-state-item">\
 							Home Position \
 							<button class="btn btn-mini btn-primary map-state-save home-extent" type="button">Save</button>\
