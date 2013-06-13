@@ -338,7 +338,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				$("#"+map.container.id).append('\
 					<div class="temp map-state-manager">\
 						<h4>Manage Map States</h4>\
-						<p>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item.</p>\
+						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item.</h5>\
 						<div class="home-state map-state-item">\
 							Home Position \
 							<button class="btn btn-mini btn-primary map-state-save home-extent" type="button">Save</button>\
@@ -520,7 +520,29 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						wysi.composer.commands.exec("insertHTML", html);
 					}
 					else{
-						wysi.composer.commands.exec("insertHTML", '<span data-map-state-link="'+ _mapStateLinkIndex +'" class="map-state-link">'+ wysi.composer.selection.getText() +'</span>');
+						var selectedText = wysi.composer.selection.getText();
+						wysi.composer.commands.exec("insertHTML", '<span data-map-state-link="'+ _mapStateLinkIndex +'" class="map-state-link">'+ selectedText +'</span>');
+						if($(".temp.map-state-manager .map-state-links-wrapper").length > 0){
+							$(".temp.map-state-manager .map-state-links-wrapper").append('\
+								<div class="link-state map-state-item">\
+										"<p class="text-string">' + selectedText + '</p>" \
+										<button class="btn btn-mini btn-primary map-state-save link-state" type="button">Save</button>\
+										<button class="btn btn-mini map-state-show link-state" type="button">Show</button> \
+									</div>\
+								');
+						}
+						else{
+							$(".temp.map-state-manager").append('\
+								<div class="map-state-links-wrapper">\
+									<h6>Map Links</h6>\
+									<div class="link-state map-state-item">\
+										"<p class="text-string">' + selectedText + '</p>" \
+										<button class="btn btn-mini btn-primary map-state-save link-state" type="button">Save</button>\
+										<button class="btn btn-mini map-state-show link-state" type="button">Show</button> \
+									</div>\
+								</div>\
+							');
+						}
 						++_mapStateLinkIndex;
 					}
 				});

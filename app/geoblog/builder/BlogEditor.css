@@ -106,8 +106,8 @@ textarea.temp{
 	max-height: 300px;
 	padding: 15px;
 	background-color: #fff;
-	border-radius: 5px;
 	z-index: 100;
+	overflow: auto;
 }
 
 .temp.map-state-manager h4{
@@ -116,7 +116,7 @@ textarea.temp{
 	margin-bottom: 5px
 }
 
-.temp.map-state-manager p{
+.temp.map-state-manager h5{
 	font-size: 14px;
 	font-style: italic;
 	color: #666;
@@ -130,4 +130,31 @@ textarea.temp{
 .temp.map-state-manager .map-state-show{
 	margin-right: 5px;
 	float: right;
+}
+
+.temp.map-state-manager .map-state-item{
+	line-height: 1.4;
+}
+
+.temp.map-state-manager .map-state-links-wrapper{
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #dadada;
+}
+
+.temp.map-state-manager .map-state-links-wrapper h6{	
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.temp.map-state-manager .link-state{
+	margin-top: 5px;
+}
+
+.temp.map-state-manager .text-string{
+	display: inline-block;
+	max-width: 190px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
