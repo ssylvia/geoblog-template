@@ -346,7 +346,7 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,configOptions.allowDeletes,".legend-toggle",".legend-content",function(status,blog,geo,position){
+					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(status,blog,geo,position){
 						var graphic,
 							pt,
 							adds,

@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,cumulativeTime,allowDeletes,legendToggleSelector,legendContentSelector,onSave,onDiscard)
+		return function BlogEditor(selector,map,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onSave,onDiscard)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -26,7 +26,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_mapStateAttr,
 				_onAddEditFeature,
 				_onRemoveEditFeature,
-				_mapStateLinkIndex = 0;
+				_mapStateLinkIndex = 0
+				_homeExtent = false;
 
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
@@ -269,10 +270,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					deleteBtn = "",
 					hideBtn = '<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>',
 					position;
+					_homeExtent = false;
 				if (element){
 					newPost = false;
 					data = element.data(_dataAttribute);					
 					_currentOID = data[_blogLayer.objectIdField];
+					_homeExtent = $.parseJSON(data[_mapStateAttr]);
 					if(data[_statusAttr] === "Hidden"){
 						hideBtn = "";
 					}
@@ -331,6 +334,26 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				if(delayedPost){
 					$("input.delay-post-option").prop("checked",true);
 				}
+
+				$("#"+map.container.id).append('\
+					<div class="temp map-state-manager">\
+						<h4>Manage Map States</h4>\
+						<p>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item.</p>\
+						<div class="home-state map-state-item">\
+							Home Position \
+							<button class="btn btn-mini btn-primary map-state-save home-extent" type="button">Save</button>\
+							<button class="btn btn-mini map-state-show home-extent" type="button">Show</button> \
+						</div>\
+					</div>'
+				);
+
+				$(".map-state-save.home-extent").click(function(){
+					_homeExtent = getMapState();
+				});
+
+				$(".map-state-show.home-extent").click(function(){
+					showMapState(_homeExtent);
+				});
 
 				$(".editor-ctrl").click(function(){
 					if($(this).hasClass("add-text-item")){
@@ -630,6 +653,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						hiddenElement.show();
 						index = hiddenElement.index();
 					}
+					$(".temp.map-state-manager").remove();
 					$(".add-blog-post, .blog-visibility-toggles").show();
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
@@ -642,22 +666,24 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			function savePost(status,position)
 			{
+				var homeExtent;
+				if (_homeExtent){
+					homeExtent = _homeExtent;
+				}
+				else{
+					homeExtent = getMapState();
+				}
 				var saveStatus,
 					geometry = getPostGeometry(),
-					mapState = {
-						extent: map.extent.toJson(),
-						visibleLayers: getVisibleLayers(),
-						infoWindow: getInfoWindowFeature()
-					};
-
-				var blogPost = {
-					title: $(".temp.blog-post-title").last().val(),
-					content: compileHTMLContent(),
-					time: getPostDate(),
-					geometry: JSON.stringify(geometry),
-					mapState: JSON.stringify(mapState),
-					status: status
-				}
+					mapState = homeExtent,
+					blogPost = {
+						title: $(".temp.blog-post-title").last().val(),
+						content: compileHTMLContent(),
+						time: getPostDate(),
+						geometry: JSON.stringify(geometry),
+						mapState: JSON.stringify(mapState),
+						status: status
+					}
 
 				if(status === "Delete" && _currentOID){
 					blogPost[_blogLayer.objectIdField] = _currentOID;
@@ -710,6 +736,17 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			{
 				var date = new Date($(".temp.blog-post-date").last().val());
 				return date.valueOf();
+			}
+
+			function getMapState()
+			{
+				var mapState = {
+					extent: map.extent.toJson(),
+					visibleLayers: getVisibleLayers(),
+					infoWindow: getInfoWindowFeature()
+				};
+
+				return mapState;
 			}
 
 			function getPostGeometry()
@@ -810,6 +847,107 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				$(".layer-select").each(function(){
 					$(this).prop("checked",map.getLayer($(this).val()).visible);
 				});
+			}
+
+			function showMapState(mapState)
+			{
+				//TODO: is there a way to query graphic for popup
+				map.infoWindow.clearFeatures();
+				map.infoWindow.hide();
+				if(mapState.infoWindow){
+					if(mapState.infoWindow.content !== undefined){
+						map.infoWindow.setContent(unescape(mapState.infoWindow.content));
+						map.infoWindow.setTitle("");
+						map.infoWindow.show(mapState.infoWindow.location);
+					}
+					else{
+						if(mapState.infoWindow.url != undefined){
+							var queryTask = new esri.tasks.QueryTask(mapState.infoWindow.url);
+							var query = new esri.tasks.Query();
+								query.objectIds = [mapState.infoWindow.feature];
+								query.returnGeometry = true;
+								query.outFields = ["*"];
+
+							queryTask.execute(query,function(result){
+								ftr = result.features[0];
+								if(ftr.infoTemplate === undefined){
+									ftr.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
+								}
+								map.infoWindow.setFeatures([ftr]);
+								map.infoWindow.show(mapState.infoWindow.location);
+							});
+
+						}
+						else{
+							var graphic;
+							dojo.forEach(map.getLayer(mapState.infoWindow.layerId).graphics,function(g){
+								if(g.attributes[mapState.infoWindow.objectIdField] === mapState.infoWindow.feature){
+									graphic = g;
+								}
+							});
+
+							if(graphic != undefined){
+								if(graphic.infoTemplate === undefined){
+									graphic.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
+								}
+								map.infoWindow.setFeatures([graphic]);
+								map.infoWindow.show(mapState.infoWindow.location);
+							}
+						}
+					}
+				}
+
+				toggleVisibleLayers(mapState.visibleLayers);
+
+				if(alwaysDisplayPoints){
+					_blogLayer.show();
+				}
+
+				//Set map state
+				var extent = new esri.geometry.Extent({
+					"xmin":mapState.extent.xmin,
+					"ymin":mapState.extent.ymin,
+					"xmax":mapState.extent.xmax,
+					"ymax":mapState.extent.ymax, 
+					"spatialReference":{
+						"wkid":mapState.extent.spatialReference.wkid}
+					});
+				map.setExtent(extent);
+			}
+
+			function toggleVisibleLayers(visibleLayers)
+			{
+				//TODO: fade layers
+				if (visibleLayers){
+
+					dojo.forEach(map.layerIds,function(id){
+						if ($.inArray(id,visibleLayers) >= 0){
+							map.getLayer(id).show();
+						}
+						else{
+							map.getLayer(id).hide();
+						}
+					});
+
+					dojo.forEach(map.graphicsLayerIds,function(id){
+						if ($.inArray(id,visibleLayers) >= 0){
+							map.getLayer(id).show();
+						}
+						else{
+							map.getLayer(id).hide();
+						}
+					});
+
+				}
+				else{
+					dojo.forEach(map.layerIds,function(id){
+						map.getLayer(id).hide();
+					});
+
+					dojo.forEach(map.graphicsLayerIds,function(id){
+						map.getLayer(id).hide();
+					});
+				}
 			}
 
 		}

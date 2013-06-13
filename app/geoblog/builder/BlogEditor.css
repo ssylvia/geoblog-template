@@ -97,3 +97,37 @@ textarea.temp{
 .editor-ctrl{
 	margin-bottom: 5px;
 }
+
+.temp.map-state-manager{
+	position: absolute;
+	bottom: 15px;
+	left: 15px;
+	width: 350px;
+	max-height: 300px;
+	padding: 15px;
+	background-color: #fff;
+	border-radius: 5px;
+	z-index: 100;
+}
+
+.temp.map-state-manager h4{
+	font-weight: bold;
+	font-size: 16px;
+	margin-bottom: 5px
+}
+
+.temp.map-state-manager p{
+	font-size: 14px;
+	font-style: italic;
+	color: #666;
+	margin-bottom: 15px;
+}
+
+.temp.map-state-manager .map-state-save{
+	float: right;
+}
+
+.temp.map-state-manager .map-state-show{
+	margin-right: 5px;
+	float: right;
+}
