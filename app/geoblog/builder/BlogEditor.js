@@ -420,7 +420,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				var editor = $(".temp.blog-post-text").last();
 
 				editor.wysihtml5({
-					"stylesheets": ["lib/bootstrap-wysihtml5/lib/css/wysiwyg-color.css"],
+					"stylesheets": ["lib/bootstrap/css/bootstrap.min.css","app/geoblog/ui/BlogView.css","lib/bootstrap-wysihtml5/lib/css/wysiwyg-color.css"],
 					"font-styles": false,
 					"image": false,
 					"color": true,
@@ -428,12 +428,78 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						code: function(locale,options){
 							return '<li><a class="btn add-map-position-link" href="javascript:;" unselectable="on"><i class="icon-globe"></i> Link map position</li>'
 						}
+					},
+					parserRules: {
+						"classes": {
+							"wysiwyg-color-silver": 1,
+							"wysiwyg-color-gray": 1,
+							"wysiwyg-color-white": 1,
+							"wysiwyg-color-maroon": 1,
+							"wysiwyg-color-red": 1,
+							"wysiwyg-color-purple": 1,
+							"wysiwyg-color-fuchsia": 1,
+							"wysiwyg-color-green": 1,
+							"wysiwyg-color-lime": 1,
+							"wysiwyg-color-olive": 1,
+							"wysiwyg-color-yellow": 1,
+							"wysiwyg-color-navy": 1,
+							"wysiwyg-color-blue": 1,
+							"wysiwyg-color-teal": 1,
+							"wysiwyg-color-aqua": 1,
+							"wysiwyg-color-orange": 1,
+							"map-state-link": 1
+						},
+						"tags": {
+							"b": {},
+							"i": {},
+							"br": {},
+							"ol": {},
+							"ul": {},
+							"li": {},
+							"h1": {},
+							"h2": {},
+							"h3": {},
+							"blockquote": {},
+							"u": 1,
+							"img": {
+								"check_attributes": {
+									"width": "numbers",
+									"alt": "alt",
+									"src": "url",
+									"height": "numbers"
+								}
+							},
+							"a":  {
+								"set_attributes": {
+									"target": "_blank",
+									"rel":    "nofollow"
+								},
+								"check_attributes": {
+									"href":   "url" // important to avoid XSS
+								}
+							},
+							"span": {
+								"check_attributes": {
+									"data-map-state-link": "numbers"
+								}
+							},
+							"div": 1,
+							"code": 1,
+							"pre": 1,
+						}
 					}
 				});
 				$(".add-map-position-link").last().click(function(){
 					var wysi = editor.data("wysihtml5").editor;
-					wysi.composer.commands.exec("insertHTML", '<a href="javascript:" rel="nofollow" title="" data-map-state-link="'+ _mapStateLinkIndex +'" class="map-state-link">'+ wysi.composer.selection.getText() +'</a>');
-					++_mapStateLinkIndex;
+					if(wysi.composer.selection.getSelectedNode().parentNode.className === "map-state-link"){
+						var html = wysi.composer.selection.getSelectedNode().parentElement.innerHTML;
+						wysi.composer.selection.getSelectedNode().parentNode.remove();
+						wysi.composer.commands.exec("insertHTML", html);
+					}
+					else{
+						wysi.composer.commands.exec("insertHTML", '<span data-map-state-link="'+ _mapStateLinkIndex +'" class="map-state-link">'+ wysi.composer.selection.getText() +'</span>');
+						++_mapStateLinkIndex;
+					}
 				});
 			}
 

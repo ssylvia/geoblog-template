@@ -47,6 +47,17 @@
 	line-height: 1.5em;
 }
 
+.map-state-link{
+	color: #0088cc;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.map-state-link:hover, .map-state-link:focus {
+	color: #005580;
+	text-decoration: underline;
+}
+
 .blog-post-photo-caption{
 	color: #777;
 	font-size: 13px;
