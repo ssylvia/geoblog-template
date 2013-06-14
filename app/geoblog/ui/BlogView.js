@@ -10,7 +10,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,blogLayer,cumulativeTime,statusAttr,contentAttr,timeAttr,mapAttr,iconHeight,loadCallback)
+		return function BlogView(selector,map,blogLayer,cumulativeTime,statusAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
 		{
 			var _mapTips = null,
 				_homeExtent = null;
@@ -47,6 +47,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 					var selectedEl = elements.eq(index),
 						selectedGrp = graphics[index],
 						mapState = $.parseJSON(selectedGrp.attributes[mapAttr]),
+						data = $.parseJSON(selectedGrp.attributes[dataAttr]),
 						speed = 200;
 
 					//Set Blog State
@@ -67,7 +68,12 @@ define(["storymaps/utils/multiTips/MultiTips"],
 							textColor: "#ffffff",
 							offsetTop: iconHeight - 8
 						});
-					}	
+					}
+
+					$(".map-state-link").unbind("click");
+					$(".map-state-link").click(function(){
+						goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints);
+					});
 
 					//Set TimeExtent
 					if(cumulativeTime){
@@ -77,70 +83,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 						map.setTimeExtent(new esri.TimeExtent(new Date(selectedGrp.attributes[timeAttr]),new Date(selectedGrp.attributes[timeAttr])));
 					}
 
-					//TODO: is there a way to query graphic for popup
-					map.infoWindow.clearFeatures();
-					map.infoWindow.hide();
-					if(mapState.infoWindow){
-						if(mapState.infoWindow.content !== undefined){
-							map.infoWindow.setContent(unescape(mapState.infoWindow.content));
-							map.infoWindow.setTitle("");
-							map.infoWindow.show(mapState.infoWindow.location);
-						}
-						else{
-							if(mapState.infoWindow.url != undefined){
-								var queryTask = new esri.tasks.QueryTask(mapState.infoWindow.url);
-								var query = new esri.tasks.Query();
-									query.objectIds = [mapState.infoWindow.feature];
-									query.returnGeometry = true;
-									query.outFields = ["*"];
-
-								queryTask.execute(query,function(result){
-									ftr = result.features[0];
-									if(ftr.infoTemplate === undefined){
-										ftr.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
-									}
-									map.infoWindow.setFeatures([ftr]);
-									map.infoWindow.show(mapState.infoWindow.location);
-								});
-
-							}
-							else{
-								var graphic;
-								dojo.forEach(map.getLayer(mapState.infoWindow.layerId).graphics,function(g){
-									if(g.attributes[mapState.infoWindow.objectIdField] === mapState.infoWindow.feature){
-										graphic = g;
-									}
-								});
-
-								if(graphic != undefined){
-									if(graphic.infoTemplate === undefined){
-										graphic.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
-									}
-									map.infoWindow.setFeatures([graphic]);
-									map.infoWindow.show(mapState.infoWindow.location);
-								}
-							}
-						}
-					}
-
-					toggleVisibleLayers(mapState.visibleLayers);
-
-					if(alwaysDisplayPoints){
-						blogLayer.show();
-					}
-
-					//Set map state
-					var extent = new esri.geometry.Extent({
-						"xmin":mapState.extent.xmin,
-						"ymin":mapState.extent.ymin,
-						"xmax":mapState.extent.xmax,
-						"ymax":mapState.extent.ymax, 
-						"spatialReference":{
-							"wkid":mapState.extent.spatialReference.wkid}
-						});
-					map.setExtent(extent);
-						
-					_homeExtent = extent;
+					goToMapState(mapState,alwaysDisplayPoints,true);
 
 					$(".post-index-bullet").removeClass("active");
 					$(".post-index-bullet").eq(index).addClass("active");
@@ -169,6 +112,75 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				}
 				else{
 					$(selector).append(elementStr);
+				}
+			}
+
+			function goToMapState(mapState,alwaysDisplayPoints,homeExtent)
+			{
+				map.infoWindow.clearFeatures();
+				map.infoWindow.hide();
+				if(mapState.infoWindow){
+					if(mapState.infoWindow.content !== undefined){
+						map.infoWindow.setContent(unescape(mapState.infoWindow.content));
+						map.infoWindow.setTitle("");
+						map.infoWindow.show(mapState.infoWindow.location);
+					}
+					else{
+						if(mapState.infoWindow.url != undefined){
+							var queryTask = new esri.tasks.QueryTask(mapState.infoWindow.url);
+							var query = new esri.tasks.Query();
+								query.objectIds = [mapState.infoWindow.feature];
+								query.returnGeometry = true;
+								query.outFields = ["*"];
+
+							queryTask.execute(query,function(result){
+								ftr = result.features[0];
+								if(ftr.infoTemplate === undefined){
+									ftr.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
+								}
+								map.infoWindow.setFeatures([ftr]);
+								map.infoWindow.show(mapState.infoWindow.location);
+							});
+
+						}
+						else{
+							var graphic;
+							dojo.forEach(map.getLayer(mapState.infoWindow.layerId).graphics,function(g){
+								if(g.attributes[mapState.infoWindow.objectIdField] === mapState.infoWindow.feature){
+									graphic = g;
+								}
+							});
+
+							if(graphic != undefined){
+								if(graphic.infoTemplate === undefined){
+									graphic.setInfoTemplate(map.getLayer(mapState.infoWindow.layerId).infoTemplate);
+								}
+								map.infoWindow.setFeatures([graphic]);
+								map.infoWindow.show(mapState.infoWindow.location);
+							}
+						}
+					}
+				}
+
+				toggleVisibleLayers(mapState.visibleLayers);
+
+				if(alwaysDisplayPoints){
+					blogLayer.show();
+				}
+
+				//Set map state
+				var extent = new esri.geometry.Extent({
+					"xmin":mapState.extent.xmin,
+					"ymin":mapState.extent.ymin,
+					"xmax":mapState.extent.xmax,
+					"ymax":mapState.extent.ymax, 
+					"spatialReference":{
+						"wkid":mapState.extent.spatialReference.wkid}
+					});
+				map.setExtent(extent);
+					
+				if(homeExtent){
+					_homeExtent = extent;
 				}
 			}
 

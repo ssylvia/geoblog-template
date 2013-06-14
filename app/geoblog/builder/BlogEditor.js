@@ -24,13 +24,14 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_blogLayer,
 				_geoAttr,
 				_mapStateAttr,
+				_blogDataAttr,
 				_onAddEditFeature,
 				_onRemoveEditFeature,
 				_mapStateLinkIndex = 0,
 				_homeExtent = false,
 				_tempDataAttr;
 
-			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
+			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,blogDataAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
 				$(selector).append('\
 					<div class="blog-visibility-toggles">\
@@ -74,6 +75,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_statusAttr = statusAttr;
 				_geoAttr = geoAttr;
 				_mapStateAttr = mapStateAttr;
+				_blogDataAttr = blogDataAttr;
 
 				if(onAddEditFeature){
 					_onAddEditFeature = onAddEditFeature;
@@ -291,7 +293,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					if(allowDeletes && _blogLayer.getEditCapabilities().canDelete){
 						deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete</button>';
 					}
-					_tempDataAttr = $.parseJSON(data.data);
+					_tempDataAttr = $.parseJSON(data[_blogDataAttr]);
 					if(!_tempDataAttr || !_tempDataAttr.textLinks){
 						_tempDataAttr = {
 							textLinks: {
