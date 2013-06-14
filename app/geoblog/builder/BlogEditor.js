@@ -26,8 +26,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_mapStateAttr,
 				_onAddEditFeature,
 				_onRemoveEditFeature,
-				_mapStateLinkIndex = 0
-				_homeExtent = false;
+				_mapStateLinkIndex = 0,
+				_homeExtent = false,
+				_tempDataAttr;
 
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
@@ -271,6 +272,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					hideBtn = '<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>',
 					position;
 					_homeExtent = false;
+					_tempDataAttr = {
+						textLinks: {
+						}
+					}
 				if (element){
 					newPost = false;
 					data = element.data(_dataAttribute);					
@@ -286,6 +291,13 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					if(allowDeletes && _blogLayer.getEditCapabilities().canDelete){
 						deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete</button>';
 					}
+					_tempDataAttr = $.parseJSON(data.data);
+					if(!_tempDataAttr || !_tempDataAttr.textLinks){
+						_tempDataAttr = {
+							textLinks: {
+							}
+						}
+					}					
 					element.hide(),
 					position = element.index();
 				}
@@ -354,6 +366,43 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				$(".map-state-show.home-extent").click(function(){
 					showMapState(_homeExtent);
 				});
+
+				for(item in _tempDataAttr.textLinks){
+
+					if($(".temp.map-state-manager .map-state-links-wrapper").length > 0){
+						$(".temp.map-state-manager .map-state-links-wrapper").append('\
+							<div class="link-state map-state-item" data-link="' + item + '">\
+								"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>" \
+								<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + item + '" type="button">Save</button>\
+								<button class="btn btn-mini map-state-show link-state" data-link="' + item + '" type="button">Show</button> \
+							</div>\
+						');
+					}
+					else{
+						$(".temp.map-state-manager").append('\
+							<div class="map-state-links-wrapper">\
+								<h6>Text Links</h6>\
+								<div class="link-state map-state-item" data-link="' + item + '">\
+									"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>" \
+									<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + item + '" type="button">Save</button>\
+									<button class="btn btn-mini map-state-show link-state" data-link="' + item + '" type="button">Show</button> \
+								</div>\
+							</div>\
+						');
+					}
+
+					$(".map-state-save.link-state").last().click(function(){
+						_tempDataAttr.textLinks[$(this).attr("data-link")].mapState = getMapState();
+					});
+
+					$(".map-state-show.link-state").last().click(function(){
+						showMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
+					});
+
+					if(item >= _mapStateLinkIndex){
+						_mapStateLinkIndex = parseFloat(item) + 1;
+					}
+				}
 
 				$(".editor-ctrl").click(function(){
 					if($(this).hasClass("add-text-item")){
@@ -516,6 +565,13 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					var wysi = editor.data("wysihtml5").editor;
 					if(wysi.composer.selection.getSelectedNode().parentNode.className === "map-state-link"){
 						var html = wysi.composer.selection.getSelectedNode().parentElement.innerHTML;
+						var index = wysi.composer.selection.getSelectedNode().parentElement.getAttribute("data-map-state-link");
+						$(".link-state.map-state-item").each(function(){
+							if($(this).attr("data-link") == index){
+								$(this).remove();
+							}
+						});
+						delete _tempDataAttr.textLinks[index];
 						wysi.composer.selection.getSelectedNode().parentNode.remove();
 						wysi.composer.commands.exec("insertHTML", html);
 					}
@@ -524,25 +580,38 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						wysi.composer.commands.exec("insertHTML", '<span data-map-state-link="'+ _mapStateLinkIndex +'" class="map-state-link">'+ selectedText +'</span>');
 						if($(".temp.map-state-manager .map-state-links-wrapper").length > 0){
 							$(".temp.map-state-manager .map-state-links-wrapper").append('\
-								<div class="link-state map-state-item">\
-										"<p class="text-string">' + selectedText + '</p>" \
-										<button class="btn btn-mini btn-primary map-state-save link-state" type="button">Save</button>\
-										<button class="btn btn-mini map-state-show link-state" type="button">Show</button> \
-									</div>\
-								');
+							<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
+									"<p class="text-string">' + selectedText + '</p>" \
+									<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
+									<button class="btn btn-mini map-state-show link-state" data-link="' + _mapStateLinkIndex + '" type="button">Show</button> \
+								</div>\
+							');
 						}
 						else{
 							$(".temp.map-state-manager").append('\
 								<div class="map-state-links-wrapper">\
-									<h6>Map Links</h6>\
-									<div class="link-state map-state-item">\
+									<h6>Text Links</h6>\
+									<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 										"<p class="text-string">' + selectedText + '</p>" \
-										<button class="btn btn-mini btn-primary map-state-save link-state" type="button">Save</button>\
-										<button class="btn btn-mini map-state-show link-state" type="button">Show</button> \
+										<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
+										<button class="btn btn-mini map-state-show link-state" data-link="' + _mapStateLinkIndex + '" type="button">Show</button> \
 									</div>\
 								</div>\
 							');
 						}
+						_tempDataAttr.textLinks[_mapStateLinkIndex] = {
+							mapState: getMapState(),
+							text: selectedText
+						}
+
+						$(".map-state-save.link-state").last().click(function(){
+							_tempDataAttr.textLinks[$(this).attr("data-link")].mapState = getMapState();
+						});
+
+						$(".map-state-show.link-state").last().click(function(){
+							showMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
+						});
+
 						++_mapStateLinkIndex;
 					}
 				});
@@ -704,6 +773,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						time: getPostDate(),
 						geometry: JSON.stringify(geometry),
 						mapState: JSON.stringify(mapState),
+						data: JSON.stringify(_tempDataAttr),
 						status: status
 					}
 
