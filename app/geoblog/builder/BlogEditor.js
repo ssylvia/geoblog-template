@@ -568,11 +568,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					if(wysi.composer.selection.getSelectedNode().parentNode.className === "map-state-link"){
 						var html = wysi.composer.selection.getSelectedNode().parentElement.innerHTML;
 						var index = wysi.composer.selection.getSelectedNode().parentElement.getAttribute("data-map-state-link");
-						$(".link-state.map-state-item").each(function(){
-							if($(this).attr("data-link") == index){
-								$(this).remove();
-							}
-						});
+						if($(".link-state.map-state-item").length > 1){
+							$(".link-state.map-state-item").each(function(){
+								if($(this).attr("data-link") == index){
+									$(this).remove();
+								}
+							});
+						}
+						else{
+							$(".temp.map-state-manager .map-state-links-wrapper").remove();
+						}
 						delete _tempDataAttr.textLinks[index];
 						wysi.composer.selection.getSelectedNode().parentNode.remove();
 						wysi.composer.commands.exec("insertHTML", html);
