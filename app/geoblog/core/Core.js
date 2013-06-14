@@ -109,6 +109,16 @@ define(["esri/map",
 
 		function createAppVariables()
 		{
+			if(_isEmbed){
+				$("#banner").hide();
+				$("#blog-wrapper").css({
+					"height": "50%",
+					"width": "100%"
+				}).removeClass("region-left").addClass("region-bottom");
+				configOptions.postsPerPage = 5;
+			}
+			Helper.resetLayout();
+			
 			var orderByFields = configOptions.sortBy + " " + configOptions.order;
 
 			app = {
@@ -123,15 +133,6 @@ define(["esri/map",
 				blogData: new BlogData(_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage),
 				blog: null
 			}
-
-			if(_isEmbed){
-				$("#banner").hide();
-				$("#blog-wrapper").css({
-					"height": "50%",
-					"width": "100%"
-				}).removeClass("region-left").addClass("region-bottom");
-			}
-			Helper.resetLayout();
 
 			checkCredentials();
 		}
