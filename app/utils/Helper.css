@@ -74,6 +74,10 @@ li{
 	left: 0;
 }
 
+.region-bottom{
+	bottom: 0;
+}
+
 #banner{
 	background-color: #444;
 	height: 115px;

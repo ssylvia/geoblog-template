@@ -30,6 +30,7 @@ define(["esri/map",
 		//
 
 		var _isBuilder = false,
+			_isEmbed = false,
 			_blogSelector = "#blog",
 			_selectByIndex = {
 				active: false,
@@ -44,7 +45,6 @@ define(["esri/map",
 		});
 
 		$(document).ready(function(){
-			Helper.resetLayout();
 			$(".loader").fadeIn();
 		});
 
@@ -69,6 +69,9 @@ define(["esri/map",
 
 			if (urlObject.query.edit || urlObject.query.edit === "") {
 				_isBuilder = true;
+			}
+			if (urlObject.query.embed || urlObject.query.embed === "") {
+				_isEmbed = true;
 			}
 
 			//is an appid specified - if so read json from there
@@ -120,6 +123,15 @@ define(["esri/map",
 				blogData: new BlogData(_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage),
 				blog: null
 			}
+
+			if(_isEmbed){
+				$("#banner").hide();
+				$("#blog-wrapper").css({
+					"height": "50%",
+					"width": "100%"
+				}).removeClass("region-left").addClass("region-bottom");
+			}
+			Helper.resetLayout();
 
 			checkCredentials();
 		}
