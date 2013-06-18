@@ -361,8 +361,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item. All settings will be saved when the blog post is saved.</h5>\
 						<div class="home-state map-state-item">\
 							Home Position \
-							<button class="btn btn-mini btn-primary map-state-save home-extent" type="button">Save</button>\
-							<button class="btn btn-mini map-state-show home-extent" type="button">Show</button> \
+							<div class="btn-group  map-state-ctrl">\
+								<button class="btn btn-mini map-state-show home-extent" type="button"><i class="icon-eye-open"></i></button>\
+								<button class="btn btn-mini map-state-save home-extent" type="button">Save</button>\
+							</div>\
 						</div>\
 					</div>'
 				);
@@ -381,10 +383,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					if($(".temp.map-state-manager .map-state-links-wrapper").length > 0){
 						$(".temp.map-state-manager .map-state-links-wrapper").append('\
 							<div class="link-state map-state-item" data-link="' + item + '">\
-								"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>" \
-								<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + item + '" type="button">Save</button>\
-								<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + item + '" type="button"><i class="icon-remove"></i></button>\
-								<button class="btn btn-mini map-state-show link-state" data-link="' + item + '" type="button">Show</button> \
+								"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>"\
+								<div class="btn-group  map-state-ctrl">\
+									<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + item + '" type="button"><i class="icon-eye-open"></i></button>\
+									<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + item + '" type="button"><i class="icon-trash"></i></button>\
+									<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + item + '" type="button">Save</button>\
+								</div>\
 							</div>\
 						');
 					}
@@ -393,10 +397,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<div class="map-state-links-wrapper">\
 								<h6>Text Links</h6>\
 								<div class="link-state map-state-item" data-link="' + item + '">\
-									"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>" \
-									<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + item + '" type="button">Save</button>\
-									<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + item + '" type="button"><i class="icon-remove"></i></button>\
-									<button class="btn btn-mini map-state-show link-state" data-link="' + item + '" type="button">Show</button> \
+									"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>"\
+									<div class="btn-group  map-state-ctrl">\
+										<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + item + '" type="button"><i class="icon-eye-open"></i></button>\
+										<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + item + '" type="button"><i class="icon-trash"></i></button>\
+										<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + item + '" type="button">Save</button>\
+									</div>\
 								</div>\
 							</div>\
 						');
@@ -622,9 +628,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							$(".temp.map-state-manager .map-state-links-wrapper").append('\
 							<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 									"<p class="text-string">' + selectedText + '</p>" \
-									<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
-									<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-remove"></i></button>\
-									<button class="btn btn-mini map-state-show link-state" data-link="' + _mapStateLinkIndex + '" type="button">Show</button> \
+									<div class="btn-group  map-state-ctrl">\
+										<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-eye-open"></i></button>\
+										<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-trash"></i></button>\
+										<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
+									</div>\
 								</div>\
 							');
 						}
@@ -634,9 +642,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 									<h6>Text Links</h6>\
 									<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 										"<p class="text-string">' + selectedText + '</p>" \
-										<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
-										<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-remove"></i></button>\
-										<button class="btn btn-mini map-state-show link-state" data-link="' + _mapStateLinkIndex + '" type="button">Show</button> \
+										<div class="btn-group  map-state-ctrl">\
+											<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-eye-open"></i></button>\
+											<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-trash"></i></button>\
+											<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
+										</div>\
 									</div>\
 								</div>\
 							');
@@ -1061,6 +1071,17 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						$(this).data("wysihtml5").editor.composer.setValue(newStr);
 					}
 				});
+				delete _tempDataAttr.textLinks[index];
+				if($(".link-state.map-state-item").length > 1){
+					$(".link-state.map-state-item").each(function(){
+						if($(this).attr("data-link") == index){
+							$(this).remove();
+						}
+					});
+				}
+				else{
+					$(".temp.map-state-manager .map-state-links-wrapper").remove();
+				}
 			}
 
 			function toggleVisibleLayers(visibleLayers)

@@ -123,12 +123,16 @@ textarea.temp{
 	margin-bottom: 15px;
 }
 
-.temp.map-state-manager .map-state-save{
+/*.temp.map-state-manager .map-state-save{
 	float: right;
 }
 
 .temp.map-state-manager .map-state-show, .temp.map-state-manager .map-state-remove{
 	margin-right: 5px;
+	float: right;
+}*/
+
+.btn-group.map-state-ctrl{
 	float: right;
 }
 
