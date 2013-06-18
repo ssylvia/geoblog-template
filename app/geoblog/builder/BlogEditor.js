@@ -31,6 +31,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				_homeExtent = false,
 				_tempDataAttr;
 
+			dojo.connect(map,"onExtentChange",function(){
+				$(".map-state-manager .map-state-save").each(function(){
+					$(this).html('Save');
+				});
+			});
+
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,blogDataAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
 				$(selector).append('\
@@ -363,6 +369,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				$(".map-state-save.home-extent").click(function(){
 					_homeExtent = getMapState();
+					$(this).html('Save <i class="icon-ok"></i>');
 				});
 
 				$(".map-state-show.home-extent").click(function(){
@@ -395,6 +402,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 					$(".map-state-save.link-state").last().click(function(){
 						_tempDataAttr.textLinks[$(this).attr("data-link")].mapState = getMapState();
+						$(this).html('Save <i class="icon-ok"></i>');
 					});
 
 					$(".map-state-show.link-state").last().click(function(){
@@ -632,6 +640,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 						$(".map-state-save.link-state").last().click(function(){
 							_tempDataAttr.textLinks[$(this).attr("data-link")].mapState = getMapState();
+							$(this).html('Save <i class="icon-ok"></i>');
 						});
 
 						$(".map-state-show.link-state").last().click(function(){
