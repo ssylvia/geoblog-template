@@ -498,6 +498,25 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					"font-styles": false,
 					"image": false,
 					"color": true,
+					events: {
+						change: function(){
+							var dataLinks = [];
+							$(".temp.blog-post-text").each(function(){
+								var splitArray = $(this).val().split("\"");
+								for (i in splitArray){
+									if(splitArray[i].search("data-map-state-link") >= 0){
+										dataLinks.push(splitArray[parseFloat(i) + 1]);
+									}
+								}
+								$(".link-state.map-state-item").each(function(){
+									if($.inArray($(this).attr("data-link"),dataLinks) < 0){
+										$(this).remove();
+										delete _tempDataAttr.textLinks[$(this).attr("data-link")];
+									}
+								});
+							});
+						}
+					},
 					toolbar: {
 						code: function(locale,options){
 							return '<li><a class="btn add-map-position-link" href="javascript:;" unselectable="on"><i class="icon-globe"></i> Link map position</li>'
