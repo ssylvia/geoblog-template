@@ -383,6 +383,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<div class="link-state map-state-item" data-link="' + item + '">\
 								"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>" \
 								<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + item + '" type="button">Save</button>\
+								<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + item + '" type="button"><i class="icon-remove"></i></button>\
 								<button class="btn btn-mini map-state-show link-state" data-link="' + item + '" type="button">Show</button> \
 							</div>\
 						');
@@ -394,6 +395,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 								<div class="link-state map-state-item" data-link="' + item + '">\
 									"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>" \
 									<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + item + '" type="button">Save</button>\
+									<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + item + '" type="button"><i class="icon-remove"></i></button>\
 									<button class="btn btn-mini map-state-show link-state" data-link="' + item + '" type="button">Show</button> \
 								</div>\
 							</div>\
@@ -407,6 +409,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 					$(".map-state-show.link-state").last().click(function(){
 						showMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
+					});
+
+					$(".map-state-remove.link-state").last().click(function(){
+						removeTextLink($(this).attr("data-link"));
 					});
 
 					if(item >= _mapStateLinkIndex){
@@ -617,6 +623,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 									"<p class="text-string">' + selectedText + '</p>" \
 									<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
+									<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-remove"></i></button>\
 									<button class="btn btn-mini map-state-show link-state" data-link="' + _mapStateLinkIndex + '" type="button">Show</button> \
 								</div>\
 							');
@@ -628,6 +635,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 									<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 										"<p class="text-string">' + selectedText + '</p>" \
 										<button class="btn btn-mini btn-primary map-state-save link-state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
+										<button class="btn btn-mini btn-danger map-state-remove link-state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-remove"></i></button>\
 										<button class="btn btn-mini map-state-show link-state" data-link="' + _mapStateLinkIndex + '" type="button">Show</button> \
 									</div>\
 								</div>\
@@ -1040,6 +1048,19 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						"wkid":mapState.extent.spatialReference.wkid}
 					});
 				map.setExtent(extent);
+			}
+
+			function removeTextLink(index)
+			{
+				var dataStr = ('<span data-map-state-link="' + index + '" class="map-state-link">');
+				$(".temp.blog-post-text").each(function(){
+					var valText = $(this).data("wysihtml5").editor.composer.getValue();
+					if(valText.search(dataStr) >= 0){
+						var splitStr = valText.split(dataStr);
+						var newStr = splitStr[0] + splitStr[1].replace('</span>','');
+						$(this).data("wysihtml5").editor.composer.setValue(newStr);
+					}
+				});
 			}
 
 			function toggleVisibleLayers(visibleLayers)

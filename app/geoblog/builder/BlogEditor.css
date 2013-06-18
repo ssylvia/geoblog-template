@@ -127,7 +127,7 @@ textarea.temp{
 	float: right;
 }
 
-.temp.map-state-manager .map-state-show{
+.temp.map-state-manager .map-state-show, .temp.map-state-manager .map-state-remove{
 	margin-right: 5px;
 	float: right;
 }
