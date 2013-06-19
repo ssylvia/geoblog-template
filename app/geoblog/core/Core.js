@@ -709,7 +709,7 @@ define(["esri/map",
 				$("#blog-sizer").show();
 			}
 			if(app.blogSizer){
-				app.blogSizer.comstraints();
+				app.blogSizer.constraints();
 			}
 
 			//Set embedable content to fill width of blog with a 16:9 ratio
