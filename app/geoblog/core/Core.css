@@ -5,7 +5,6 @@ html, body, #application-window{
 #blog-wrapper{
 	height: 100%;
 	width: 60%;
-	min-width: 400px;
 }
 
 #blog{
@@ -105,4 +104,18 @@ html, body, #application-window{
 /* Fix tooltip position */
 #blog .tooltip{
 	position: fixed;
+}
+
+#blog-sizer{
+	display: none;
+	position: absolute;
+	background-color: #fff;
+	top: 50%;
+	margin-top: -15px;
+	width: 30px;
+	height: 30px;
+	border-radius: 0 15px 15px 0; 
+	line-height: 2;
+	z-index: 100;
+	cursor: move;
 }

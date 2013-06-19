@@ -287,6 +287,32 @@ define(["esri/map",
 			$(".initExtentButton").click(function(){
 				app.map.setExtent(app.blog.getHomeExtent());
 			});
+
+			//Initialize blog resizer
+			app.blogSizer = new dojo.dnd.move.constrainedMoveable(dojo.byId("blog-sizer"),{
+				constraints: blogSizerBoundingBox
+			});
+
+			dojo.connect(app.blogSizer,"onMove",function(mover,pos){
+				$("#blog-wrapper").css("width",pos.l);
+				Helper.resetLayout();
+				resizeBlogElements();
+			});
+
+			dojo.connect(app.blogSizer,"onMoveStop",function(mover,pos){
+				app.map.resize();
+			});
+		}
+
+		function blogSizerBoundingBox()
+		{
+			var bb = {
+				t: ($("#content").height() / 2),
+				l: $("#blog-navigation").width() + 400,
+				h: 0,
+				w: $("#content").width() - $("#blog-navigation").width() - 800
+			}
+			return bb;
 		}
 
 		function loadBlog()
@@ -674,6 +700,18 @@ define(["esri/map",
 
 		function resizeBlogElements()
 		{
+			//set position of blog resizer and display
+			$("#blog-sizer").css({
+				"left": $("#map").position().left,
+				"top": "50%"
+			});			
+			if(!_isEmbed && !$("#blog-sizer").is(":visible")){
+				$("#blog-sizer").show();
+			}
+			if(app.blogSizer){
+				app.blogSizer.comstraints();
+			}
+
 			//Set embedable content to fill width of blog with a 16:9 ratio
 			$(".blog-post-embed-wrapper iframe").height($(".blog-post-embed-wrapper iframe").width() * 0.563);
 
