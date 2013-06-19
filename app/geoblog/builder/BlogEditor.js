@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onSave,onDiscard)
+		return function BlogEditor(selector,map,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onEditStart,onSave,onDiscard)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -272,6 +272,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 			function prepareEditorState(element)
 			{
+				if(onEditStart){
+					onEditStart();
+				}
+				
 				var newPost = true,
 					data,
 					delayedPost,
@@ -663,6 +667,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 						$(".map-state-show.link-state").last().click(function(){
 							showMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
+						});
+
+						$(".map-state-remove.link-state").last().click(function(){
+							removeTextLink($(this).attr("data-link"));
 						});
 
 						++_mapStateLinkIndex;

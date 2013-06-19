@@ -5,7 +5,7 @@ html, body, #application-window{
 #blog-wrapper{
 	height: 100%;
 	width: 60%;
-	box-shadow:3px 3px 6px 0px #666;
+	box-shadow:4px 3px 6px 0px #333;
 	z-index: 2;
 }
 
@@ -118,7 +118,7 @@ html, body, #application-window{
 	height: 30px;
 	font-size: 14px;
 	border-radius: 0 15px 15px 0;
-	box-shadow:3px 3px 6px 0px #666;
+	box-shadow:4px 3px 6px 0px #333;
 	line-height: 2.4;
 	z-index: 100;
 	cursor: w-resize;

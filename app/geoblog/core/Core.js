@@ -385,7 +385,11 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(status,blog,geo,position){
+					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(){
+						if(!_isEmbed && $("#blog-sizer").is(":visible")){
+							$("#blog-sizer").hide();
+						}
+					},function(status,blog,geo,position){
 						var graphic,
 							pt,
 							adds,
@@ -417,6 +421,9 @@ define(["esri/map",
 							$(_blogSelector).mCustomScrollbar("scrollTo","bottom");
 							$(".loader").fadeOut();
 						});
+						if(!_isEmbed && !$("#blog-sizer").is(":visible")){
+							$("#blog-sizer").show();
+						}
 					},function(index){
 						_selectByIndex = {
 							active: true,
@@ -426,6 +433,9 @@ define(["esri/map",
 							$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + ($(".geoblog-post").length - 1) + ")");
 						}
 						selectPostByIndex();
+						if(!_isEmbed && !$("#blog-sizer").is(":visible")){
+							$("#blog-sizer").show();
+						}
 					});
 				});
 
