@@ -162,3 +162,8 @@ textarea.temp{
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.modal h3{
+	font-size: 18px;
+	font-weight: bold;
+}

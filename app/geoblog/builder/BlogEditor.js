@@ -275,7 +275,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				if(onEditStart){
 					onEditStart();
 				}
-				
+
 				var newPost = true,
 					data,
 					delayedPost,
@@ -366,8 +366,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						<div class="home-state map-state-item">\
 							Home Position \
 							<div class="btn-group  map-state-ctrl">\
-								<button class="btn btn-mini map-state-show home-extent" type="button"><i class="icon-eye-open"></i></button>\
-								<button class="btn btn-mini map-state-save home-extent" type="button">Save</button>\
+								<button class="btn btn-mini map-state-date home-extent" title="Choose time stamp" type="button"><i class="icon-calendar"></i></button>\
+								<button class="btn btn-mini map-state-show home-extent" title="Preview map state" type="button"><i class="icon-eye-open"></i></button>\
+								<button class="btn btn-mini map-state-save home-extent" title="Save map state type="button">Save</button>\
 							</div>\
 						</div>\
 					</div>'
@@ -380,6 +381,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				$(".map-state-show.home-extent").click(function(){
 					showMapState(_homeExtent);
+				});
+
+				$(".map-state-date.home-extent").click(function(){
+					getMapStateTime();
 				});
 
 				for(item in _tempDataAttr.textLinks){
@@ -883,6 +888,38 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				});
 
 				return escape(HTML);
+			}
+
+			function getMapStateTime(date)
+			{
+				if($("#map-state-blog-picker").length === 0){
+					$("body").append('\
+						<div id="map-state-blog-picker" class="modal hide">\
+							<div class="modal-header">\
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+								<h3>Choose time stamp</h3>\
+							</div>\
+							<div class="modal-body">\
+								<div class="input-append date form_datetime">\
+									<input class="temp map-state-date" size="20" type="text" value="'+ getTimeStamp(new Date()) +'" readonly>\
+									<span class="add-on"><i class="icon-calendar"></i></span>\
+								</div>\
+							</div>\
+							<div class="modal-footer">\
+								<button type="button" class="btn" data-dismiss="modal">Cancel</button>\
+								<button type="button" class="btn btn-primary save-time-stamp" data-dismiss="modal">Save time stamp</button>\
+							</div>\
+						</div>\
+					');
+					$(".form_datetime").last().datetimepicker({
+						format: "dd MM yyyy HH:ii p",
+						showMeridian: true,
+						autoclose: true,
+						todayBtn: true,
+						pickerPosition: "bottom-left"
+					});
+				}
+				$("#map-state-blog-picker").modal();
 			}
 
 			function getPostDate()
