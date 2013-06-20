@@ -366,7 +366,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						<div class="home-state map-state-item">\
 							Home Position \
 							<div class="btn-group  map-state-ctrl">\
-								<button class="btn btn-mini map-state-date home-extent" title="Choose time stamp" type="button"><i class="icon-calendar"></i></button>\
+								<button class="btn btn-mini map-state-date home-extent" title="Set map state time stamp" type="button"><i class="icon-calendar"></i></button>\
 								<button class="btn btn-mini map-state-show home-extent" title="Preview map state" type="button"><i class="icon-eye-open"></i></button>\
 								<button class="btn btn-mini map-state-save home-extent" title="Save map state type="button">Save</button>\
 							</div>\
@@ -375,7 +375,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				);
 
 				$(".map-state-save.home-extent").click(function(){
-					_homeExtent = getMapState();
+					_homeExtent = getMapState(_homeExtent);
 					$(this).html('Save <i class="icon-ok"></i>');
 				});
 
@@ -384,7 +384,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				});
 
 				$(".map-state-date.home-extent").click(function(){
-					getMapStateTime();
+					getMapStateTime(_homeExtent);
 				});
 
 				for(item in _tempDataAttr.textLinks){
@@ -394,6 +394,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<div class="link-state map-state-item" data-link="' + item + '">\
 								"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>"\
 								<div class="btn-group  map-state-ctrl">\
+									<button class="btn btn-mini map-state-date link-state" title="Set map state time stamp" data-link="' + item + '" type="button"><i class="icon-calendar"></i></button>\
 									<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + item + '" type="button"><i class="icon-eye-open"></i></button>\
 									<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + item + '" type="button"><i class="icon-trash"></i></button>\
 									<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + item + '" type="button">Save</button>\
@@ -408,6 +409,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 								<div class="link-state map-state-item" data-link="' + item + '">\
 									"<p class="text-string">' + _tempDataAttr.textLinks[item].text + '</p>"\
 									<div class="btn-group  map-state-ctrl">\
+										<button class="btn btn-mini map-state-date link-state" title="Set map state time stamp" data-link="' + item + '" type="button"><i class="icon-calendar"></i></button>\
 										<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + item + '" type="button"><i class="icon-eye-open"></i></button>\
 										<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + item + '" type="button"><i class="icon-trash"></i></button>\
 										<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + item + '" type="button">Save</button>\
@@ -418,7 +420,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 
 					$(".map-state-save.link-state").last().click(function(){
-						_tempDataAttr.textLinks[$(this).attr("data-link")].mapState = getMapState();
+						_tempDataAttr.textLinks[$(this).attr("data-link")].mapState = getMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
 						$(this).html('Save <i class="icon-ok"></i>');
 					});
 
@@ -428,6 +430,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 					$(".map-state-remove.link-state").last().click(function(){
 						removeTextLink($(this).attr("data-link"));
+					});
+
+					$(".map-state-date.link-state").click(function(){
+						getMapStateTime(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
 					});
 
 					if(item >= _mapStateLinkIndex){
@@ -638,6 +644,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 									"<p class="text-string">' + selectedText + '</p>" \
 									<div class="btn-group  map-state-ctrl">\
+										<button class="btn btn-mini map-state-date link-state" title="Set map state time stamp" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-calendar"></i></button>\
 										<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-eye-open"></i></button>\
 										<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-trash"></i></button>\
 										<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
@@ -652,6 +659,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 									<div class="link-state map-state-item" data-link="' + _mapStateLinkIndex + '">\
 										"<p class="text-string">' + selectedText + '</p>" \
 										<div class="btn-group  map-state-ctrl">\
+											<button class="btn btn-mini map-state-date link-state" title="Set map state time stamp" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-calendar"></i></button>\
 											<button class="btn btn-mini map-state-show link-state" title="Preview map state" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-eye-open"></i></button>\
 											<button class="btn btn-mini map-state-remove link-state" title="Remove text link" data-link="' + _mapStateLinkIndex + '" type="button"><i class="icon-trash"></i></button>\
 											<button class="btn btn-mini map-state-save link-state" title="Save map state" data-link="' + _mapStateLinkIndex + '" type="button">Save</button>\
@@ -676,6 +684,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 						$(".map-state-remove.link-state").last().click(function(){
 							removeTextLink($(this).attr("data-link"));
+						});
+
+						$(".map-state-date.link-state").click(function(){
+							getMapStateTime(_tempDataAttr.textLinks[$(this).attr("data-link")].mapStat);
 						});
 
 						++_mapStateLinkIndex;
@@ -890,8 +902,16 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				return escape(HTML);
 			}
 
-			function getMapStateTime(date)
+			function getMapStateTime(currentState)
 			{
+				var time;
+				if(currentState && currentState.timeStamp){
+					time = currentState.timeStamp;
+				}
+				else{
+					time = getPostDate();
+				}
+
 				if($("#map-state-blog-picker").length === 0){
 					$("body").append('\
 						<div id="map-state-blog-picker" class="modal hide">\
@@ -900,13 +920,15 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 								<h3>Choose time stamp</h3>\
 							</div>\
 							<div class="modal-body">\
+								<p>Choose the time stamp associated with this map state. When this map stated is selected the map will use this time to set all time-enabled layers in your webmap.</p>\
+								<br>\
 								<div class="input-append date form_datetime">\
-									<input class="temp map-state-date" size="20" type="text" value="'+ getTimeStamp(new Date()) +'" readonly>\
+									<input class="temp map-state-date" size="20" type="text" value="'+ getTimeStamp(new Date(time)) +'" readonly>\
 									<span class="add-on"><i class="icon-calendar"></i></span>\
 								</div>\
 							</div>\
 							<div class="modal-footer">\
-								<button type="button" class="btn" data-dismiss="modal">Cancel</button>\
+								<button type="button" class="btn cancel-time-stamp" data-dismiss="modal">Cancel</button>\
 								<button type="button" class="btn btn-primary save-time-stamp" data-dismiss="modal">Save time stamp</button>\
 							</div>\
 						</div>\
@@ -920,6 +942,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					});
 				}
 				$("#map-state-blog-picker").modal();
+
+				$("#map-state-blog-picker .save-time-stamp").last().click(function(){
+					var date = new Date($(".temp.map-state-date").last().val());
+					currentState.timeStamp = date.valueOf();
+				});
 			}
 
 			function getPostDate()
@@ -928,12 +955,22 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				return date.valueOf();
 			}
 
-			function getMapState()
+			function getMapState(currentState)
 			{
+				var time;
+
+				if(currentState && currentState.timeStamp){
+					var time = currentState.timeStamp;
+				}
+				else{
+					var time = getPostDate();
+				}
+
 				var mapState = {
 					extent: map.extent.toJson(),
 					visibleLayers: getVisibleLayers(),
-					infoWindow: getInfoWindowFeature()
+					infoWindow: getInfoWindowFeature(),
+					timeStamp: time
 				};
 
 				return mapState;
