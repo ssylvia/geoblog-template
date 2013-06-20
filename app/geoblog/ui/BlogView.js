@@ -14,6 +14,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		{
 			var _mapTips = null,
 				_homeExtent = null;
+				_homeMapState = null;
 
 			this.update = function(blogPosts) 
 			{
@@ -35,6 +36,11 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				return _homeExtent;
 			}
 
+			this.goToHomeState = function()
+			{
+				goToMapState(_homeMapState.mapState,_homeMapState.displayPoints,_homeMapState.homeState,_homeMapState.time);
+			}
+
 			this.getMultiTips = function()
 			{
 				return _mapTips;
@@ -48,7 +54,8 @@ define(["storymaps/utils/multiTips/MultiTips"],
 						selectedGrp = graphics[index],
 						mapState = $.parseJSON(selectedGrp.attributes[mapAttr]),
 						data = $.parseJSON(selectedGrp.attributes[dataAttr]),
-						speed = 200;
+						speed = 200,
+						defaultTime = selectedGrp.attributes[timeAttr];
 
 					//Set Blog State
 					elements.removeClass("active");
@@ -72,18 +79,17 @@ define(["storymaps/utils/multiTips/MultiTips"],
 
 					$(".map-state-link").unbind("click");
 					$(".map-state-link").click(function(){
-						goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints);
+						goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
 					});
 
-					//Set TimeExtent
-					if(cumulativeTime){
-						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(selectedGrp.attributes[timeAttr])));
-					}
-					else{
-						map.setTimeExtent(new esri.TimeExtent(new Date(selectedGrp.attributes[timeAttr]),new Date(selectedGrp.attributes[timeAttr])));
-					}
+					goToMapState(mapState,alwaysDisplayPoints,true,defaultTime);
 
-					goToMapState(mapState,alwaysDisplayPoints,true);
+					_homeMapState = {
+						mapState: mapState,
+						displayPoints: alwaysDisplayPoints,
+						homeState: true,
+						time: defaultTime
+					}
 
 					$(".post-index-bullet").removeClass("active");
 					$(".post-index-bullet").eq(index).addClass("active");
@@ -115,7 +121,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				}
 			}
 
-			function goToMapState(mapState,alwaysDisplayPoints,homeExtent)
+			function goToMapState(mapState,alwaysDisplayPoints,homeExtent,defaultTime)
 			{
 				map.infoWindow.clearFeatures();
 				map.infoWindow.hide();
@@ -163,6 +169,19 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				}
 
 				toggleVisibleLayers(mapState.visibleLayers);
+
+				var timeStamp = defaultTime;
+				if(mapState.timeStamp){
+					timeStamp = mapState.timeStamp;
+				}
+
+				//Set TimeExtent
+				if(cumulativeTime){
+					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(timeStamp)));
+				}
+				else{
+					map.setTimeExtent(new esri.TimeExtent(new Date(timeStamp),new Date(timeStamp)));
+				}
 
 				if(alwaysDisplayPoints){
 					blogLayer.show();

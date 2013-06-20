@@ -5,7 +5,7 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "9d6a0d8bf65042c184983278e8965242",
+			webmap: "cffc475ae9d74d41aa21138c267ba9f5",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
 			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts

@@ -432,7 +432,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						removeTextLink($(this).attr("data-link"));
 					});
 
-					$(".map-state-date.link-state").click(function(){
+					$(".map-state-date.link-state").last().click(function(){
 						getMapStateTime(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
 					});
 
@@ -686,8 +686,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 							removeTextLink($(this).attr("data-link"));
 						});
 
-						$(".map-state-date.link-state").click(function(){
-							getMapStateTime(_tempDataAttr.textLinks[$(this).attr("data-link")].mapStat);
+						$(".map-state-date.link-state").last().click(function(){
+							getMapStateTime(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
 						});
 
 						++_mapStateLinkIndex;
@@ -912,40 +912,48 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					time = getPostDate();
 				}
 
-				if($("#map-state-blog-picker").length === 0){
-					$("body").append('\
-						<div id="map-state-blog-picker" class="modal hide">\
-							<div class="modal-header">\
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
-								<h3>Choose time stamp</h3>\
-							</div>\
-							<div class="modal-body">\
-								<p>Choose the time stamp associated with this map state. When this map stated is selected the map will use this time to set all time-enabled layers in your webmap.</p>\
-								<br>\
-								<div class="input-append date form_datetime">\
-									<input class="temp map-state-date" size="20" type="text" value="'+ getTimeStamp(new Date(time)) +'" readonly>\
-									<span class="add-on"><i class="icon-calendar"></i></span>\
-								</div>\
-							</div>\
-							<div class="modal-footer">\
-								<button type="button" class="btn cancel-time-stamp" data-dismiss="modal">Cancel</button>\
-								<button type="button" class="btn btn-primary save-time-stamp" data-dismiss="modal">Save time stamp</button>\
+				$("body").append('\
+					<div id="map-state-blog-picker" class="modal hide">\
+						<div class="modal-header">\
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+							<h3>Choose time stamp</h3>\
+						</div>\
+						<div class="modal-body">\
+							<p>Choose the time stamp associated with this map state. When this map state is selected the map will use this time to set all time-enabled layers in your webmap.</p>\
+							<br>\
+							<div class="input-append date form_datetime">\
+								<input class="temp map-state-date" size="20" type="text" value="'+ getTimeStamp(new Date(time)) +'" readonly>\
+								<span class="add-on"><i class="icon-calendar"></i></span>\
 							</div>\
 						</div>\
-					');
-					$(".form_datetime").last().datetimepicker({
-						format: "dd MM yyyy HH:ii p",
-						showMeridian: true,
-						autoclose: true,
-						todayBtn: true,
-						pickerPosition: "bottom-left"
-					});
-				}
+						<div class="modal-footer">\
+							<button type="button" class="btn cancel-time-stamp" data-dismiss="modal">Cancel</button>\
+							<button type="button" class="btn btn-primary save-time-stamp" data-dismiss="modal">Save time stamp</button>\
+						</div>\
+					</div>\
+				');
+				var calendar = $(".form_datetime").last();
+				calendar.datetimepicker({
+					format: "dd MM yyyy HH:ii p",
+					showMeridian: true,
+					autoclose: true,
+					todayBtn: true,
+					pickerPosition: "bottom-left"
+				});
 				$("#map-state-blog-picker").modal();
 
 				$("#map-state-blog-picker .save-time-stamp").last().click(function(){
 					var date = new Date($(".temp.map-state-date").last().val());
 					currentState.timeStamp = date.valueOf();
+					console.log(currentState);
+					console.log(_tempDataAttr);
+					calendar.datetimepicker("remove");
+					$("#map-state-blog-picker").modal("hide").remove();
+				});
+
+				$("#map-state-blog-picker .cancel-time-stamp").last().click(function(){
+					calendar.datetimepicker("remove");
+					$("#map-state-blog-picker").modal("hide").remove();
 				});
 			}
 
@@ -1125,6 +1133,19 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 				}
 
 				toggleVisibleLayers(mapState.visibleLayers);
+
+				var timeStamp = getPostDate();
+				if(mapState.timeStamp){
+					timeStamp = mapState.timeStamp;
+				}
+
+				//Set TimeExtent
+				if(cumulativeTime){
+					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(timeStamp)));
+				}
+				else{
+					map.setTimeExtent(new esri.TimeExtent(new Date(timeStamp),new Date(timeStamp)));
+				}
 
 				if(alwaysDisplayPoints){
 					_blogLayer.show();

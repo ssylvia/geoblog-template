@@ -285,7 +285,8 @@ define(["esri/map",
 			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
 			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
 			$(".initExtentButton").click(function(){
-				app.map.setExtent(app.blog.getHomeExtent());
+				//app.map.setExtent(app.blog.getHomeExtent());
+				app.blog.goToHomeState();
 			});
 
 			//Initialize blog resizer
