@@ -5,11 +5,13 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "cffc475ae9d74d41aa21138c267ba9f5",
+			webmap: "9d6a0d8bf65042c184983278e8965242",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
 			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/CSV_Starter/FeatureServer/0",
+			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/geoblog1/FeatureServer/0",
+			//Start post object ID
+			post: null,
 			//Allow deletes from app
 			allowDeletes: true,
 			//Height of feature service icon

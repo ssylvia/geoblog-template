@@ -10,9 +10,10 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogData(isBuilder,draftVisible,hiddenVisible,orderBy,queryCount)
+		return function BlogData(isBuilder,draftVisible,hiddenVisible,orderBy,queryCount,firstPostOnLoad)
 		{
 			var _this = this,
+				_firstLoad = false,
 				_featureLayer,
 				_featureIds,
 				_upddateFromSave = false,
@@ -78,6 +79,13 @@ define([],
 			{
 				_selctedIndex = null;
 
+				if(!_firstLoad && firstPostOnLoad){
+					if($.inArray(parseFloat(firstPostOnLoad),_featureIds) >= 0){
+						_queryIndex = $.inArray(parseFloat(firstPostOnLoad),_featureIds);
+					}
+				}
+				_firstLoad = true;
+
 				if (_upddateFromSave){
 					if(typeof _upddateFromSave === 'number' && isFinite(_upddateFromSave)){
 						_startPosition = _upddateFromSave;
@@ -113,6 +121,8 @@ define([],
 					$(".page-button.page-up").show();
 					$(".page-button.page-down").show();
 				}
+
+				console.log(_queryIndex);
 
 				var query = new esri.tasks.Query();
 					query.returnGeometry = true;
