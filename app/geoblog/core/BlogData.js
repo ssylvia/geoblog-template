@@ -122,8 +122,6 @@ define([],
 					$(".page-button.page-down").show();
 				}
 
-				console.log(_queryIndex);
-
 				var query = new esri.tasks.Query();
 					query.returnGeometry = true;
 					query.outFields = ["*"];
