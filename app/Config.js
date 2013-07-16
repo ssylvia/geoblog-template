@@ -5,11 +5,11 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "9d6a0d8bf65042c184983278e8965242",
+			webmap: "6ee16c57a9a6404e941a10c91567c0dd",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
 			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/geoblog1/FeatureServer/0",
+			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/arcgis/rest/services/AmericanDreamProject_Test_Private/FeatureServer/0",
 			//Start post object ID
 			post: null,
 			//Allow deletes from app
@@ -17,7 +17,7 @@ define([],
 			//Height of feature service icon
 			iconHeight: 32,
 			//Feature servide field to sort by
-			sortBy: "FID",
+			sortBy: "time",
 			//Display order of feature service; specfiy "ASC" (ascending) or "DESC" (descending).
 			order: "ASC",
 			//Number of post available per pages (recommend 10 for smaller screens);
@@ -30,6 +30,8 @@ define([],
 			title: "",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
 			subtitle: "",
+			//Enter URL to be used with social media buttons embedded in post. The URL will also be appended with the post object id so make sure query parameter is included
+			socialURL: "",
 			//If the webmap uses Bing Maps data, you will need to provided your Bing Maps Key
 			bingmapskey: "Akt3ZoeZ089qyG3zWQZSWpwV3r864AHStal7Aon21-Fyxwq_KdydAH32LTwhieA8",
 			// Specify a proxy for custom deployment

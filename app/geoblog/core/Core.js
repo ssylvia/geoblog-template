@@ -140,7 +140,12 @@ define(["esri/map",
 					outFields: ["*"]
 				}),
 				blogData: new BlogData(_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage,configOptions.post),
-				blog: null
+				blog: null,
+				shareSettings: {
+					url: configOptions.socialURL || location.origin + location.pathname + "?post=",
+					title: "",
+					summary: "",
+				}
 			}
 
 			checkCredentials();
@@ -228,8 +233,8 @@ define(["esri/map",
 
 		function setupBanner(title,subtitle)
 		{
-			$("#title").html(configOptions.title || title);
-			$("#subtitle").html(configOptions.subtitle || subtitle);
+			$("#title").html(title);
+			$("#subtitle").html(subtitle);
 		}
 
 		function loadMap()
@@ -287,9 +292,16 @@ define(["esri/map",
 		}
 
 		function initializeApp(response)
-		{			
+		{	
+			var title = configOptions.title || response.itemInfo.item.title;
+			var subtitle = configOptions.subtitle || response.itemInfo.item.title;
+			
+			setupBanner(title,subtitle);
+
+			app.shareSettings.title = title;
+			app.shareSettings.sunmary = subtitle;
+			
 			loadBlog();
-			setupBanner(response.itemInfo.item.title,response.itemInfo.item.snippet);
 
 			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
 			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
@@ -327,7 +339,7 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"status","content","time","mapState","data",configOptions.iconHeight,function(){				
+			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){				
 				
 				app.blogData.setBlogElements($(".geoblog-post"));
 

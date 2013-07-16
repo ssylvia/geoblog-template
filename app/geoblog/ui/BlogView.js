@@ -10,10 +10,10 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,blogLayer,cumulativeTime,statusAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
+		return function BlogView(selector,map,blogLayer,cumulativeTime,statusAttr,titleAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
 		{
 			var _mapTips = null,
-				_homeExtent = null;
+				_homeExtent = null,
 				_homeMapState = null;
 
 			this.update = function(blogPosts) 
@@ -25,8 +25,10 @@ define(["storymaps/utils/multiTips/MultiTips"],
 				var editEl = $(selector).children().first();
 
 				dojo.forEach(blogPosts,function(post){
-					createBlogPost(editEl,post.attributes[statusAttr],post.attributes[contentAttr]);
+					createBlogPost(editEl,post.attributes[statusAttr],post.attributes[contentAttr],post.attributes[titleAttr],post.attributes[blogLayer.objectIdField]);
 				});
+
+				stButtons.makeButtons();
 
 				loadCallback();
 			}
@@ -44,6 +46,41 @@ define(["storymaps/utils/multiTips/MultiTips"],
 			this.getMultiTips = function()
 			{
 				return _mapTips;
+			}
+
+			function createBlogPost(editEl,status,blogContent,title,blogId)
+			{
+				var content = unescape(blogContent);
+				
+				var shareTitle = title || app.shareSettings.title;
+				var shareSummary = app.shareSettings.summary;
+				var shareURL = app.shareSettings.url + blogId;
+
+				var elementStr;
+				if(status === "Draft"){
+					elementStr = '<div class="geoblog-post draft-post">'+content+'</div>';
+				}
+				else if(status === "Hidden"){
+					elementStr = '<div class="geoblog-post hidden-post">'+content+'</div>';
+				}
+				else{
+					elementStr = '<div class="geoblog-post">\
+						'+content+'\
+						<div class="blog-post-social-wrapper blog-item">\
+							<span class="st_facebook" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" displayText="Facebook"></span>\
+							<span class="st_twitter" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" st_via="" displayText="Tweet"></span>\
+							<span class="st_googleplus" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" displayText="Google +"></span>\
+							<span class="st_sharethis" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" displayText="Other"></span>\
+						</div>\
+					</div>';
+				}
+
+				if(editEl.length > 0){
+					editEl.before(elementStr);
+				}
+				else{
+					$(selector).append(elementStr);
+				}
 			}
 
 			this.selectPost = function(index,graphics,elements,alwaysDisplayPoints,editing)
@@ -96,29 +133,6 @@ define(["storymaps/utils/multiTips/MultiTips"],
 
 				}
 
-			}
-
-			function createBlogPost(editEl,status,blogContent)
-			{
-				var content = unescape(blogContent);
-
-				var elementStr;
-				if(status === "Draft"){
-					elementStr = '<div class="geoblog-post draft-post">'+content+'</div>';
-				}
-				else if(status === "Hidden"){
-					elementStr = '<div class="geoblog-post hidden-post">'+content+'</div>';
-				}
-				else{
-					elementStr = '<div class="geoblog-post">'+content+'</div>';
-				}
-
-				if(editEl.length > 0){
-					editEl.before(elementStr);
-				}
-				else{
-					$(selector).append(elementStr);
-				}
 			}
 
 			function goToMapState(mapState,alwaysDisplayPoints,homeExtent,defaultTime)

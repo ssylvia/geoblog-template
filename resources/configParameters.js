@@ -60,19 +60,19 @@
       "fieldName": "cumulativeTime",
       "tooltip": "Display all previous blog post points on map",
       "placeHolder": "",
-      "label": "Cumulative Time:"
+      "label": "Cumulative Time"
     },{
       "type": "boolean",
       "fieldName": "allowDeletes",
       "tooltip": "Allow blog post to be deleted from app. Will be fully removed from feature service.",
       "placeHolder": "",
-      "label": "Cumulative Time:"
+      "label": "Allow deletes"
     },{
       "type": "boolean",
       "fieldName": "alwaysDisplayPoints",
       "tooltip": "Always show blog post points on map",
       "placeHolder": "",
-      "label": "Always show blog post points:"
+      "label": "Always show blog post points"
     }]
   }],
     "values":{
