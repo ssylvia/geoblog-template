@@ -5,11 +5,11 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "6ee16c57a9a6404e941a10c91567c0dd",
+			webmap: "9d6a0d8bf65042c184983278e8965242",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
 			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/arcgis/rest/services/AmericanDreamProject_Test_Private/FeatureServer/0",
+			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/geoblog1/FeatureServer/0",
 			//Start post object ID
 			post: null,
 			//Allow deletes from app

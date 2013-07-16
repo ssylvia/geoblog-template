@@ -130,6 +130,11 @@ define(["esri/map",
 			
 			var orderByFields = configOptions.sortBy + " " + configOptions.order;
 
+			var searchStr = "?post=";
+			if(location.search !== ""){
+				searchStr = location.search + "&post=";
+			}
+
 			app = {
 				//Esri map variable
 				map: null,
@@ -142,7 +147,7 @@ define(["esri/map",
 				blogData: new BlogData(_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage,configOptions.post),
 				blog: null,
 				shareSettings: {
-					url: configOptions.socialURL || location.origin + location.pathname + "?post=",
+					url: configOptions.socialURL || location.origin + location.pathname + searchStr,
 					title: "",
 					summary: "",
 				}
