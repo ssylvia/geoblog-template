@@ -163,13 +163,14 @@ define([],
 			function prevPage()
 			{
 				if(_queryIndex != 0){
-					if(_queryIndex - _queryCount < 0){
+					if(_queryIndex - _queryCount < 0){						
+						_startPosition = _queryIndex - 1;
 						_queryIndex = 0;
 					}
 					else{
+						_startPosition = "bottom";
 						_queryIndex-=_queryCount;
 					}
-					_startPosition = "bottom";
 					queryFeatureService();
 				}
 			}
