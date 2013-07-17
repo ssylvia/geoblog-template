@@ -824,9 +824,14 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					}
 					$(".temp.map-state-manager").remove();
 					$(".add-blog-post, .blog-visibility-toggles").show();
+					//Clear temp data
+					_activeEditSession = false;
+					_currentOID = null;
+					_mapStateLinkIndex = 0;
+					_homeExtent = false;
+					_tempDataAttr = null;
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
-					_activeEditSession = false;
 					if(discard && onDiscard){
 						onDiscard(index);
 					}
