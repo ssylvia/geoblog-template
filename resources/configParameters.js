@@ -21,6 +21,12 @@
       "label": "Authorized Editors:"
     },{
       "type": "string",
+      "fieldName": "socialURL",
+      "tooltip": "URL to be used for social media buttons in blog posts",
+      "placeHolder": "http://sample.com/?post=",
+      "label": "URL for Social Media:"
+    },{
+      "type": "string",
       "fieldName": "featureService",
       "tooltip": "Paste feature service url",
       "placeHolder": "",

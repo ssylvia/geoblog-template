@@ -91,6 +91,7 @@ define(["esri/map",
 					load: function(response){
 						if(response.values.title !== undefined){configOptions.title = response.values.title;}
 						if(response.values.subtitle !== undefined){configOptions.subtitle = response.values.subtitle;}
+						if(response.values.socialURL !== undefined){configOptions.socialURL = response.values.socialURL;}
 						if(response.values.webmap !== undefined) {configOptions.webmap = response.values.webmap;}
 						if(response.values.editors !== undefined) {configOptions.authorizedEditors = unescape(response.values.editors).split(",");}
 						if(response.values.featureService !== undefined){configOptions.featureService = response.values.featureService;}
