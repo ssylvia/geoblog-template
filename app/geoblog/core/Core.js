@@ -150,7 +150,7 @@ define(["esri/map",
 				shareSettings: {
 					url: configOptions.socialURL || location.origin + location.pathname + searchStr,
 					title: "",
-					summary: "",
+					summary: ""
 				}
 			}
 

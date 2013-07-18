@@ -1,4 +1,4 @@
-define(["dojo/dom-style", "dojo/dom-construct"], function(domStyle, domConstruct) {
+define(["dojo/dom-style", "dojo/dom-construct","dojo/has"], function(domStyle, domConstruct, has) {
 	/**
 	 * Multi tips
 	 * @class MultiTips
@@ -10,6 +10,10 @@ define(["dojo/dom-style", "dojo/dom-construct"], function(domStyle, domConstruct
 		var settings = null;
 		var forceHidden = false;
 		var events = [];
+		var ieLessThen9 = false;
+		if(has("ie") <= 8){
+			ieLessThen9 = true;
+		}
 	
 		initMultiTips(options);
 		
@@ -241,8 +245,10 @@ define(["dojo/dom-style", "dojo/dom-construct"], function(domStyle, domConstruct
 	
 		function labelUp(scrPt, i, settings, width, height)
 		{
+			var adj = ieLessThen9 ? 10 : 20;
+
 			domStyle.set('multiTip' + i, {
-				top: (scrPt.y - height - 20 - settings.offsetTop) + 'px',
+				top: (scrPt.y - height - adj - settings.offsetTop) + 'px',
 				left: (scrPt.x - (width/2) - 5) + 'px'
 			});
 			
@@ -259,8 +265,10 @@ define(["dojo/dom-style", "dojo/dom-construct"], function(domStyle, domConstruct
 	
 		function labelRight(scrPt, i, settings, width, height)
 		{
+			var adj = ieLessThen9 ? 5 : 10;
+
 			domStyle.set('multiTip' + i, {
-				top: (scrPt.y - 10 - ((height-10) / 2)) + 'px',
+				top: (scrPt.y - adj - ((height-10) / 2)) + 'px',
 				left: (scrPt.x + 10 + settings.offsetSide) + 'px'
 			});
 			
@@ -277,9 +285,12 @@ define(["dojo/dom-style", "dojo/dom-construct"], function(domStyle, domConstruct
 	
 		function labelLeft(scrPt, i, settings, width, height)
 		{
+			var adj = ieLessThen9 ? 5 : 10;
+			var adjLeft = ieLessThen9 ? 10 : 20;
+
 			domStyle.set('multiTip' + i, {
-				top: (scrPt.y - 10 - ((height-10) / 2)) + 'px',
-				left: (scrPt.x - 20 - width - settings.offsetSide) + 'px'
+				top: (scrPt.y - adj - ((height-10) / 2)) + 'px',
+				left: (scrPt.x - adjLeft - width - settings.offsetSide) + 'px'
 			});
 			
 			domStyle.set('arrow' + i, {
