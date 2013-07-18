@@ -62,6 +62,12 @@
       "placeHolder": "10",
       "label": "Posts per page:"
     },{
+      "type": "string",
+      "fieldName": "earliestYear",
+      "tooltip": "Earliest year in time enabled layer",
+      "placeHolder": "1970",
+      "label": "Earliest Year:"
+    },{
       "type": "boolean",
       "fieldName": "cumulativeTime",
       "tooltip": "Display all previous blog post points on map",

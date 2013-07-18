@@ -102,6 +102,7 @@ define(["esri/map",
 						if(response.values.allowDeletes !== undefined) {configOptions.allowDeletes = response.values.allowDeletes;}
 						if(response.values.cumulativeTime !== undefined) {configOptions.cumulativeTime = response.values.cumulativeTime;}
 						if(response.values.alwaysDisplayPoints !== undefined){configOptions.alwaysDisplayPoints = response.values.alwaysDisplayPoints;}
+						if(response.values.earliestYear !== undefined){configOptions.earliestYear = response.values.earliestYear;}
 						createAppVariables();
 					},
 					error: function(response){
@@ -345,7 +346,7 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){				
+			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.earliestYear,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){				
 				
 				app.blogData.setBlogElements($(".geoblog-post"));
 
@@ -413,7 +414,7 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(){
+					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.earliestYear,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(){
 						if(_layout !== "narrow" && $("#blog-sizer").is(":visible")){
 							$("#blog-sizer").hide();
 						}

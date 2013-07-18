@@ -24,6 +24,8 @@ define([],
 			postsPerPage: 10,
 			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post
 			cumulativeTime: true,
+			//Earliest year in time enabled layers
+			earliestYear: "1970",
 			//If true, when a blog post is selected and a point has been set on the map, the point graphic will display even if layer is turned off
 			alwaysDisplayPoints: true,
 			//Enter a title, if no title is specified, the webmap's title is used.

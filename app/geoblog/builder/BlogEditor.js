@@ -10,7 +10,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onEditStart,onSave,onDiscard)
+		return function BlogEditor(selector,map,earliestYear,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onEditStart,onSave,onDiscard)
 		{
 			var _this = this,
 				_mapLayer = new esri.layers.GraphicsLayer(),
@@ -216,7 +216,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					map.infoWindow.hide();
 
 					if(cumulativeTime){
-						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date()));
+						map.setTimeExtent(new esri.TimeExtent(new Date(earliestYear),new Date()));
 					}
 					else{
 						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date()));
@@ -496,7 +496,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					pickerPosition: "bottom-left"
 				}).change(function(){
 					if(cumulativeTime){
-						map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(getPostDate())));
+						map.setTimeExtent(new esri.TimeExtent(new Date(earliestYear),new Date(getPostDate())));
 					}
 					else{
 						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date(getPostDate())));	
@@ -1146,7 +1146,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 
 				//Set TimeExtent
 				if(cumulativeTime){
-					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(timeStamp)));
+					map.setTimeExtent(new esri.TimeExtent(new Date(earliestYear),new Date(timeStamp)));
 				}
 				else{
 					map.setTimeExtent(new esri.TimeExtent(new Date(timeStamp),new Date(timeStamp)));

@@ -10,7 +10,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,blogLayer,cumulativeTime,statusAttr,titleAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
+		return function BlogView(selector,map,blogLayer,earliestYear,cumulativeTime,statusAttr,titleAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
 		{
 			var _mapTips = null,
 				_homeExtent = null,
@@ -191,7 +191,7 @@ define(["storymaps/utils/multiTips/MultiTips"],
 
 				//Set TimeExtent
 				if(cumulativeTime){
-					map.setTimeExtent(new esri.TimeExtent(new Date(0),new Date(timeStamp)));
+					map.setTimeExtent(new esri.TimeExtent(new Date(earliestYear),new Date(timeStamp)));
 				}
 				else{
 					map.setTimeExtent(new esri.TimeExtent(new Date(timeStamp),new Date(timeStamp)));
