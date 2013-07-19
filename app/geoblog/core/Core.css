@@ -108,6 +108,35 @@ html, body, #application-window{
 	position: fixed;
 }
 
+.pager-tab{
+	display: none;
+	position: absolute;
+	text-align: center;
+	width: 200px;
+	left:50%;
+	margin-left: -80px;
+	padding: 5px 0;
+	background-color: #777;
+	color: #fff;
+	cursor: pointer;
+	z-index: 20;
+}
+
+.pager-tab:hover{
+	background-color: #999;
+}
+
+#page-up-tab{
+	border-bottom-left-radius: 5px; 
+	border-bottom-right-radius: 5px; 
+}
+
+#page-down-tab{
+	bottom: 0;
+	border-top-left-radius: 5px; 
+	border-top-right-radius: 5px; 
+}
+
 #blog-sizer{
 	display: none;
 	position: absolute;

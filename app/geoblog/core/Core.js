@@ -588,6 +588,20 @@ define(["esri/map",
 							bottomQuarter: null
 						};
 
+					//Display pager tabs
+					if(scrollTop >= -50 && !$("#page-up-tab").hasClass("disabled")){
+						$("#page-up-tab").slideDown("fast");
+					}
+					else{
+						$("#page-up-tab").slideUp("fast");
+					}
+					if(container.height() + scrollTop - (buffer*4) < 50 && !$("#page-down-tab").hasClass("disabled")){
+						$("#page-down-tab").slideDown("fast");
+					}
+					else{
+						$("#page-down-tab").slideUp("fast");
+					}
+
 					if(scrollTop === 0){
 						selectPosition.top = 0;	
 					}
