@@ -256,7 +256,6 @@ define(["esri/map",
 				app.map = response.map;
 
 				app.map.blogLayer = app.blogLayer
-				app.map.addLayer(app.map.blogLayer);
 
 				app.map.legendLayers = esri.arcgis.utils.getLegendLayers(response);
 
@@ -309,6 +308,8 @@ define(["esri/map",
 			app.shareSettings.sunmary = subtitle;
 			
 			loadBlog();
+			//Add blog layer to map
+			app.map.addLayer(app.map.blogLayer);
 
 			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
 			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
