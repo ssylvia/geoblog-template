@@ -252,10 +252,12 @@ define(["esri/map",
 				}
 			});
 
+			$("#map").attr("webmap",configOptions.webmap);
+
 			mapDeferred.addCallback(function(response){
 				app.map = response.map;
 
-				app.map.blogLayer = app.blogLayer
+				app.map.blogLayer = app.blogLayer;
 
 				app.map.legendLayers = esri.arcgis.utils.getLegendLayers(response);
 
@@ -308,8 +310,6 @@ define(["esri/map",
 			app.shareSettings.sunmary = subtitle;
 			
 			loadBlog();
-			//Add blog layer to map
-			app.map.addLayer(app.map.blogLayer);
 
 			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
 			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
@@ -331,6 +331,9 @@ define(["esri/map",
 
 			dojo.connect(app.blogSizer,"onMoveStop",function(mover,pos){
 				app.map.resize();
+				$(".map").not("#map").each(function(){
+					$(this).data("map").resize();
+				});
 			});
 		}
 
@@ -347,7 +350,7 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView(_blogSelector,app.map,app.map.blogLayer,configOptions.earliestYear,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){				
+			app.blog = new BlogView("#map-wrapper",_blogSelector,app.map,app.map.blogLayer,configOptions.earliestYear,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){				
 				
 				app.blogData.setBlogElements($(".geoblog-post"));
 
@@ -415,7 +418,7 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor(_blogSelector,app.map,configOptions.earliestYear,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(){
+					app.editor = new BlogEditor("#map-wrapper",_blogSelector,app.map,configOptions.earliestYear,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(){
 						if(_layout !== "narrow" && $("#blog-sizer").is(":visible")){
 							$("#blog-sizer").hide();
 						}
@@ -756,7 +759,7 @@ define(["esri/map",
 		{
 			//set position of blog resizer and display
 			$("#blog-sizer").css({
-				"left": $("#map").position().left,
+				"left": $("#map-wrapper").position().left,
 				"top": "50%"
 			});			
 			if(_layout !== "narrow" && !$("#blog-sizer").is(":visible")){

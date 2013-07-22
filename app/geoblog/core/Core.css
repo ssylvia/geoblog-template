@@ -6,7 +6,7 @@ html, body, #application-window{
 	height: 100%;
 	width: 60%;
 	box-shadow:4px 3px 6px 0px #333;
-	z-index: 2;
+	z-index: 3;
 }
 
 #blog{
@@ -151,4 +151,17 @@ html, body, #application-window{
 	line-height: 2.4;
 	z-index: 100;
 	cursor: w-resize;
+}
+
+.map{
+	z-index: 0;
+}
+
+#map-blind{
+	background-color: #fff;
+	z-index: 1;
+}
+
+.map.active{
+	z-index: 2;
 }

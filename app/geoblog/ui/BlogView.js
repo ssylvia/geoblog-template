@@ -1,5 +1,5 @@
-define(["storymaps/utils/multiTips/MultiTips"],
-	function(MultiTips)
+define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
+	function(MultiTips,Helper)
 	{
 		/**
 		 * BlogView
@@ -10,11 +10,12 @@ define(["storymaps/utils/multiTips/MultiTips"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogView(selector,map,blogLayer,earliestYear,cumulativeTime,statusAttr,titleAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
+		return function BlogView(mapWrapper,selector,map,blogLayer,earliestYear,cumulativeTime,statusAttr,titleAttr,contentAttr,timeAttr,mapAttr,dataAttr,iconHeight,loadCallback)
 		{
 			var _mapTips = null,
 				_homeExtent = null,
-				_homeMapState = null;
+				_homeMapState = null,
+				_originalMap = map;
 
 			this.update = function(blogPosts) 
 			{
@@ -119,7 +120,9 @@ define(["storymaps/utils/multiTips/MultiTips"],
 						goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
 					});
 
-					goToMapState(mapState,alwaysDisplayPoints,true,defaultTime);
+					arrangeMaps(mapState.webmap).then(function(){
+						goToMapState(mapState,alwaysDisplayPoints,true,defaultTime);
+					});
 
 					_homeMapState = {
 						mapState: mapState,
@@ -250,6 +253,67 @@ define(["storymaps/utils/multiTips/MultiTips"],
 						map.getLayer(id).hide();
 					});
 				}
+			}
+
+			function arrangeMaps(mapId)
+			{
+				var deferred = new dojo.Deferred();
+
+				if(mapId){
+					if($("#map-" + mapId).length > 0){
+						$(".map").removeClass("active");
+						$("#map-" + mapId).addClass("active");
+						map = $("#map-" + mapId).data("map");
+						deferred.resolve();
+					}
+					else{
+						loadNewMap(mapId).then(function(){
+							arrangeMaps(mapId);
+						});
+					}
+				}
+				else{
+					$(".map").removeClass("active");
+					$("#map").addClass("active");
+					map = _originalMap;
+					deferred.resolve();
+				}
+
+				return deferred;
+			}
+
+			function loadNewMap(mapId)
+			{
+				var deferred = new dojo.Deferred();
+
+				$(mapWrapper).append('<div id="map-' + mapId + '" class="map region-center" webmap="' + mapId + '"></div>');
+
+				Helper.resetLayout();
+
+				var mapDeferred = esri.arcgis.utils.createMap(mapId,"map-" + mapId,{
+					mapOptions: {
+						sliderPosition: "top-right"
+					}
+				});
+
+				mapDeferred.addCallback(function(response){
+					var map = response.map;
+
+					$("#map-" + mapId).data("map",map);
+
+					if (map.loaded){
+						deferred.resolve();
+						map.addLayer(blogLayer);
+					}
+					else {
+						dojo.connect(map, "onLoad", function() {
+							deferred.resolve();
+							map.addLayer(blogLayer);
+						});
+					}
+				});
+
+				return deferred;
 			}
 		}
 

@@ -1,5 +1,5 @@
-define(["storymaps/utils/MovableGraphic","dojo/json"],
-	function(MovableGraphic,JSON)
+define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
+	function(MovableGraphic,JSON,Helper)
 	{
 		/**
 		 * BlogEditor
@@ -10,9 +10,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogEditor(selector,map,earliestYear,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onEditStart,onSave,onDiscard)
+		return function BlogEditor(mapWrapper,selector,map,earliestYear,cumulativeTime,alwaysDisplayPoints,allowDeletes,legendToggleSelector,legendContentSelector,onEditStart,onSave,onDiscard)
 		{
 			var _this = this,
+				_originalMap = map,
 				_mapLayer = new esri.layers.GraphicsLayer(),
 				_activeEditSession = false,
 				_hiddenVisible = false,
@@ -36,6 +37,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					$(this).html('Save');
 				});
 			});
+
+			this.test = function(id)
+			{
+				arrangeMaps(id);
+			}
 
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,blogDataAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
@@ -359,7 +365,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					$("input.delay-post-option").prop("checked",true);
 				}
 
-				$("#"+map.container.id).append('\
+				$(mapWrapper).append('\
 					<div class="temp map-state-manager">\
 						<h4>Manage Map States</h4>\
 						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item. All settings will be saved when the blog post is saved.</h5>\
@@ -832,6 +838,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					_tempDataAttr = null;
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
+					map = _originalMap;
 					if(discard && onDiscard){
 						onDiscard(index);
 					}
@@ -971,6 +978,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function getMapState(currentState)
 			{
 				var time;
+				var mapState;
 
 				if(currentState && currentState.timeStamp){
 					var time = currentState.timeStamp;
@@ -979,12 +987,23 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 					var time = getPostDate();
 				}
 
-				var mapState = {
-					extent: map.extent.toJson(),
-					visibleLayers: getVisibleLayers(),
-					infoWindow: getInfoWindowFeature(),
-					timeStamp: time
-				};
+				if($(".map.active").attr("webmap") === map.id){
+					mapState = {
+						extent: map.extent.toJson(),
+						visibleLayers: getVisibleLayers(),
+						infoWindow: getInfoWindowFeature(),
+						timeStamp: time
+					};
+				}
+				else{
+					mapState = {
+						webmap: $(".map.active").attr("webmap"),
+						extent: map.extent.toJson(),
+						visibleLayers: getVisibleLayers(),
+						infoWindow: getInfoWindowFeature(),
+						timeStamp: time
+					};
+				}
 
 				return mapState;
 			}
@@ -1038,6 +1057,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 			function addLayerSelector()
 			{
 				$(legendToggleSelector).html("CHOOSE VISIBLE LAYERS");
+
+				$(legendContentSelector).empty();
 
 				dojo.forEach(map.layerIds,function(id){
 					var visible = map.getLayer(id).visible;
@@ -1225,6 +1246,63 @@ define(["storymaps/utils/MovableGraphic","dojo/json"],
 						map.getLayer(id).hide();
 					});
 				}
+			}
+
+			function arrangeMaps(mapId)
+			{
+				if(mapId){
+					if($("#map-" + mapId).length > 0){
+						$(".map").removeClass("active");
+						$("#map-" + mapId).addClass("active");
+						map = $("#map-" + mapId).data("map");
+						addLayerSelector();
+					}
+					else{
+						loadNewMap(mapId).then(function(){
+							arrangeMaps(mapId);
+						});
+					}
+				}
+				else{
+					$(".map").removeClass("active");
+					$("#map").addClass("active");
+					map = _originalMap;
+					addLayerSelector();
+				}
+			}
+
+			function loadNewMap(mapId)
+			{
+				var deferred = new dojo.Deferred();
+
+				$(mapWrapper).append('<div id="map-' + mapId + '" class="map region-center" webmap="' + mapId + '"></div>');
+
+				Helper.resetLayout();
+
+				var mapDeferred = esri.arcgis.utils.createMap(mapId,"map-" + mapId,{
+					mapOptions: {
+						sliderPosition: "top-right"
+					}
+				});
+
+				mapDeferred.addCallback(function(response){
+					var map = response.map;
+
+					$("#map-" + mapId).data("map",map);
+
+					if (map.loaded){
+						deferred.resolve();
+						map.addLayer(_blogLayer);
+					}
+					else {
+						dojo.connect(map, "onLoad", function() {
+							deferred.resolve();
+							map.addLayer(_blogLayer);
+						});
+					}
+				});
+
+				return deferred;
 			}
 
 		}
