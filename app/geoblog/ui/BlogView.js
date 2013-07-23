@@ -98,29 +98,30 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 					//Set Blog State
 					elements.removeClass("active");
 					selectedEl.addClass("active");
-
-					if(_mapTips != null){
-						_mapTips.clean();
-					}
-					if(selectedGrp.attributes.geometry != "false"){
-						_mapTips = new MultiTips({
-							map: map,
-							content: selectedGrp.attributes.title,
-							pointArray: [selectedGrp],
-							labelDirection: "auto",
-							backgroundColor: "#444444",
-							pointerColor: "#444444",
-							textColor: "#ffffff",
-							offsetTop: iconHeight - 8
-						});
-					}
-
-					$(".map-state-link").unbind("click");
-					$(".map-state-link").click(function(){
-						goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
-					});
+					
 
 					arrangeMaps(mapState.webmap).then(function(){
+
+						if(_mapTips != null){
+							_mapTips.clean();
+						}
+						if(selectedGrp.attributes.geometry != "false"){
+							_mapTips = new MultiTips({
+								map: map,
+								content: selectedGrp.attributes.title,
+								pointArray: [selectedGrp],
+								labelDirection: "auto",
+								backgroundColor: "#444444",
+								pointerColor: "#444444",
+								textColor: "#ffffff",
+								offsetTop: iconHeight - 8
+							});
+						}
+
+						$(".map-state-link").unbind("click");
+						$(".map-state-link").click(function(){
+							goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
+						});
 						goToMapState(mapState,alwaysDisplayPoints,true,defaultTime);
 					});
 
@@ -263,18 +264,27 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 					if($("#map-" + mapId).length > 0){
 						$(".map").removeClass("active");
 						$("#map-" + mapId).addClass("active");
+						$(".legend").hide();
+						$("#legend-" + mapId).show();
 						map = $("#map-" + mapId).data("map");
 						deferred.resolve();
 					}
 					else{
 						loadNewMap(mapId).then(function(){
-							arrangeMaps(mapId);
+							$(".map").removeClass("active");
+							$("#map-" + mapId).addClass("active");
+							$(".legend").hide();
+							$("#legend-" + mapId).show();
+							map = $("#map-" + mapId).data("map");
+							deferred.resolve();
 						});
 					}
 				}
 				else{
 					$(".map").removeClass("active");
 					$("#map").addClass("active");
+					$(".legend").hide();
+					$("#legend").show();
 					map = _originalMap;
 					deferred.resolve();
 				}
@@ -285,6 +295,8 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 			function loadNewMap(mapId)
 			{
 				var deferred = new dojo.Deferred();
+
+				$(".loader").fadeIn();
 
 				$(mapWrapper).append('<div id="map-' + mapId + '" class="map region-center" webmap="' + mapId + '"></div>');
 
@@ -299,21 +311,52 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 				mapDeferred.addCallback(function(response){
 					var map = response.map;
 
+					map.addLayer(blogLayer);
+
 					$("#map-" + mapId).data("map",map);
+
+					dojo.connect(map,"onUpdateEnd",function(){
+						if($(".loader").is(":visible")){
+							$(".loader").fadeOut();
+						}
+					});
+
+					var layers = esri.arcgis.utils.getLegendLayers(response);
 
 					if (map.loaded){
 						deferred.resolve();
-						map.addLayer(blogLayer);
+						if(!app.editor){
+							createLegend(map,layers,mapId);
+						}
 					}
 					else {
 						dojo.connect(map, "onLoad", function() {
 							deferred.resolve();
-							map.addLayer(blogLayer);
+							if(!app.editor){
+								createLegend(map,layers,mapId);
+							}
 						});
 					}
 				});
 
 				return deferred;
+			}
+
+			function createLegend(map,layers,mapId)
+			{
+				$(".legend-content").append('<div id="legend-' + mapId + '" class="legend"></div>');
+				$("#legend-" + mapId).show();
+
+				if (layers.length > 0) {
+					var legend = new esri.dijit.Legend({
+						map:map,
+						layerInfos: layers
+					},"legend-" + mapId);
+					legend.startup();
+				}
+				else{
+					$("#legend-" + mapId).html("No legend");
+				}
 			}
 		}
 

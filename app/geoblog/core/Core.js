@@ -258,6 +258,7 @@ define(["esri/map",
 				app.map = response.map;
 
 				app.map.blogLayer = app.blogLayer;
+				app.map.addLayer(app.map.blogLayer);
 
 				app.map.legendLayers = esri.arcgis.utils.getLegendLayers(response);
 
@@ -267,14 +268,6 @@ define(["esri/map",
 							g.hide();
 						}
 					});
-				});
-
-				dojo.connect(app.map.blogLayer,"onMouseOver",function(){
-					app.map.setMapCursor("pointer");
-				});
-
-				dojo.connect(app.map.blogLayer,"onMouseOut",function(){
-					app.map.setMapCursor("defualt");
 				});
 
 				dojo.connect(app.map.blogLayer,"onClick",function(event){
@@ -525,7 +518,7 @@ define(["esri/map",
 					legend.startup();
 				}
 				else{
-					$(".legend-toggle").hide();
+					$("#legend").html("No legend");
 				}
 			}
 

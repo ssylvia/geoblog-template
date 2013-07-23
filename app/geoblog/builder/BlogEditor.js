@@ -38,11 +38,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				});
 			});
 
-			this.test = function(id)
-			{
-				arrangeMaps(id);
-			}
-
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,blogDataAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
 				$(selector).append('\
@@ -215,6 +210,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				if(!_activeEditSession){
 					_activeEditSession = true;
 
+					arrangeMaps($(".map.active").attr("webmap"));
+
 					//Prepare map and blog state
 					$(".geoblog-post").removeClass("active");
 					$(".multiTip").hide();
@@ -238,6 +235,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 			{
 				if(!_activeEditSession){
 					_activeEditSession = true;
+
+					arrangeMaps($(".map.active").attr("webmap"));
 
 					prepareEditorState(element);
 
@@ -1275,6 +1274,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 			{
 				var deferred = new dojo.Deferred();
 
+				$(".loader").fadeIn();
+
 				$(mapWrapper).append('<div id="map-' + mapId + '" class="map region-center" webmap="' + mapId + '"></div>');
 
 				Helper.resetLayout();
@@ -1288,16 +1289,22 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				mapDeferred.addCallback(function(response){
 					var map = response.map;
 
+					map.addLayer(_blogLayer);
+
+					dojo.connect(map,"onUpdateEnd",function(){
+						if($(".loader").is(":visible")){
+							$(".loader").fadeOut();
+						}
+					});
+
 					$("#map-" + mapId).data("map",map);
 
 					if (map.loaded){
 						deferred.resolve();
-						map.addLayer(_blogLayer);
 					}
 					else {
 						dojo.connect(map, "onLoad", function() {
 							deferred.resolve();
-							map.addLayer(_blogLayer);
 						});
 					}
 				});

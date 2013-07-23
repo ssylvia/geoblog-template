@@ -82,10 +82,22 @@ html, body, #application-window{
 
 .legend-content{
 	display: none;
-	padding: 15px;
+}
+
+.legend{
+	display: none;
+	padding: 15px 15px 0 15px;
 	max-height: 300px;
 	overflow: auto;
 	word-break: break-all;
+}
+
+.legend:first-child{
+	display: none;
+}
+
+.legend.active{
+	display: block;
 }
 
 .modal h2{
