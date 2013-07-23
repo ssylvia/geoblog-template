@@ -270,15 +270,16 @@ define(["esri/map",
 					});
 				});
 
-				dojo.connect(app.map.blogLayer,"onClick",function(event){
-					app.blogData.goToPageByItem(event.graphic.attributes[event.graphic.getLayer().objectIdField],function(index){
-						_selectByIndex = {
-							active: true,
-							index: index
-						}
-						$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
-					});
-				});
+				//DISABLED UNTIL WORKING ON ADDITONAL WEBMAPS
+				// dojo.connect(app.map.blogLayer,"onClick",function(event){
+				// 	app.blogData.goToPageByItem(event.graphic.attributes[event.graphic.getLayer().objectIdField],function(index){
+				// 		_selectByIndex = {
+				// 			active: true,
+				// 			index: index
+				// 		}
+				// 		$(_blogSelector).mCustomScrollbar("scrollTo",".geoblog-post:eq(" + index + ")");
+				// 	});
+				// });
 
 				if (app.map.loaded){
 					initializeApp(response);

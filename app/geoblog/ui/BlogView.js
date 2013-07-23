@@ -311,7 +311,8 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 				mapDeferred.addCallback(function(response){
 					var map = response.map;
 
-					map.addLayer(blogLayer);
+					map.blogLayer = blogLayer;
+					map.addLayer(map.blogLayer);
 
 					$("#map-" + mapId).data("map",map);
 
@@ -326,14 +327,14 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 					if (map.loaded){
 						deferred.resolve();
 						if(!app.editor){
-							createLegend(map,layers,mapId);
+							addDijits(map,layers,mapId);
 						}
 					}
 					else {
 						dojo.connect(map, "onLoad", function() {
 							deferred.resolve();
 							if(!app.editor){
-								createLegend(map,layers,mapId);
+								addDijits(map,layers,mapId);
 							}
 						});
 					}
@@ -342,7 +343,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 				return deferred;
 			}
 
-			function createLegend(map,layers,mapId)
+			function addDijits(map,layers,mapId)
 			{
 				$(".legend-content").append('<div id="legend-' + mapId + '" class="legend"></div>');
 				$("#legend-" + mapId).show();
@@ -357,6 +358,16 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 				else{
 					$("#legend-" + mapId).html("No legend");
 				}
+
+				$(".esriSimpleSliderIncrementButton").each(function(){
+					if(!$(this).hasClass("zoomButtonIn")){
+						$(this).addClass("zoomButtonIn");
+						$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
+						$(".initExtentButton").click(function(){
+							app.blog.goToHomeState();
+						});
+					}
+				});
 			}
 		}
 
