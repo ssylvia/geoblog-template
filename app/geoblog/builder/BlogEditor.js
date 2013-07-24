@@ -112,6 +112,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				updateLayerSelector();
 			}
 
+			this.refreshEditor = function(newMap)
+			{
+				map = newMap;
+				addLayerSelector();
+			}
+
 			this.addEditButtons = function(elements)
 			{
 				elements.each(function(){
@@ -367,7 +373,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				$(mapWrapper).append('\
 					<div class="temp map-state-manager">\
 						<h4>Manage Map States</h4>\
-						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item. All settings will be saved when the blog post is saved.</h5>\
+						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item. All settings will be saved when the blog post is saved.<br><br>To use external webmap, paste ID below.</h5>\
+						<div class="input-append">\
+							<input id="webmap-id-form" class="span2" id="appendedInputButtons" type="text">\
+							<button id="webmap-load" class="btn" type="button">Load</button>\
+							<button id="webmap-clear" class="btn" type="button">Clear</button>\
+						</div>\
 						<div class="home-state map-state-item">\
 							Home Position \
 							<div class="btn-group  map-state-ctrl">\
@@ -378,6 +389,15 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 						</div>\
 					</div>'
 				);
+
+				$("#webmap-load").click(function(){
+					arrangeMaps($("#webmap-id-form").val());
+				});
+
+				$("#webmap-clear").click(function(){
+					arrangeMaps();
+					$("#webmap-id-form").val("");
+				});
 
 				$(".map-state-save.home-extent").click(function(){
 					_homeExtent = getMapState(_homeExtent);
@@ -1258,7 +1278,11 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 					}
 					else{
 						loadNewMap(mapId).then(function(){
-							arrangeMaps(mapId);
+							$(".map").removeClass("active");
+							$("#map-" + mapId).addClass("active");
+							map = $("#map-" + mapId).data("map");
+							addLayerSelector();
+
 						});
 					}
 				}
@@ -1301,10 +1325,28 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 
 					if (map.loaded){
 						deferred.resolve();
+						$(".esriSimpleSliderIncrementButton").each(function(){
+							if(!$(this).hasClass("zoomButtonIn")){
+								$(this).addClass("zoomButtonIn");
+								$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
+								$(".initExtentButton").click(function(){
+									app.blog.goToHomeState();
+								});
+							}
+						});
 					}
 					else {
 						dojo.connect(map, "onLoad", function() {
 							deferred.resolve();
+							$(".esriSimpleSliderIncrementButton").each(function(){
+								if(!$(this).hasClass("zoomButtonIn") && !$(this).hasClass("initExtentButton")){
+									$(this).addClass("zoomButtonIn");
+									$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
+									$(".initExtentButton").click(function(){
+										app.blog.goToHomeState();
+									});
+								}
+							});
 						});
 					}
 				});

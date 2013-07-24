@@ -41,7 +41,9 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 			this.goToHomeState = function()
 			{
-				goToMapState(_homeMapState.mapState,_homeMapState.displayPoints,_homeMapState.homeState,_homeMapState.time);
+				arrangeMaps(_homeMapState.mapState.webmap).then(function(){
+					goToMapState(_homeMapState.mapState,_homeMapState.displayPoints,_homeMapState.homeState,_homeMapState.time);
+				});
 			}
 
 			this.getMultiTips = function()
@@ -120,7 +122,15 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 						$(".map-state-link").unbind("click");
 						$(".map-state-link").click(function(){
-							goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
+							var webmap = data.textLinks[$(this).attr("data-map-state-link")].mapState.webmap;
+							if(mapState.webmap != webmap){
+								arrangeMaps(webmap).then(function(){
+									goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
+								});
+							}
+							else{
+								goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
+							}
 						});
 						goToMapState(mapState,alwaysDisplayPoints,true,defaultTime);
 					});
@@ -264,18 +274,28 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 					if($("#map-" + mapId).length > 0){
 						$(".map").removeClass("active");
 						$("#map-" + mapId).addClass("active");
-						$(".legend").hide();
-						$("#legend-" + mapId).show();
+						if(!app.editor){
+							$(".legend").hide();
+							$("#legend-" + mapId).show();
+						}
 						map = $("#map-" + mapId).data("map");
+						if(app.editor){
+							app.editor.refreshEditor(map);
+						}
 						deferred.resolve();
 					}
 					else{
 						loadNewMap(mapId).then(function(){
 							$(".map").removeClass("active");
 							$("#map-" + mapId).addClass("active");
-							$(".legend").hide();
-							$("#legend-" + mapId).show();
+							if(!app.editor){
+								$(".legend").hide();
+								$("#legend-" + mapId).show();
+							}
 							map = $("#map-" + mapId).data("map");
+							if(app.editor){
+								app.editor.refreshEditor(map);
+							}
 							deferred.resolve();
 						});
 					}
@@ -286,6 +306,9 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 					$(".legend").hide();
 					$("#legend").show();
 					map = _originalMap;
+					if(app.editor){
+						app.editor.refreshEditor(map);
+					}
 					deferred.resolve();
 				}
 
@@ -326,16 +349,12 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 					if (map.loaded){
 						deferred.resolve();
-						if(!app.editor){
-							addDijits(map,layers,mapId);
-						}
+						addDijits(map,layers,mapId);
 					}
 					else {
 						dojo.connect(map, "onLoad", function() {
 							deferred.resolve();
-							if(!app.editor){
-								addDijits(map,layers,mapId);
-							}
+							addDijits(map,layers,mapId);
 						});
 					}
 				});
@@ -345,28 +364,80 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 			function addDijits(map,layers,mapId)
 			{
-				$(".legend-content").append('<div id="legend-' + mapId + '" class="legend"></div>');
-				$("#legend-" + mapId).show();
 
-				if (layers.length > 0) {
-					var legend = new esri.dijit.Legend({
-						map:map,
-						layerInfos: layers
-					},"legend-" + mapId);
-					legend.startup();
-				}
-				else{
-					$("#legend-" + mapId).html("No legend");
+				if(!app.editor){
+					$(".legend-content").append('<div id="legend-' + mapId + '" class="legend"></div>');
+					$("#legend-" + mapId).show();
+
+					if (layers.length > 0) {
+						var legend = new esri.dijit.Legend({
+							map:map,
+							layerInfos: layers
+						},"legend-" + mapId);
+						legend.startup();
+					}
+					else{
+						$("#legend-" + mapId).html("No legend");
+					}
 				}
 
 				$(".esriSimpleSliderIncrementButton").each(function(){
-					if(!$(this).hasClass("zoomButtonIn")){
+					if(!$(this).hasClass("zoomButtonIn") && !$(this).hasClass("initExtentButton")){
 						$(this).addClass("zoomButtonIn");
 						$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
 						$(".initExtentButton").click(function(){
 							app.blog.goToHomeState();
 						});
 					}
+				});
+			}
+
+			function addLayerSelector()
+			{
+				$(legendToggleSelector).html("CHOOSE VISIBLE LAYERS");
+
+				$(legendContentSelector).empty();
+
+				dojo.forEach(map.layerIds,function(id){
+					var visible = map.getLayer(id).visible;
+
+					$(legendContentSelector).last().prepend(
+						'<label class="checkbox">\
+							<input type="checkbox" class="layer-select" value="'+id+'"> '+id+'\
+						</label><br>');
+
+					if(map.getLayer(id).visible)
+						$(".layer-select").first().prop("checked",visible);
+
+					$(".layer-select").first().click(function(){
+						if($(this).is(":checked")){
+							map.getLayer($(this).val()).show();
+						}
+						else{
+							map.getLayer($(this).val()).hide();
+						}
+					});
+				});
+
+				dojo.forEach(map.graphicsLayerIds,function(id){
+					var visible = map.getLayer(id).visible;
+
+					$(legendContentSelector).last().prepend(
+						'<label class="checkbox">\
+							<input type="checkbox" class="layer-select" value="'+id+'"> '+id+'\
+						</label><br>');
+
+					if(map.getLayer(id).visible)
+						$(".layer-select").first().prop("checked",visible);
+
+					$(".layer-select").first().click(function(){
+						if($(this).is(":checked")){
+							map.getLayer($(this).val()).show();
+						}
+						else{
+							map.getLayer($(this).val()).hide();
+						}
+					});
 				});
 			}
 		}

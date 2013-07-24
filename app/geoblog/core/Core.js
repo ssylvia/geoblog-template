@@ -412,7 +412,7 @@ define(["esri/map",
 			//Add post editor
 			if(_isBuilder){
 				require(["storymaps/geoblog/builder/BlogEditor"], function(BlogEditor){
-					app.editor = new BlogEditor("#map-wrapper",_blogSelector,app.map,configOptions.earliestYear,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle",".legend-content",function(){
+					app.editor = new BlogEditor("#map-wrapper",_blogSelector,app.map,configOptions.earliestYear,configOptions.cumulativeTime,configOptions.alwaysDisplayPoints,configOptions.allowDeletes,".legend-toggle","#legend",function(){
 						if(_layout !== "narrow" && $("#blog-sizer").is(":visible")){
 							$("#blog-sizer").hide();
 						}
