@@ -376,8 +376,6 @@ define(["esri/map",
 					selectPostByIndex();
 				}
 
-				alert("testset");
-
 				//Hide Loading animation
 				$(".loader").fadeOut();
 				$(".legend-wrapper").show();
