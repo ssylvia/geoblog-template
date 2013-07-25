@@ -344,9 +344,12 @@ define(["esri/map",
 
 		function loadBlog()
 		{
-			app.blog = new BlogView("#map-wrapper",_blogSelector,app.map,app.map.blogLayer,configOptions.earliestYear,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){				
-				
+			app.blog = new BlogView("#map-wrapper",_blogSelector,app.map,app.map.blogLayer,configOptions.earliestYear,configOptions.cumulativeTime,"status","title","content","time","mapState","data",configOptions.iconHeight,function(){
 				app.blogData.setBlogElements($(".geoblog-post"));
+
+				if(_isBuilder){
+					app.editor.addEditButtons(app.blogData.getBlogElements());
+				}
 
 				if($(_blogSelector).data("mCustomScrollbarIndex")){
 					$(_blogSelector).mCustomScrollbar("destroy");
@@ -373,6 +376,8 @@ define(["esri/map",
 					selectPostByIndex();
 				}
 
+				alert("testset");
+
 				//Hide Loading animation
 				$(".loader").fadeOut();
 				$(".legend-wrapper").show();
@@ -396,10 +401,6 @@ define(["esri/map",
 				});
 
 				resizeBlogElements();
-
-				if(_isBuilder){
-					app.editor.addEditButtons(app.blogData.getBlogElements());
-				}
 			});
 
 			app.blogData.init(app.blogLayer,function(graphics,startPosition){
@@ -668,6 +669,32 @@ define(["esri/map",
 		function selectPostByIndex()
 		{
 			if (_selectByIndex.active && _selectByIndex.index !== null){
+				var container = $("#blog .mCSB_container"),
+					scrollTop = container.position().top,
+					buffer = $(_blogSelector).height() / 4,
+					selectPosition = {
+						top: null,
+						bottom: null,
+						atTop: null,
+						fullyShown: null,
+						topQuarter: null,
+						bottomQuarter: null
+					};
+
+				//Display pager tabs
+				if(scrollTop >= -50 && !$("#page-up-tab").hasClass("disabled")){
+					$("#page-up-tab").slideDown("fast");
+				}
+				else{
+					$("#page-up-tab").slideUp("fast");
+				}
+				if(container.height() + scrollTop - (buffer*4) < 50 && !$("#page-down-tab").hasClass("disabled")){
+					$("#page-down-tab").slideDown("fast");
+				}
+				else{
+					$("#page-down-tab").slideUp("fast");
+				}
+				
 				_selectByIndex.active = false;
 				app.blogData.setPostByIndex(_selectByIndex.index,getEditStatus(),selectPostCallback);
 			}

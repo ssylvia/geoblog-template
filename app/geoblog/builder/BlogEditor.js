@@ -405,7 +405,9 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				});
 
 				$(".map-state-show.home-extent").click(function(){
-					showMapState(_homeExtent);
+					arrangeMaps(_homeExtent.webmap).then(function(){
+						showMapState(_homeExtent);
+					});
 				});
 
 				$(".map-state-date.home-extent").click(function(){
@@ -450,7 +452,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 					});
 
 					$(".map-state-show.link-state").last().click(function(){
-						showMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
+						var data = _tempDataAttr.textLinks[$(this).attr("data-link")].mapState;
+						arrangeMaps(data.webmap).then(function(){
+							showMapState(data);
+						});
 					});
 
 					$(".map-state-remove.link-state").last().click(function(){
@@ -704,7 +709,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 						});
 
 						$(".map-state-show.link-state").last().click(function(){
-							showMapState(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
+							var data = _tempDataAttr.textLinks[$(this).attr("data-link")].mapState;
+							arrangeMaps(data.webmap).then(function(){
+								showMapState(data);
+							});
 						});
 
 						$(".map-state-remove.link-state").last().click(function(){
@@ -1269,12 +1277,18 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 
 			function arrangeMaps(mapId)
 			{
-				if(mapId){
+				var deferred = new dojo.Deferred();
+
+				if($("#map").attr("webmap") != mapId){
 					if($("#map-" + mapId).length > 0){
 						$(".map").removeClass("active");
 						$("#map-" + mapId).addClass("active");
 						map = $("#map-" + mapId).data("map");
 						addLayerSelector();
+						$(".map-state-manager .map-state-save").each(function(){
+							$(this).html('Save');
+						});
+						deferred.resolve();
 					}
 					else{
 						loadNewMap(mapId).then(function(){
@@ -1282,7 +1296,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 							$("#map-" + mapId).addClass("active");
 							map = $("#map-" + mapId).data("map");
 							addLayerSelector();
-
+							$(".map-state-manager .map-state-save").each(function(){
+								$(this).html('Save');
+							});
+							deferred.resolve();
 						});
 					}
 				}
@@ -1291,7 +1308,13 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 					$("#map").addClass("active");
 					map = _originalMap;
 					addLayerSelector();
+					$(".map-state-manager .map-state-save").each(function(){
+						$(this).html('Save');
+					});
+					deferred.resolve();
 				}
+
+				return deferred;
 			}
 
 			function loadNewMap(mapId)
@@ -1326,7 +1349,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 					if (map.loaded){
 						deferred.resolve();
 						$(".esriSimpleSliderIncrementButton").each(function(){
-							if(!$(this).hasClass("zoomButtonIn")){
+							if(!$(this).hasClass("zoomButtonIn") && !$(this).hasClass("initExtentButton")){
 								$(this).addClass("zoomButtonIn");
 								$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
 								$(".initExtentButton").click(function(){

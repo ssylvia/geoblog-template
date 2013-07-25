@@ -88,7 +88,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 			this.selectPost = function(index,graphics,elements,alwaysDisplayPoints,editing)
 			{
-				if(!editing){
+				if(!editing && graphics[index]){
 
 					var selectedEl = elements.eq(index),
 						selectedGrp = graphics[index],
@@ -122,15 +122,11 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 						$(".map-state-link").unbind("click");
 						$(".map-state-link").click(function(){
-							var webmap = data.textLinks[$(this).attr("data-map-state-link")].mapState.webmap;
-							if(mapState.webmap != webmap){
-								arrangeMaps(webmap).then(function(){
-									goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
-								});
-							}
-							else{
-								goToMapState(data.textLinks[$(this).attr("data-map-state-link")].mapState,alwaysDisplayPoints,false,defaultTime);
-							}
+							var index = $(this).attr("data-map-state-link");
+							var webmap = data.textLinks[index].mapState.webmap;
+							arrangeMaps(webmap).then(function(){
+								goToMapState(data.textLinks[index].mapState,alwaysDisplayPoints,false,defaultTime);
+							});
 						});
 						goToMapState(mapState,alwaysDisplayPoints,true,defaultTime);
 					});

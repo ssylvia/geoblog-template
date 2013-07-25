@@ -33,7 +33,7 @@ define([],
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
 			subtitle: "",
 			//Enter URL to be used with social media buttons embedded in post. The URL will also be appended with the post object id so make sure query parameter is included
-			socialURL: "",
+			socialURL: "http://www.theatlantic.com/special-report/american-futures/?post=",
 			//If the webmap uses Bing Maps data, you will need to provided your Bing Maps Key
 			bingmapskey: "Akt3ZoeZ089qyG3zWQZSWpwV3r864AHStal7Aon21-Fyxwq_KdydAH32LTwhieA8",
 			// Specify a proxy for custom deployment
