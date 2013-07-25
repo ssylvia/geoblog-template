@@ -170,6 +170,7 @@ define(["esri/map",
 					});
 					if(load){
 						//initFeatureServiceCreator();
+						esri.id.getCredential(app.blogLayer.url);
 						loadMap();
 					}
 					else{

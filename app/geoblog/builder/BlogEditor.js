@@ -1281,7 +1281,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 
 				if(mapId && $("#map").attr("webmap") != mapId){
 					if($("#map-" + mapId).length > 0){
-						alert("test1");
 						$(".map").removeClass("active");
 						$("#map-" + mapId).addClass("active");
 						map = $("#map-" + mapId).data("map");
