@@ -93,7 +93,7 @@ html, body, #application-window{
 }
 
 .legend:first-child{
-	display: none;
+	display: block;
 }
 
 .legend.active{
