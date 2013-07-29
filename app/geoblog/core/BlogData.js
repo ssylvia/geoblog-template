@@ -10,7 +10,7 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogData(isBuilder,draftVisible,hiddenVisible,orderBy,queryCount,firstPostOnLoad)
+		return function BlogData(editors,isBuilder,draftVisible,hiddenVisible,orderBy,queryCount,firstPostOnLoad)
 		{
 			var _this = this,
 				_firstLoad = false,
@@ -19,6 +19,7 @@ define([],
 				_upddateFromSave = false,
 				_queryIndex = 0,
 				_queryCount = queryCount,
+				_editorQuery = createEditorQuery(editors),
 				_blogPostGraphics,
 				_blogPostElements,
 				_selectedGraphic,
@@ -28,6 +29,27 @@ define([],
 				_events = {
 					onQueryComplete: null
 				};
+
+			//Create editor query string
+			function createEditorQuery(editorArray)
+			{
+				if(editorArray.length === 0){
+					return "";
+				}
+				else{
+					var str = " AND ("
+					dojo.forEach(editorArray,function(editor,i){
+						if (i === 0){
+							str = str + "Creator = '" + editor + "'";
+						}
+						else{
+							str = str + " OR Creator = '" + editor + "'";
+						}
+					});
+					str = str + ")"					
+					return str;
+				}
+			}
 
 			this.init = function(featureLayer,onQueryComplete)
 			{
@@ -48,19 +70,19 @@ define([],
 				var dateVal = date.valueOf();
 				var query = new esri.tasks.Query();
 					if(isBuilder && hiddenVisible() && draftVisible()){
-						query.where = "status='Published' OR status='Draft' OR status='Hidden' OR ISNUMERIC(status)=1";
+						query.where = "(status='Published' OR status='Draft' OR status='Hidden' OR ISNUMERIC(status)=1)" + _editorQuery;
 					}
 					else if(isBuilder && draftVisible()){
-						query.where = "status='Published' OR status='Draft' OR ISNUMERIC(status)=1";
+						query.where = "(status='Published' OR status='Draft' OR ISNUMERIC(status)=1)" + _editorQuery;
 					}
 					else if(isBuilder && hiddenVisible()){
-						query.where = "status='Published' OR status='Hidden' OR ISNUMERIC(status)=1";
+						query.where = "(status='Published' OR status='Hidden' OR ISNUMERIC(status)=1)" + _editorQuery;
 					}
 					else if(isBuilder){
-						query.where = "status='Published' OR ISNUMERIC(status)=1";
+						query.where = "(status='Published' OR ISNUMERIC(status)=)1" + _editorQuery;
 					}
 					else{
-						query.where = "status='Published' OR (ISNUMERIC(status)=1 AND status<=" + dateVal + ")";
+						query.where = "(status='Published' OR (ISNUMERIC(status)=1 AND status<=" + dateVal + "))" + _editorQuery;
 					}
 					query.orderByFields = [orderBy];
 

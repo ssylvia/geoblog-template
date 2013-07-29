@@ -127,7 +127,7 @@ define(["esri/map",
 					}).removeClass("region-left").addClass("region-bottom");
 					configOptions.postsPerPage = 5;
 				}
-				}
+			}
 			Helper.resetLayout();
 			
 			var orderByFields = configOptions.sortBy + " " + configOptions.order;
@@ -146,7 +146,7 @@ define(["esri/map",
 				blogLayer: new esri.layers.FeatureLayer(configOptions.featureService,{
 					outFields: ["*"]
 				}),
-				blogData: new BlogData(_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage,configOptions.post),
+				blogData: new BlogData(configOptions.authorizedEditors,_isBuilder,getDraftVisible,getHiddenVisible,orderByFields,configOptions.postsPerPage,configOptions.post),
 				blog: null,
 				shareSettings: {
 					url: configOptions.socialURL || location.origin + location.pathname + searchStr,

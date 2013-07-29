@@ -9,7 +9,7 @@ define([],
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
 			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/geoblog1/FeatureServer/0",
+			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/CSV_Starter/FeatureServer/0",
 			//Start post object ID
 			post: null,
 			//Allow deletes from app
