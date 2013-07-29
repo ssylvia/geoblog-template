@@ -79,7 +79,7 @@ define([],
 						query.where = "(status='Published' OR status='Hidden' OR ISNUMERIC(status)=1)" + _editorQuery;
 					}
 					else if(isBuilder){
-						query.where = "(status='Published' OR ISNUMERIC(status)=)1" + _editorQuery;
+						query.where = "(status='Published' OR ISNUMERIC(status)=1)" + _editorQuery;
 					}
 					else{
 						query.where = "(status='Published' OR (ISNUMERIC(status)=1 AND status<=" + dateVal + "))" + _editorQuery;
