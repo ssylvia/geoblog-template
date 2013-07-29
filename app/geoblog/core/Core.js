@@ -567,7 +567,14 @@ define(["esri/map",
 			});
 
 			$(".legend-toggle").click(function(){
-				$(this).next().stop(true,true).slideToggle();
+				$(this).next().stop(true,true).slideToggle(400,function(){
+					if($(this).is(":visible")){
+						$(this).prev().html("LEGEND &#9650;");
+					}
+					else{
+						$(this).prev().html("LEGEND &#9660;");
+					}
+				});
 			});
 		}
 
