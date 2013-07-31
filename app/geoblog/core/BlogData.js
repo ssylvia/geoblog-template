@@ -19,7 +19,7 @@ define([],
 				_upddateFromSave = false,
 				_queryIndex = 0,
 				_queryCount = queryCount,
-				_editorQuery = createEditorQuery(editors),
+				_editorQuery = "",
 				_blogPostGraphics,
 				_blogPostElements,
 				_selectedGraphic,
@@ -33,7 +33,11 @@ define([],
 			//Create editor query string
 			function createEditorQuery(editorArray)
 			{
-				if(editorArray.length === 0){
+				var creatorTest = $.grep(_featureLayer.fields,function(n,i){
+					return n.name === "Creator";
+				});
+
+				if(editorArray.length === 0 || creatorTest.length === 0){
 					return "";
 				}
 				else{
@@ -54,6 +58,7 @@ define([],
 			this.init = function(featureLayer,onQueryComplete)
 			{
 				_featureLayer = featureLayer;
+				_editorQuery = createEditorQuery(editors);
 				_events.onQueryComplete = onQueryComplete;
 
 				queryFeatureIds();
