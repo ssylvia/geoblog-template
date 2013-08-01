@@ -33,11 +33,15 @@ define([],
 			//Create editor query string
 			function createEditorQuery(editorArray)
 			{
-				var creatorTest = $.grep(_featureLayer.fields,function(n,i){
-					return n.name === "Creator";
+				var creatorTest = false;
+
+				dojo.forEach(_featureLayer.fields,function(f){
+					if(f.name === "Creator"){
+						creatorTest = true;
+					}
 				});
 
-				if(editorArray.length === 0 || creatorTest.length === 0){
+				if(!creatorTest || editorArray.length === 0){
 					return "";
 				}
 				else{

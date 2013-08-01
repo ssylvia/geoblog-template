@@ -331,7 +331,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 					var map = response.map;
 
 					map.blogLayer = blogLayer;
-					map.addLayer(map.blogLayer);
+					//map.addLayer(map.blogLayer);
 
 					$("#map-" + mapId).data("map",map);
 

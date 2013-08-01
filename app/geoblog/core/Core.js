@@ -259,17 +259,17 @@ define(["esri/map",
 				app.map = response.map;
 
 				app.map.blogLayer = app.blogLayer;
-				app.map.addLayer(app.map.blogLayer);
+				//app.map.addLayer(app.map.blogLayer);
 
 				app.map.legendLayers = esri.arcgis.utils.getLegendLayers(response);
 
-				dojo.connect(app.map.blogLayer,"onUpdateEnd",function(){
-					dojo.forEach(app.map.blogLayer.graphics,function(g){
-						if(g.attributes.geometry === "false"){
-							g.hide();
-						}
-					});
-				});
+				// dojo.connect(app.map.blogLayer,"onUpdateEnd",function(){
+				// 	dojo.forEach(app.map.blogLayer.graphics,function(g){
+				// 		if(g.attributes.geometry === "false"){
+				// 			g.hide();
+				// 		}
+				// 	});
+				// });
 
 				//DISABLED UNTIL WORKING ON ADDITONAL WEBMAPS
 				// dojo.connect(app.map.blogLayer,"onClick",function(event){
