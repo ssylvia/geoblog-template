@@ -321,17 +321,23 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 				Helper.resetLayout();
 
+				var popup = new esri.dijit.PopupMobile(null,dojo.create("div"));
+
 				var mapDeferred = esri.arcgis.utils.createMap(mapId,"map-" + mapId,{
 					mapOptions: {
-						sliderPosition: "top-right"
+						sliderPosition: "top-right",
+						infoWindow: popup
 					}
 				});
 
 				mapDeferred.addCallback(function(response){
 					var map = response.map;
+					if($("#application-window").width() <= 768){
+						dojo.place(popup.domNode, map.root);
+					}
 
 					map.blogLayer = blogLayer;
-					map.addLayer(map.blogLayer);
+					//map.addLayer(map.blogLayer);
 
 					$("#map-" + mapId).data("map",map);
 

@@ -14,7 +14,7 @@ geoblog-template
 
 ###Create geoblog feature service
 1.	Go to "My Content" add item from computer
-2.	Upload starter CSV that is attached to this page
+2.	Upload starter CSV that is within resources/samples/CSV_Starter.csv
 3.	Publish as feature service
 4.	Go to new feature service item page
 5.	Share publicly
