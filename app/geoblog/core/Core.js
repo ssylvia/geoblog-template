@@ -321,7 +321,6 @@ define(["esri/map",
 			$(".esriSimpleSliderIncrementButton").addClass("zoomButtonIn");
 			$(".zoomButtonIn").last().after("<div class='esriSimpleSliderIncrementButton initExtentButton'><img style='margin-top:5px' src='resources/images/app/home.png'></div>");
 			$(".initExtentButton").click(function(){
-				//app.map.setExtent(app.blog.getHomeExtent());
 				app.blog.goToHomeState();
 			});
 
@@ -337,6 +336,29 @@ define(["esri/map",
 			});
 
 			dojo.connect(app.blogSizer,"onMoveStop",function(mover,pos){
+				app.map.resize();
+				$(".map").not("#map").each(function(){
+					$(this).data("map").resize();
+				});
+			});
+
+			$(".blog-toggle").click(function(){
+				if($("#blog-wrapper").outerHeight() > $("#application-window").height()/2){
+					$("#blog-wrapper").css({
+						"height": "25%",
+						"width": "100%"
+					});
+					$(".blog-toggle").html('<i class="icon-arrow-up"></i>');
+				}
+				else{
+					$("#blog-wrapper").css({
+						"height": "70%",
+						"width": "100%"
+					});
+					$(".blog-toggle").html('<i class="icon-arrow-down"></i>');
+				}
+				Helper.resetLayout();
+				resizeBlogElements();
 				app.map.resize();
 				$(".map").not("#map").each(function(){
 					$(this).data("map").resize();
