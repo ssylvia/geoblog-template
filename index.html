@@ -134,28 +134,34 @@
 
 				<div id="blog-wrapper" class="region-left">
 
-					<div id="blog-navigation" class="region-left">
-						<div id="nav-buttons-wrapper" class="region-top">
-							<p class="nav-button prev-post" title="Previous Post">&#9650;</p>
-							<p class="nav-button next-post" title="Next Post">&#9660;</p>
-						</div><!--/nav-buttons-wrapper-->
-						<div id="nav-index-wrapper" class="region-center">
-							<i id="page-up" class="page-button page-up icon-chevron-up" title="Previous Page" onclick="app.blogData.goToPrevPage()"></i>
-							<div id="nav-index"></div>
-							<i id="page-down" class="page-button page-down icon-chevron-down" title="Next Page" onclick="app.blogData.goToNextPage()"></i>
-						</div><!--/nav-index-wrapper-->
-					</div><!--blog-navigation-->
+					<div id="blog-buffer" class="region-top"></div>
 
-					<div id="blog" class="region-center">
-					</div><!--blog-->
+					<div id="blog-content" class="region-center">
 
-					<div id="page-up-tab" class="pager-tab" onclick="app.blogData.goToPrevPage()">Load previous posts</div>
-					<div id="page-down-tab" class="pager-tab" onclick="app.blogData.goToNextPage()">Load more posts</div>
+						<div id="blog-navigation" class="region-left mobile-hide">
+							<div id="nav-buttons-wrapper" class="region-top">
+								<p class="nav-button prev-post" title="Previous Post">&#9650;</p>
+								<p class="nav-button next-post" title="Next Post">&#9660;</p>
+							</div><!--/nav-buttons-wrapper-->
+							<div id="nav-index-wrapper" class="region-center">
+								<i id="page-up" class="page-button page-up icon-chevron-up" title="Previous Page" onclick="app.blogData.goToPrevPage()"></i>
+								<div id="nav-index"></div>
+								<i id="page-down" class="page-button page-down icon-chevron-down" title="Next Page" onclick="app.blogData.goToNextPage()"></i>
+							</div><!--/nav-index-wrapper-->
+						</div><!--blog-navigation-->
+
+						<div id="blog" class="region-center">
+						</div><!--blog-->
+
+						<div id="page-up-tab" class="pager-tab" onclick="app.blogData.goToPrevPage()">Load previous posts</div>
+						<div id="page-down-tab" class="pager-tab" onclick="app.blogData.goToNextPage()">Load more posts</div>
+
+					</div><!--blog-content-->
 
 				</div><!--/blog-wrapper-->
 
 				<div id="map-wrapper" class="region-center">					
-					<div class="legend-wrapper">
+					<div class="legend-wrapper narrow-hide">
 						<div class="legend-toggle">LEGEND &#9660;</div>
 						<div id="legend-content" class="legend-content">
 							<div id="legend" class="legend"></div>

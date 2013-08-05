@@ -177,3 +177,34 @@ html, body, #application-window{
 .map.active{
 	z-index: 2;
 }
+
+@media all and (max-width: 780px) {
+	#mobile-nav{
+		display: none;
+	}
+
+	#blog-buffer{
+		height: 10px;
+	}
+
+	.legend-toggle{
+		padding: 0;
+	}
+
+	.esriSimpleSlider{
+		display: none;
+	}
+
+	.esriViewPopup{
+		padding: 10px;
+	}
+
+	.esriMobileNavigationBar{
+		background-color: #444;
+		background-image: none;
+	}
+
+	.esriMobileNavigationItem.right{
+		display: none;
+	}
+}
