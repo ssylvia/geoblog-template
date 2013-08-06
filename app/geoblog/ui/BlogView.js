@@ -321,7 +321,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 				Helper.resetLayout();
 
-				var popup = new esri.dijit.PopupMobile(null,dojo.create("div"));
+				var popup = $("#application-window").width() > 768 ? null : new esri.dijit.PopupMobile(null,dojo.create("div"));
 
 				var mapDeferred = esri.arcgis.utils.createMap(mapId,"map-" + mapId,{
 					mapOptions: {

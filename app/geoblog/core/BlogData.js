@@ -10,7 +10,7 @@ define([],
 		 *REQUIRES: Jquery 1.9.1 or above
 		 */
 
-		return function BlogData(editors,isBuilder,draftVisible,hiddenVisible,orderBy,queryCount,firstPostOnLoad)
+		return function BlogData(editors,isBuilder,isPreview,draftVisible,hiddenVisible,orderBy,queryCount,firstPostOnLoad)
 		{
 			var _this = this,
 				_firstLoad = false,
@@ -89,6 +89,9 @@ define([],
 					}
 					else if(isBuilder){
 						query.where = "(status='Published' OR ISNUMERIC(status)=1)" + _editorQuery;
+					}
+					else if(isPreview){
+						query.where = "(status='Published' OR status='Draft' OR ISNUMERIC(status)=1)" + _editorQuery;
 					}
 					else{
 						query.where = "(status='Published' OR (ISNUMERIC(status)=1 AND status<=" + dateVal + "))" + _editorQuery;

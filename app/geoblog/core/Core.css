@@ -178,17 +178,48 @@ html, body, #application-window{
 	z-index: 2;
 }
 
+.blog-toggle{
+	display: none;
+	position: absolute;
+	bottom: 0;
+	background-color: #fff;
+	border-top-right-radius: 5px;  
+	padding: 8px;
+	z-index: 5;
+	cursor: pointer;
+}
+
+#home-toggle-mobile{
+	display: none;
+	position: absolute;
+	top: 0;
+	background-color: #fff;
+	border-bottom-right-radius: 5px;  
+	padding: 8px;
+	z-index: 5;
+	cursor: pointer;
+}
+
 @media all and (max-width: 780px) {
 	#mobile-nav{
 		display: none;
+	}
+
+	.blog-toggle{
+		display: block;
+	}
+
+	#blog-wrapper{
+		box-shadow: none;
 	}
 
 	#blog-buffer{
 		height: 10px;
 	}
 
-	.legend-toggle{
-		padding: 0;
+	.legend-wrapper{
+		left: 50%;
+		margin-left: -152px;
 	}
 
 	.esriSimpleSlider{
