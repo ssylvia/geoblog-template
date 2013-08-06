@@ -189,6 +189,17 @@ html, body, #application-window{
 	cursor: pointer;
 }
 
+#home-toggle-mobile{
+	display: none;
+	position: absolute;
+	top: 0;
+	background-color: #fff;
+	border-bottom-right-radius: 5px;  
+	padding: 8px;
+	z-index: 5;
+	cursor: pointer;
+}
+
 @media all and (max-width: 780px) {
 	#mobile-nav{
 		display: none;
@@ -206,8 +217,9 @@ html, body, #application-window{
 		height: 10px;
 	}
 
-	.legend-toggle{
-		padding: 0;
+	.legend-wrapper{
+		left: 50%;
+		margin-left: -152px;
 	}
 
 	.esriSimpleSlider{

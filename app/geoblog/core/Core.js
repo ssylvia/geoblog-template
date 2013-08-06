@@ -349,6 +349,7 @@ define(["esri/map",
 						"width": "100%"
 					});
 					$(".blog-toggle").html('<i class="icon-arrow-up"></i>');
+					$(".legend-wrapper").show();
 				}
 				else{
 					$("#blog-wrapper").css({
@@ -356,6 +357,7 @@ define(["esri/map",
 						"width": "100%"
 					});
 					$(".blog-toggle").html('<i class="icon-arrow-down"></i>');
+					$(".legend-wrapper").hide();
 				}
 				Helper.resetLayout();
 				resizeBlogElements();
@@ -404,9 +406,7 @@ define(["esri/map",
 					scrollInertia: getScrollInertia($("#application-window").width()),
 					callbacks: {
 						onScroll: function(){
-							if($("#application-window").width() > 768){
-								selectPostByScrollPosition();
-							}
+							selectPostByScrollPosition();
 						},
 						whileScrolling: function(){
 							if($("#application-window").width() <= 768){
