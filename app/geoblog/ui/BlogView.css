@@ -38,13 +38,14 @@
 
 .blog-post-title{	
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 1.25em;
 }
 
 .blog-post-text{
 	color: #444;
 	font-family: Georgia;
-	line-height: 1.5em;
+	font-size: 1.05em;
+	line-height: 1.65em;
 }
 
 .map-state-link{
