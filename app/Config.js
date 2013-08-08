@@ -17,9 +17,9 @@ define([],
 			//Height of feature service icon
 			iconHeight: 32,
 			//Feature servide field to sort by
-			sortBy: "time",
+			sortBy: "OBJECTID",
 			//Display order of feature service; specfiy "ASC" (ascending) or "DESC" (descending).
-			order: "ASC",
+			order: "DESC",
 			//Number of post available per pages (recommend 10 for smaller screens);
 			postsPerPage: 10,
 			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post
