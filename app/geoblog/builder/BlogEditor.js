@@ -295,6 +295,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 					hideBtn = '<button class="btn btn-inverse editor-ctrl toggle-item-visibility" type="button">Hide</button>',
 					position;
 					_homeExtent = false;
+					_mapStateLinkIndex = 0;
 					_tempDataAttr = {
 						textLinks: {
 						}
@@ -311,7 +312,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 						delayedPost = true;
 					}
 					time = new Date(data.time);
-					if(allowDeletes && _blogLayer.getEditCapabilities().canDelete){
+					if(allowDeletes && _blogLayer.getEditCapabilities().canDelete){_
 						deleteBtn = '<button class="btn btn-danger editor-ctrl delete-item" type="button">Delete</button>';
 					}
 					_tempDataAttr = $.parseJSON(data[_blogDataAttr]);
@@ -466,7 +467,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 						getMapStateTime(_tempDataAttr.textLinks[$(this).attr("data-link")].mapState);
 					});
 
-					if(item >= _mapStateLinkIndex){
+					if(parseFloat(item) >= _mapStateLinkIndex){
 						_mapStateLinkIndex = parseFloat(item) + 1;
 					}
 				}
@@ -860,9 +861,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 					//Clear temp data
 					_activeEditSession = false;
 					_currentOID = null;
-					_mapStateLinkIndex = 0;
 					_homeExtent = false;
-					_tempDataAttr = null;
 					_mapLayer.clear();
 					map.removeLayer(_mapLayer);
 					map = _originalMap;
@@ -984,8 +983,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				$("#map-state-blog-picker .save-time-stamp").last().click(function(){
 					var date = new Date($(".temp.map-state-date").last().val());
 					currentState.timeStamp = date.valueOf();
-					console.log(currentState);
-					console.log(_tempDataAttr);
 					calendar.datetimepicker("remove");
 					$("#map-state-blog-picker").modal("hide").remove();
 				});
