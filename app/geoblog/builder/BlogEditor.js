@@ -643,7 +643,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 								}
 							},
 							"div": 1,
-							"code": 1,
 							"pre": 1,
 						}
 					}
