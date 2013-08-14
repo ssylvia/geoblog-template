@@ -10,7 +10,7 @@ blockquote{
 
 #blog-wrapper{
 	height: 100%;
-	width: 60%;
+	width: 40%;
 	box-shadow:4px 3px 6px 0px #333;
 	z-index: 3;
 }
@@ -144,15 +144,8 @@ blockquote{
 	background-color: #999;
 }
 
-#page-up-tab{
-	border-bottom-left-radius: 5px; 
-	border-bottom-right-radius: 5px; 
-}
-
 #page-down-tab{
 	bottom: 0;
-	border-top-left-radius: 5px; 
-	border-top-right-radius: 5px; 
 }
 
 #blog-sizer{
