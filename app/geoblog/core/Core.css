@@ -2,6 +2,12 @@ html, body, #application-window{
 	overflow: hidden;
 }
 
+blockquote{
+	padding: 0 0 0 15px;
+	margin: 0 0 20px;
+	border-left: 5px solid #eeeeee;
+}
+
 #blog-wrapper{
 	height: 100%;
 	width: 60%;
