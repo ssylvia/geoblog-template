@@ -144,15 +144,8 @@ blockquote{
 	background-color: #999;
 }
 
-#page-up-tab{
-	border-bottom-left-radius: 5px; 
-	border-bottom-right-radius: 5px; 
-}
-
 #page-down-tab{
 	bottom: 0;
-	border-top-left-radius: 5px; 
-	border-top-right-radius: 5px; 
 }
 
 #blog-sizer{
