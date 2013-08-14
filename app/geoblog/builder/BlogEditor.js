@@ -38,10 +38,6 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				});
 			});
 
-			this.getTempData = function () {
-				return _tempDataAttr.textLinks;
-			}
-
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,blogDataAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
 				$(selector).append('\
@@ -578,12 +574,12 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 										dataLinks.push(splitArray[parseFloat(i) + 1]);
 									}
 								}
-								$(".link-state.map-state-item").each(function(){
-									if($.inArray($(this).attr("data-link"),dataLinks) < 0){
-										$(this).remove();
-										delete _tempDataAttr.textLinks[$(this).attr("data-link")];
-									}
-								});
+							});
+							$(".link-state.map-state-item").each(function(){
+								if($.inArray($(this).attr("data-link"),dataLinks) < 0){
+									$(this).remove();
+									delete _tempDataAttr.textLinks[$(this).attr("data-link")];
+								}
 							});
 						}
 					},
