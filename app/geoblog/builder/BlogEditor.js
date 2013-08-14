@@ -38,6 +38,10 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				});
 			});
 
+			this.getTempData = function () {
+				return _tempDataAttr.textLinks;
+			}
+
 			this.init = function(blogLayer,dataAttribute,statusAttr,timeAttr,geoAttr,mapStateAttr,blogDataAttr,onAddEditFeature,onRemoveEditFeature,onPostVisibilityChange)
 			{
 				$(selector).append('\
