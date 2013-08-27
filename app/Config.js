@@ -9,7 +9,7 @@ define([],
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
 			authorizedEditors: ["AmericanDreamProject","dasbury_Dream","debfallows_Dream","jfallows_Dream","ssylvia_dream","snarula_Dream"],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/arcgis/rest/services/Geoblog_feature_service2/FeatureServer/0",
+			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/ArcGIS/rest/services/AmericanFutures/FeatureServer/0",
 			//Start post object ID
 			post: null,
 			//Allow deletes from app
@@ -19,7 +19,7 @@ define([],
 			//Feature servide field to sort by
 			sortBy: "time",
 			//Display order of feature service; specfiy "ASC" (ascending) or "DESC" (descending).
-			order: "ASC",
+			order: "DESC",
 			//Number of post available per pages (recommend 10 for smaller screens);
 			postsPerPage: 10,
 			//If true, time extent is cumulative to blog post date. If false, time extent is the state in time of blog post
