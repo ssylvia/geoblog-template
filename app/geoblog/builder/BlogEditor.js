@@ -372,7 +372,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				}
 
 				$(mapWrapper).append('\
-					<div class="temp map-state-manager">\
+					<div id="map-state-manager" class="temp map-state-manager" style="bottom: 15px;">\
 						<h4>Manage Map States</h4>\
 						<h5>Tap "Save" to preserve the visible layers, selected popup, and map position to the selected item. All settings will be saved when the blog post is saved.<br><br>To use external webmap, paste ID below.</h5>\
 						<div class="input-append">\
@@ -413,6 +413,14 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 
 				$(".map-state-date.home-extent").click(function(){
 					getMapStateTime(_homeExtent);
+				});
+
+				mapManagerMover = new dojo.dnd.move.constrainedMoveable(dojo.byId("map-state-manager"),{
+					constraints: mapManagerMoverBB
+				});
+
+				dojo.connect(mapManagerMover,"onFirstMove",function(){
+					$("#map-state-manager").css("bottom","auto");
 				});
 
 				for(item in _tempDataAttr.textLinks){
@@ -533,6 +541,17 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 						map.setTimeExtent(new esri.TimeExtent(new Date(getPostDate()),new Date(getPostDate())));	
 					}
 				});
+			}
+
+			function mapManagerMoverBB()
+			{
+				var bb = {
+					t: 15,
+					l: 15,
+					h: $("#map-wrapper").height() - 228,
+					w: $("#map-wrapper").width() - 410
+				}
+				return bb;
 			}
 
 			function addTextEditor(text,newPost)
