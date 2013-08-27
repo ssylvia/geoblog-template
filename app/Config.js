@@ -7,7 +7,7 @@ define([],
 			//The web map id
 			webmap: "201c9b57132c426ca7236a885b91959e",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
-			authorizedEditors: ["AmericanDreamProject","dasbury_Dream","debfallows_Dream","jfallows_Dream","ssylvia_dream","snarula_Dream"],
+			authorizedEditors: [],
 			//Enter the url to the feature service storing blog posts
 			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/ArcGIS/rest/services/AmericanFutures/FeatureServer/0",
 			//Start post object ID
@@ -29,11 +29,11 @@ define([],
 			//If true, when a blog post is selected and a point has been set on the map, the point graphic will display even if layer is turned off
 			alwaysDisplayPoints: false,
 			//Enter a title, if no title is specified, the webmap's title is used.
-			title: "American Futures",
+			title: "",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
-			subtitle: "Follow James Fallows's Journey Across America",
+			subtitle: "",
 			//Enter URL to be used with social media buttons embedded in post. The URL will also be appended with the post object id so make sure query parameter is included
-			socialURL: "http://www.theatlantic.com/special-report/american-futures/?post=",
+			socialURL: "",
 			//If the webmap uses Bing Maps data, you will need to provided your Bing Maps Key
 			bingmapskey: "Akt3ZoeZ089qyG3zWQZSWpwV3r864AHStal7Aon21-Fyxwq_KdydAH32LTwhieA8",
 			// Specify a proxy for custom deployment
