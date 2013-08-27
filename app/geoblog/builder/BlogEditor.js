@@ -548,7 +548,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				var bb = {
 					t: 15,
 					l: 15,
-					h: $("#map-wrapper").height() - 228,
+					h: $("#map-wrapper").height() - $("#map-state-manager").outerHeight() - 30,
 					w: $("#map-wrapper").width() - 410
 				}
 				return bb;
