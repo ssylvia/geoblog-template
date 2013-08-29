@@ -416,7 +416,8 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 				});
 
 				mapManagerMover = new dojo.dnd.move.constrainedMoveable(dojo.byId("map-state-manager"),{
-					constraints: mapManagerMoverBB
+					constraints: mapManagerMoverBB,
+					skip: true
 				});
 
 				dojo.connect(mapManagerMover,"onFirstMove",function(){
