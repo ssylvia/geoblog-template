@@ -71,6 +71,7 @@ define(["esri/map",
 
 			if (urlObject.query.edit || urlObject.query.edit === "") {
 				_isBuilder = true;
+				$("body").addClass("builder");
 			}
 			if (urlObject.query.preview || urlObject.query.preview === "") {
 				_isPreview = true;
