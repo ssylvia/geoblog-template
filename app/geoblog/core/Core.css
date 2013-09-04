@@ -95,6 +95,9 @@ blockquote{
 	padding: 15px 15px 15px 15px;
 	max-height: 300px;
 	overflow: auto;
+}
+
+.builder .legend{
 	word-break: break-all;
 }
 
