@@ -7,9 +7,9 @@ define([],
 			//The web map id
 			webmap: "201c9b57132c426ca7236a885b91959e",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
-			authorizedEditors: [],
+			authorizedEditors: ["StoryMaps","ssylvia_stories","acarroll_storymaps","dasbury_storymaps"],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/arcgis/rest/services/Geoblog_feature_service2/FeatureServer/0",
+			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/arcgis/rest/services/Elephants/FeatureServer/0",
 			//Start post object ID
 			post: null,
 			//Allow deletes from app
