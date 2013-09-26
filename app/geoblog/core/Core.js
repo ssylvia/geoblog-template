@@ -315,7 +315,7 @@ define(["esri/map",
 		function initializeApp(response)
 		{	
 			var title = configOptions.title || response.itemInfo.item.title;
-			var subtitle = configOptions.subtitle || response.itemInfo.item.title;
+			var subtitle = configOptions.subtitle || response.itemInfo.item.subtitle;
 			
 			setupBanner(title,subtitle);
 
