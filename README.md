@@ -22,6 +22,7 @@ geoblog-template
 7.	Under layers click the small arrow next to layer text > Click time settings > enable time > make time time attribute is selected
 8.	Go to feature service endpoint > delete first record in the feature service
 9.	Open feature service in ArcGIS.com > Change symbology and save back to feature service (Recommended)
+10.	Enable "Keep track of who created and last updated features." and "Editors can only update and delete the features they add." 
 
 ###Configure App with feature service
 1.	Go to new geoblog template that was previously published
