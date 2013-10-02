@@ -241,3 +241,50 @@ blockquote{
 		display: none;
 	}
 }
+
+/*Elephant Mods*/
+
+#map-blind{
+	background-color: #1B1924;
+}
+
+#blog-wrapper{
+	background-color: #5e5e5e;
+}
+
+.img-polaroid{
+	background-color: #777;
+}
+
+.blog-post-title{
+	color: #dcda75;
+}
+
+.blog-post-text{
+	color: #ccc;
+}
+
+.blog-post-photo-caption{
+	color: #222;
+}
+
+#blog-sizer {
+	background-color: #5e5e5e;
+	color: #ccc;
+}
+
+.map-state-link{
+	color: #ebc875;
+}
+
+.map-state-link:hover, .map-state-link:focus {
+	color: #cba344;
+}
+
+a{
+	color: #6cc4d7;
+}
+
+a:hover, a:focus {
+	color: #5096a5;
+}
