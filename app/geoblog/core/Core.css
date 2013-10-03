@@ -265,7 +265,7 @@ blockquote{
 }
 
 .blog-post-photo-caption{
-	color: #222;
+	color: #000;
 }
 
 #blog-sizer {
@@ -279,6 +279,18 @@ blockquote{
 
 .map-state-link:hover, .map-state-link:focus {
 	color: #cba344;
+}
+
+.esriSimpleSlider, .esriPopup .contentPane, .legend-content{
+	background-color: #ccc;
+}
+
+.legend-wrapper{
+	border: 2px solid #777;
+}
+
+.legend-toggle{
+	background-color: #777;
 }
 
 a{
