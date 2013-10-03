@@ -244,6 +244,21 @@ blockquote{
 
 /*Elephant Mods*/
 
+
+/* Custom Webkit Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
 #map-blind{
 	background-color: #1B1924;
 }
@@ -281,8 +296,16 @@ blockquote{
 	color: #cba344;
 }
 
-.esriSimpleSlider, .esriPopup .contentPane, .legend-content{
+.esriSimpleSlider, .legend-content{
 	background-color: #ccc;
+}
+
+.esriPopup .mainSection{
+	line-height: 1.2;
+}
+
+.esriPopup .caption{
+	padding: 5px 0;
 }
 
 .legend-wrapper{
