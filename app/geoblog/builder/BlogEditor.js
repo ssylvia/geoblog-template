@@ -1,5 +1,5 @@
-define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
-	function(MovableGraphic,JSON,Helper)
+define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper","esri/dijit/Popup","dojo/dom-construct"],
+	function(MovableGraphic,JSON,Helper,Popup,domConstruct)
 	{
 		/**
 		 * BlogEditor
@@ -1343,9 +1343,14 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper"],
 
 				Helper.resetLayout();
 
+				var popup = new Popup({
+					highlight: false
+				}, domConstruct.create("div"));
+
 				var mapDeferred = esri.arcgis.utils.createMap(mapId,"map-" + mapId,{
 					mapOptions: {
-						sliderPosition: "top-right"
+						sliderPosition: "top-right",
+						infoWindow: popup
 					}
 				});
 

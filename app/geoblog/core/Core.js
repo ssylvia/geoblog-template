@@ -6,7 +6,9 @@ define(["esri/map",
 		"storymaps/utils/Helper",
 		"storymaps/geoblog/core/BlogData",
 		"storymaps/geoblog/ui/BlogView",
-		"dojo/has"],
+		"dojo/has",
+		"esri/dijit/Popup",
+		"dojo/dom-construct"],
 	function(
 		Map,
 		Portal,
@@ -16,7 +18,9 @@ define(["esri/map",
 		Helper,
 		BlogData,
 		BlogView,
-		Has)
+		Has,
+		Popup,
+		domConstruct)
 	{
 		/**
 		 * Core
@@ -258,7 +262,10 @@ define(["esri/map",
 
 		function loadMap()
 		{
-			var popup = $("#application-window").width() > 768 ? null : new esri.dijit.PopupMobile(null,dojo.create("div"));
+			var temp = new Popup({
+				highlight: false
+			}, domConstruct.create("div"));
+			var popup = $("#application-window").width() > 768 ? temp : new esri.dijit.PopupMobile({highlight:false},dojo.create("div"));
 
 			var mapDeferred = esri.arcgis.utils.createMap(configOptions.webmap,"map",{
 				mapOptions: {

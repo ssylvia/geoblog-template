@@ -1,5 +1,5 @@
-define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
-	function(MultiTips,Helper)
+define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper","esri/dijit/Popup","dojo/dom-construct"],
+	function(MultiTips,Helper,Popup,domConstruct)
 	{
 		/**
 		 * BlogView
@@ -321,7 +321,11 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper"],
 
 				Helper.resetLayout();
 
-				var popup = $("#application-window").width() > 768 ? null : new esri.dijit.PopupMobile(null,dojo.create("div"));
+				var temp = new Popup({
+					highlight: false
+				}, domConstruct.create("div"));
+
+				var popup = $("#application-window").width() > 768 ? temp : new esri.dijit.PopupMobile({highlight:false},dojo.create("div"));
 
 				var mapDeferred = esri.arcgis.utils.createMap(mapId,"map-" + mapId,{
 					mapOptions: {
