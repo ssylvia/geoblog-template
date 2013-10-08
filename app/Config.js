@@ -29,9 +29,9 @@ define([],
 			//If true, when a blog post is selected and a point has been set on the map, the point graphic will display even if layer is turned off
 			alwaysDisplayPoints: false,
 			//Enter a title, if no title is specified, the webmap's title is used.
-			title: "Devastating decline of forest elephant habitat in Central Africa",
+			title: "A huge international ivory trade threatens the future of Africa's wild elephants",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
-			subtitle: "To save the remaining African forest elephants, illegal poaching for ivory and encroachment into core elephant habitat must be stopped. In addition, the international demand for ivory, which fuels illegal trade, must be dramatically reduced.",
+			subtitle: "Illegal poaching has caused populations of African elephants to plummet. Earth's largest land mammal is doomed to extinction in the wild unless demand for ivory is reduced and poaching is halted.",
 			//Enter URL to be used with social media buttons embedded in post. The URL will also be appended with the post object id so make sure query parameter is included
 			socialURL: "",
 			//If the webmap uses Bing Maps data, you will need to provided your Bing Maps Key
