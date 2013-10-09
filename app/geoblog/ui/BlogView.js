@@ -315,7 +315,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper","esri/dij
 			{
 				var deferred = new dojo.Deferred();
 
-				$(".loader").fadeIn();
+				$("#loader-container").fadeIn();
 
 				$(mapWrapper).append('<div id="map-' + mapId + '" class="map region-center" webmap="' + mapId + '"></div>');
 
@@ -346,9 +346,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper","esri/dij
 					$("#map-" + mapId).data("map",map);
 
 					dojo.connect(map,"onUpdateEnd",function(){
-						if($(".loader").is(":visible")){
-							$(".loader").fadeOut();
-						}
+						$("#loader-container").fadeOut();
 					});
 
 					var layers = esri.arcgis.utils.getLegendLayers(response);

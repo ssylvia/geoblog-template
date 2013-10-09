@@ -1337,7 +1337,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper","e
 			{
 				var deferred = new dojo.Deferred();
 
-				$(".loader").fadeIn();
+				$("#loader-container").fadeIn();
 
 				$(mapWrapper).append('<div id="map-' + mapId + '" class="map region-center" webmap="' + mapId + '"></div>');
 
@@ -1360,9 +1360,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper","e
 					map.addLayer(_blogLayer);
 
 					dojo.connect(map,"onUpdateEnd",function(){
-						if($(".loader").is(":visible")){
-							$(".loader").fadeOut();
-						}
+						$("#loader-container").fadeOut();
 					});
 
 					$("#map-" + mapId).data("map",map);
