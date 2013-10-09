@@ -41,6 +41,10 @@ li{
 	padding-top: .8em;
 }
 
+g,v{
+	cursor: pointer;
+}
+
 .loader{
 	display: none;
 	position: absolute;
