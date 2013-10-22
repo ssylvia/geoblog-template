@@ -150,7 +150,7 @@ define([],
 						$("#page-down-tab").removeClass("disabled");
 					}
 				}
-				else if(_featureIds.length - _queryIndex <= _queryCount){
+				else if(_featureIds.length - _queryIndex <= (_queryCount + 1)){
 					$(".page-button.page-up").show();
 					$(".page-button.page-down").hide();
 					$("#page-up-tab").removeClass("disabled");
