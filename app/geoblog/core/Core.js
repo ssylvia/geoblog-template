@@ -77,12 +77,13 @@ define(["esri/map",
 
 		function init()
 		{
-			if (!configOptions.sharingurl) {
-				if(location.host.match("localhost") || location.host.match("storymaps.esri.com") || location.host.match("c9.io"))
-					configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
-				else
-					configOptions.sharingurl = location.protocol + '//' + location.host + "/sharing/content/items";
-			}
+			// if (!configOptions.sharingurl) {
+			// 	if(location.host.match("localhost") || location.host.match("storymaps.esri.com") || location.host.match("c9.io"))
+			// 		configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
+			// 	else
+			// 		configOptions.sharingurl = location.protocol + '//' + location.host + "/sharing/content/items";
+			// }
+			configOptions.sharingurl = "http://www.arcgis.com/sharing/rest/content/items";
 
 			if (configOptions.geometryserviceurl && location.protocol === "https:")
 				configOptions.geometryserviceurl = configOptions.geometryserviceurl.replace('http:', 'https:');
