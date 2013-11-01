@@ -641,7 +641,8 @@ define(["esri/map",
 			});
 		}
 
-		function selectPostByScrollPosition(){
+		function selectPostByScrollPosition()
+		{
 			if(_selectReady){
 				if (!_selectByIndex.active){
 					var container = $("#blog .mCSB_container"),
