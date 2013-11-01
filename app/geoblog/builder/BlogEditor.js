@@ -121,7 +121,7 @@ define(["storymaps/utils/MovableGraphic","dojo/json","storymaps/utils/Helper","e
 			this.addEditButtons = function(elements)
 			{
 				elements.each(function(){
-					$(this).append('<button class="btn edit-blog-post" title="Edit blog post"><i class="icon-pencil"></i> Edit</button>');
+					$(this).append('<div class="btn edit-blog-post" title="Edit blog post"><i class="icon-pencil"></i> Edit</div>');
 				});
 				$(".btn.edit-blog-post").click(function(){
 					var parent = $(this).parent();
