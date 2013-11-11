@@ -141,14 +141,16 @@ define([],
 				if(_queryIndex === 0){
 					$(".page-button.page-up").hide();
 					$("#page-up-tab").addClass("disabled");
-					if(_featureIds.length < _queryCount){
-						$(".page-button.page-down").hide();
-						$("#page-down-tab").addClass("disabled");
-					}
-					else{
-						$(".page-button.page-down").show();
-						$("#page-down-tab").removeClass("disabled");
-					}
+					$(".page-button.page-down").hide();
+					$("#page-down-tab").addClass("disabled");
+					// if(_featureIds.length < _queryCount){
+					// 	$(".page-button.page-down").hide();
+					// 	$("#page-down-tab").addClass("disabled");
+					// }
+					// else{
+					// 	$(".page-button.page-down").show();
+					// 	$("#page-down-tab").removeClass("disabled");
+					// }
 				}
 				else if(_featureIds.length - _queryIndex <= (_queryCount + 1)){
 					$(".page-button.page-up").show();

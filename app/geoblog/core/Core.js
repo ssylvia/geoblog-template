@@ -277,7 +277,7 @@ define(["esri/map",
 
 		function setupBanner(title,subtitle)
 		{
-			document.title = title;
+			// document.title = title;
 			$("#title").html(title);
 			$("#subtitle").html(subtitle);
 		}
