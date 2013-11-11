@@ -186,8 +186,8 @@ define(["esri/map",
 				blog: null,
 				shareSettings: {
 					url: configOptions.socialURL || location.origin + location.pathname + searchStr,
-					title: "",
-					summary: ""
+					title: "Elephant Poaching Crisis Story Map",
+					summary: "Every day an estimated 96 elephants are killed to feed the growing demand for ivory.  Follow the Elephant Poaching Crisis Story Map to find out more and see how you can help."
 				}
 			}
 

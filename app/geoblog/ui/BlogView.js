@@ -71,7 +71,7 @@ define(["storymaps/utils/multiTips/MultiTips","storymaps/utils/Helper","esri/dij
 						'+content+'\
 						<div class="blog-post-social-wrapper blog-item">\
 							<span class="st_facebook" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" displayText="Facebook"></span>\
-							<span class="st_twitter" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" st_via="" displayText="Tweet"></span>\
+							<span class="st_twitter" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" st_via="TheWCS" displayText="Tweet"></span>\
 							<span class="st_googleplus" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" displayText="Google +"></span>\
 							<span class="st_sharethis" st_title="'+shareTitle+'" st_summary="'+shareSummary+'" st_url="'+shareURL+'" displayText="Other"></span>\
 						</div>\
