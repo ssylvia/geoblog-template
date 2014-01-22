@@ -5,11 +5,11 @@ define([],
 			//The appid for the configured application
 			appid: "",
 			//The web map id
-			webmap: "201c9b57132c426ca7236a885b91959e",
+			webmap: "0453264186ea485d9dfe6518bfc7cafb",
 			//ArcGIS Online usernames of those who are authorized the edit blog, sepereate by comma
-			authorizedEditors: [],
+			authorizedEditors: ["FedGISContent"],
 			//Enter the url to the feature service storing blog posts
-			featureService: "http://services1.arcgis.com/O2LesHc3TabFg7Qs/arcgis/rest/services/Geoblog_feature_service2/FeatureServer/0",
+			featureService: "http://services.arcgis.com/nzS0F0zdNLvs7nc8/ArcGIS/rest/services/FedGISContent_BlogLayer/FeatureServer/0",
 			//Start post object ID
 			post: null,
 			//Allow deletes from app
@@ -29,9 +29,9 @@ define([],
 			//If true, when a blog post is selected and a point has been set on the map, the point graphic will display even if layer is turned off
 			alwaysDisplayPoints: false,
 			//Enter a title, if no title is specified, the webmap's title is used.
-			title: "",
+			title: "Living Atlas",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
-			subtitle: "",
+			subtitle: "Add a subtitle",
 			//Enter URL to be used with social media buttons embedded in post. The URL will also be appended with the post object id so make sure query parameter is included
 			socialURL: "",
 			//If the webmap uses Bing Maps data, you will need to provided your Bing Maps Key
