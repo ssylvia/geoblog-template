@@ -10,7 +10,7 @@ blockquote{
 
 #blog-wrapper{
 	height: 100%;
-	width: 40%;
+	width: 500px;
 	box-shadow:4px 3px 6px 0px #333;
 	z-index: 3;
 }
@@ -240,4 +240,12 @@ blockquote{
 	.esriMobileNavigationItem.right{
 		display: none;
 	}
+}
+
+#social{
+	display: none;
+}
+
+#logo{
+	margin-top: 70px;
 }
