@@ -31,7 +31,7 @@ define([],
 			//Enter a title, if no title is specified, the webmap's title is used.
 			title: "ArcGIS.com includes a living atlas of the world",
 			//Enter a subtitle, if not specified the ArcGIS.com web map's summary is used
-			subtitle: "Helping understand our world through maps about the human, physical and natural geography of the world.",
+			subtitle: "Helping understand our world through maps about the people, earth and natural systems.",
 			//Enter URL to be used with social media buttons embedded in post. The URL will also be appended with the post object id so make sure query parameter is included
 			socialURL: "",
 			//If the webmap uses Bing Maps data, you will need to provided your Bing Maps Key
