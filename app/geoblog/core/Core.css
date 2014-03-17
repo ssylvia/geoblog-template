@@ -10,13 +10,14 @@ blockquote{
 
 #blog-wrapper{
 	height: 100%;
-	width: 500px;
+	width: 400px;
 	box-shadow:4px 3px 6px 0px #333;
 	z-index: 3;
 }
 
 #blog{
 	overflow: auto;
+	background-color: #ccc;
 }
 
 #blog-navigation{
@@ -154,7 +155,7 @@ blockquote{
 #blog-sizer{
 	display: none;
 	position: absolute;
-	background-color: #fff;
+	background-color: #ccc;
 	top: 50%;
 	margin-top: -15px;
 	width: 25px;
