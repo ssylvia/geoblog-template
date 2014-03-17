@@ -259,41 +259,108 @@ blockquote{
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
+#banner{
+	background-color: #444;
+	height: 125px;
+}
+
+#branding-wrapper{
+	width: 220px;
+}
+
+#title{
+	color: #fff;
+	height: 24px;
+}
+
+#subtitle, #smLink{
+	color: #b4a388;
+}
+
+#title, #subtitle{
+	font-size: 18px;
+}
+
+#title, #subtitle, #smLink, .blog-post-title{
+	text-transform: uppercase;
+}
+
+#smLink{
+	font-family: Georgia, serif;
+}
+
+.blog-post-title{
+	font-size: 26px;
+}
+
 #map-blind{
 	background-color: #1B1924;
 }
 
+#blog-navigation{
+	background-color: #d02e31;
+	background-image: url("../../../resources/images/app/textures/red_1200x800.jpg");
+	background-repeat: repeat;
+}
+
+#title{
+	-webkit-text-fill-color: transparent;
+	background: -webkit-linear-gradient(transparent, transparent), url("../../../resources/images/app/textures/felt_400x400.jpg") repeat;
+	background: -o-linear-gradient(transparent, transparent);
+	-webkit-background-clip: text;
+}
+
+.blog-post-social-wrapper .chicklets{
+	color: #fff !important;
+}
+
+.page-button{
+	color: #fff;
+}
+
 #blog-wrapper{
-	background-color: #5e5e5e;
+	background-color: #201e1e;
 }
 
 .img-polaroid{
 	background-color: #777;
+	padding: 0;
+	border: none;
 }
 
 .blog-post-title{
-	color: #dcda75;
+	color: #d02e31;
 }
 
 .blog-post-text{
-	color: #ccc;
+	color: #898178;
 }
 
 .blog-post-photo-caption{
-	color: #000;
+	color: #898178;
+	font-family: Georgia, serif;
 }
 
 #blog-sizer {
-	background-color: #5e5e5e;
-	color: #ccc;
+	background-color: #201e1e;
+	color: #fff;
 }
 
-.map-state-link{
-	color: #ebc875;
+.mCSB_dragger_bar{
+	background: #fff !important;
 }
 
-.map-state-link:hover, .map-state-link:focus {
-	color: #cba344;
+.mCSB_draggerRail{
+	background-color: #333131 !important;	
+}
+
+.geoblog-post a, .map-state-link{
+	color: #d02e31;
+}
+
+.geoblog-post a:hover, .map-state-link:hover, .map-state-link:focus {
+	color: #d02e31;
+	text-decoration: underline;
 }
 
 .esriSimpleSlider, .legend-content{
@@ -309,11 +376,11 @@ blockquote{
 }
 
 .legend-wrapper{
-	border: 2px solid #777;
+	border: 2px solid #201e1e;
 }
 
 .legend-toggle{
-	background-color: #777;
+	background-color: #201e1e;
 }
 
 a{
@@ -324,10 +391,23 @@ a:hover, a:focus {
 	color: #5096a5;
 }
 
+.esriAttribution{
+	background-color: #201e1e;
+	color: #b4a388;
+	font-family: Georgia, serif;
+	padding: 3px;
+	opacity: 0.7;
+}
+
 #loader-container{
 	display: none;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	z-index: 20000
+}
+
+h1,h2,h3,h4,h5,h6{
+	font-family: akzidenz-grotesk-condensed !important;
+	font-weight: 500;
 }
